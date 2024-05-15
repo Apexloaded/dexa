@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Inter, Poppins } from "next/font/google";
+import "./globals.scss";
+import HTML from "@/components/HTML";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
+import { config } from "@/config/wagmi.config";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin-ext"],
+  style: "normal",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +22,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <HTML font={poppins} initialState={initialState}>
+      {children}
+    </HTML>
   );
 }

@@ -1,0 +1,36 @@
+import React, { ForwardedRef, forwardRef } from "react";
+import Input from "../Form/Input";
+
+interface FileSelectorProps
+  extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
+  onSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const FileSelector = forwardRef(
+  (
+    { onSelect, ...props }: FileSelectorProps,
+    ref: ForwardedRef<HTMLInputElement>
+  ) => {
+    return (
+      <Input
+        type={"file"}
+        ref={ref}
+        onChange={onSelect}
+        className="hidden"
+        {...props}
+      />
+      //   <input
+      //     type={"file"}
+      //     ref={ref}
+      //     onChange={onSelect}
+      //     className="hidden"
+      //     {...props}
+      //   />
+    );
+  }
+);
+
+export default FileSelector;
