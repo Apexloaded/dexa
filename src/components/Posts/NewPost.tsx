@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Button from "@/components/Form/Button";
 import {
   CalendarPlusIcon,
@@ -11,43 +11,36 @@ import {
 } from "lucide-react";
 import { GifIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import ape1 from "@/assets/nft/1.png";
 import ToggleMintType from "./ToggleMintType";
 import Link from "next/link";
 import CLEditor from "../Editor/Editor";
 import PostCounter from "./PostCounter";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { postResolver } from "@/schemas/post.schema";
-import { useGreenField } from "@/context/greenfield.context";
 import { useAccount, useWriteContract } from "wagmi";
-import { generateToken, lowerTokenAlphaNumeric } from "@/libs/generateId";
-import { ReedSolomon } from "@bnb-chain/reed-solomon";
-import { CreateObject, StoreBucket } from "@/interfaces/bucket.interface";
 import FileSelector from "../ui/FileSelector";
 import MediaPreview from "../ui/MediaPreview";
 import ShowError from "../Form/ShowError";
-import toast from "react-hot-toast";
-import { createPost } from "@/actions/post.action";
-import { VisibilityType } from "@bnb-chain/greenfield-js-sdk";
-import { useIndexDB } from "@/context/indexDB.context";
-import { Stores } from "@/hooks/indexDB.hook";
 import { useDexa } from "@/context/dexa.context";
 import RemintFee from "./RemintFee";
 import { Coin } from "@/interfaces/feed.interface";
 import { ethers } from "ethers";
+import { createPost } from "@/services/post.service";
+import { useAuth } from "@/context/auth.context";
+import { getFirstLetters } from "@/libs/helpers";
+import useToast from "@/hooks/toast.hook";
 
 function NewPost() {
-  let loadToast: string;
   const [maxWord] = useState(70);
   const [remintFee, setRemintFee] = useState<string>("0");
   const [token, selectToken] = useState<Coin>();
+  const { loading, success, error } = useToast();
   const mediaRef = useRef<HTMLInputElement>(null);
-  const [bucket, setBucket] = useState<string>();
+  const { user } = useAuth();
   const [percentage, setPercentage] = useState(0);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [exceededCount, setExceededCount] = useState(0);
   const { address } = useAccount();
-  const { isDBInit, getData } = useIndexDB();
   const { writeContractAsync } = useWriteContract();
   const { FeedsABI, dexaFeeds } = useDexa();
   const {
@@ -65,23 +58,11 @@ function NewPost() {
   const content = watch("content", "");
   const isEmptyContent = content === "<p></p>";
 
-  useEffect(() => {
-    const init = async () => {
-      if (!isDBInit) return;
-      const allBucket = await getData<StoreBucket>(Stores.Buckets);
-      const bucket = allBucket.find((f) => f.address == address && f.isDefault);
-      if (bucket) setBucket(bucket.name);
-    };
-    init();
-  }, [isDBInit]);
-
   const onSubmit = async (data: FieldValues) => {
     try {
       const { content, access_level } = data;
       if (!address || !mediaFile) return;
-      loadToast = toast.loading("Creating post", {
-        position: "bottom-center",
-      });
+      loading({ msg: "Generating metadata" });
       const formData = new FormData();
       formData.append("file", mediaFile);
       formData.append("content", content);
@@ -89,11 +70,10 @@ function NewPost() {
       formData.append("bucketName", "dexa");
 
       const response = await createPost(formData);
-      if (response.code == 200 && response.message == "success") {
-        toast.loading("Minting post", {
-          id: loadToast,
-        });
-        const { tokenURI, externalURI, postId } = response.data;
+      if (response.statusCode == 201 && response.status == true) {
+        success({ msg: "Metadata generated" });
+        loading({ msg: "Minting post" });
+        const { tokenURI, nft, postId } = response.data;
         const price = remintFee != "" ? remintFee : "0";
         writeContractAsync(
           {
@@ -102,41 +82,34 @@ function NewPost() {
             functionName: "mintPost",
             args: [
               postId,
-              externalURI,
+              content,
               ethers.parseEther(price),
               token?.address,
+              tokenURI,
+              [nft],
             ],
           },
           {
             onSuccess: async (data) => {
-              toast.success("Post created", {
-                id: loadToast,
-              });
+              success({ msg: "Post created" });
               resetForm();
             },
-            onError(error) {
-              toast.error(`${error.message}`, {
-                id: loadToast,
-              });
+            onError(err) {
+              error({ msg: `${err.message}` });
             },
           }
         );
       } else {
-        toast.error("error creating post", {
-          id: loadToast,
-        });
+        error({ msg: "error creating post" });
       }
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof Error) {
-        toast.error(err.message, {
-          id: loadToast,
-        });
+        error({ msg: err.message });
       }
       if (err && typeof err === "object") {
-        toast.error(JSON.stringify(err), {
-          id: loadToast,
-        });
+        error({ msg: err.details });
       }
+      console.log(err);
     }
   };
 
@@ -167,15 +140,25 @@ function NewPost() {
 
   return (
     <div className="px-5 pt-2 flex items-start space-x-3">
-      <Link href="">
-        <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
-        <Image
-          height={100}
-          width={100}
-          alt=""
-          className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-700"
-          src={ape1}
-        />
+      <Link href={`/${user?.username}`}>
+        <div className="w-10">
+          <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
+          {user?.pfp && user.pfp != "" ? (
+            <Image
+              src={user.pfp}
+              height={400}
+              width={400}
+              alt={"PFP"}
+              className="h-10 w-10 rounded-full"
+            />
+          ) : (
+            <div className="h-10 w-10 bg-white/90 border border-primary rounded-full flex justify-center items-center">
+              <p className="text-base font-semibold text-primary">
+                {getFirstLetters(`${user?.name}`)}
+              </p>
+            </div>
+          )}
+        </div>
       </Link>
       <div className="flex-1 flex flex-col relative">
         <div className="flex justify-between items-center">
@@ -279,7 +262,7 @@ function NewPost() {
               type={"button"}
               kind={"default"}
               shape={"CIRCLE"}
-              className="text-primary hover:bg-primary/20"
+              className="text-primary hover:bg-primary/20 hidden md:flex"
               hoverColor={false}
               title="Pool"
             >
@@ -289,7 +272,7 @@ function NewPost() {
               type={"button"}
               kind={"default"}
               shape={"CIRCLE"}
-              className="text-primary hover:bg-primary/20"
+              className="text-primary hover:bg-primary/20 hidden md:flex"
               hoverColor={false}
               title="Schedule"
             >

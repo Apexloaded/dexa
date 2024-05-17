@@ -1,29 +1,13 @@
-import { Database } from "@/db/db";
-import { UserModel } from "@/db/models/user.model";
+"use server";
 
-interface IUserService {
-  find(
-    filter: Partial<UserModel>
-  ): Promise<{ data: UserModel[]; totalCount: number }>;
-  findOne(filter: Partial<UserModel>): Promise<UserModel>;
+import { getApi, uploadApi } from "./api.service";
+
+export async function getProfile(username: string) {
+  const response = await getApi(`user/profile/${username}`);
+  return response;
 }
 
-export class UsersService implements IUserService {
-  private repository: Database<UserModel>;
-
-  constructor() {
-    this.repository = new Database<UserModel>("auths");
-  }
-
-  async find(
-    filter: Partial<UserModel>,
-    page: number = 1,
-    limit: number = 10
-  ): Promise<{ data: UserModel[]; totalCount: number }> {
-    return this.repository.find(filter, page, limit);
-  }
-
-  async findOne(filter: Partial<UserModel>): Promise<UserModel> {
-    return this.repository.findOne(filter);
-  }
+export async function updateProfile(payload: FormData) {
+  const response = await uploadApi("user/update", payload);
+  return response;
 }

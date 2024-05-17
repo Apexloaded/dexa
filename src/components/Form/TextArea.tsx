@@ -6,16 +6,14 @@ interface Props
     HTMLTextAreaElement
   > {}
 
-const TextArea = forwardRef(
-  ({ className, ...props }: Props, ref: ForwardedRef<HTMLTextAreaElement>) => {
-    return (
-      <textarea
-        ref={ref}
-        className={`w-full px-4 ${className} text-base outline-primary`}
-        {...props}
-      ></textarea>
-    );
-  }
+const TextArea = React.forwardRef(
+  ({ className, ...props }: Props, ref: ForwardedRef<HTMLTextAreaElement>) => (
+    <textarea
+      ref={ref}
+      className={`w-full px-4 ${className} text-base outline-primary`}
+      {...props}
+    ></textarea>
+  )
 );
-
+TextArea.displayName = "TextArea";
 export default TextArea;

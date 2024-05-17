@@ -4,24 +4,33 @@ import React, { useEffect, useState } from "react";
 import ListPost from "../Posts/ListPost";
 import { Post } from "@/interfaces/feed.interface";
 import { useQuery } from "@tanstack/react-query";
-import { API_URL } from "@/config/env";
-import { getAllPost } from "@/actions/post.action";
+import { getAllPost } from "@/services/post.service";
+import { useReadContract } from "wagmi";
+import { useDexa } from "@/context/dexa.context";
 
 function Feeds() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const {
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["feeds"],
-    queryFn: async () => await getAllPost(),
+  const { FeedsABI, dexaFeeds } = useDexa();
+  const { data: response } = useReadContract({
+    abi: FeedsABI,
+    address: dexaFeeds,
+    functionName: "listAllPosts",
+    args: [],
   });
+  // const {
+  //   data: response,
+  //   isLoading,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ["feeds"],
+  //   queryFn: async () => await getAllPost(),
+  // });
 
   useEffect(() => {
-    if (response && response.statusCode == 200) {
-      const posts = response.data;
-      setPosts(posts);
+    if (response) {
+      const _posts = response as Post[];
+      console.log(_posts);
+      setPosts(_posts);
     }
   }, [response]);
 

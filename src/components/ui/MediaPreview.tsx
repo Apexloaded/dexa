@@ -4,10 +4,11 @@ import { XIcon } from "lucide-react";
 
 interface MediaPreviewProps {
   file: File | null;
-  onClear: () => void;
+  onClear?: () => void;
+  isRounded?: boolean;
 }
 
-function MediaPreview({ file, onClear }: MediaPreviewProps) {
+function MediaPreview({ file, onClear, isRounded = true }: MediaPreviewProps) {
   const [mediaType, setMediaType] = useState<"image" | "video">();
 
   useEffect(() => {
@@ -53,20 +54,27 @@ function MediaPreview({ file, onClear }: MediaPreviewProps) {
   return (
     file && (
       <div>
-        <div className="h-auto max-h-[20rem] md:max-h-[35rem] xl:max-h-[40rem] relative overflow-hidden w-full rounded-2xl bg-primary/5">
-          <div className="h-14 w-full absolute flex items-center justify-end px-2">
-            <Button
-              type={"button"}
-              kind={"default"}
-              shape={"CIRCLE"}
-              className="text-white bg-dark/70 hover:bg-dark/60"
-              hoverColor={false}
-              title="Remove"
-              onClick={onClear}
-            >
-              <XIcon height={18} />
-            </Button>
-          </div>
+        <div
+          className={`h-auto max-h-[20rem] md:max-h-[35rem] xl:max-h-[40rem] relative overflow-hidden w-full bg-primary/5 ${
+            isRounded ? "rounded-2xl" : ""
+          }`}
+        >
+          {onClear && (
+            <div className="h-14 w-full absolute flex items-center justify-end px-2">
+              <Button
+                type={"button"}
+                kind={"default"}
+                shape={"CIRCLE"}
+                className="text-white bg-dark/70 hover:bg-dark/60"
+                hoverColor={false}
+                title="Remove"
+                onClick={onClear}
+              >
+                <XIcon height={18} />
+              </Button>
+            </div>
+          )}
+
           <div className="h-auto max-h-[20rem] md:max-h-[35rem] xl:max-h-[40rem] overflow-scroll scrollbar-hide w-full">
             {mediaType && renderMediaPreview(file)}
           </div>

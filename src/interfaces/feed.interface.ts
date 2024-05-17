@@ -8,7 +8,8 @@ interface MediaType {
 
 export interface Post {
   id: string;
-  onChainId: string;
+  author: string;
+  tokenId: string;
   creator: UserInterface;
   content: string;
   createdAt: string;

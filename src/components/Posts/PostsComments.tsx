@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import ListPost from "../Posts/ListPost";
 import NewPost from "./NewPost";
+import { Post } from "@/interfaces/feed.interface";
 
 function PostsComment() {
-  const [posts, setPosts] = useState([1, 2, 3, 4, 5]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   return (
     <div>
@@ -14,7 +15,7 @@ function PostsComment() {
       </div>
       {posts.map((post, index) => (
         <div key={index} className="border-b border-light last:border-none">
-          <ListPost />
+          <ListPost post={post} />
         </div>
       ))}
     </div>

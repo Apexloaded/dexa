@@ -6,10 +6,10 @@ import Image from "next/image";
 import { connectorIcons, favicon } from "@/components/Icons/Connector";
 import Button from "@/components/Form/Button";
 import { config } from "@/config/wagmi.config";
-import { getNonce } from "@/actions/auth.action";
 import toast from "react-hot-toast";
 import { getWagmiError } from "@/libs/helpers";
 import SignInModal from "@/components/Auth/Login/Signature";
+import { getNonce } from "@/services/auth.service";
 
 export default function Login() {
   const [signModal, setSignModal] = useState<boolean>(false);

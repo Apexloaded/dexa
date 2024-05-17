@@ -8,7 +8,7 @@ import { StorageTypes } from "@/libs/enum";
 const API = API_URL;
 const cookie = cookies().get(StorageTypes.ACCESS_TOKEN)?.value;
 
-export const getApi = async (url: string, headers?: any) => {
+export const getApi = async (url: string) => {
   const apiUrl = `${API}/${url}`;
   return axios
     .get(apiUrl, {
@@ -25,23 +25,6 @@ export const getApi = async (url: string, headers?: any) => {
       return error;
     });
 };
-
-// export const verifyGetApi = async (url: string, token?: string) => {
-//   const apiUrl = `${API}/${url}`;
-//   return axios
-//     .get(apiUrl, {
-//       withCredentials: true,
-//       headers: {
-//         Cookie: `${StorageTypes.ACCESS_TOKEN}=${token}`,
-//       },
-//     })
-//     .then((response) => {
-//       return response.data;
-//     })
-//     .catch(function (error) {
-//       return error;
-//     });
-// };
 
 export const postApi = async (url: string, data: any) => {
   const apiUrl = `${API}/${url}`;

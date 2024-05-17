@@ -1,12 +1,12 @@
 "use client";
 
-import { getPost } from "@/actions/post.action";
 import Aside from "@/components/Layouts/Aside";
 import Section from "@/components/Layouts/Section";
 import PostDetails from "@/components/Posts/PostDetails";
 import BackButton from "@/components/ui/BackButton";
 import { useAppSelector } from "@/hooks/redux.hook";
 import { Post } from "@/interfaces/feed.interface";
+import { getSinglePost } from "@/services/post.service";
 import { selectedPost } from "@/slices/posts/post-selected.slice";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ function MintDetails({ params }: Props) {
   const _post = useAppSelector(selectedPost);
   const { data, isError, isLoading } = useQuery({
     queryKey: ["post-details", id],
-    queryFn: async () => await getPost(id),
+    queryFn: async () => await getSinglePost(id),
     enabled: !_post,
   });
   const [post, setPost] = useState<Post | undefined>(_post);

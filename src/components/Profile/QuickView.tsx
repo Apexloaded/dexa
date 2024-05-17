@@ -59,13 +59,13 @@ function QuickView() {
         <p className="text-xl font-semibold">Profile</p>
         <div className="flex gap-4 items-center justify-end text-right">
           <div className="name">
-            <p className="font-bold flex items-center gap-1 capitalize">
+            <Link href={`/${user?.username}`} className="font-bold flex items-center gap-1 capitalize">
               <BlueCheckMark />
               <span>{user?.name}</span>{" "}
-            </p>
+            </Link>
             <p className="text-neutral-400 text-sm">Professional</p>
           </div>
-          <div className="w-10 h-10 overflow-hidden rounded-full border border-neutral-200">
+          <div className="w-10 h-10 overflow-hidden rounded-full border border-light">
             {/* <Image src={Avatar} alt={`avatar`} /> */}
           </div>
         </div>

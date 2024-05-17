@@ -12,12 +12,12 @@ import React from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
 import toast from "react-hot-toast";
-import { getNonce, verifyNonce } from "@/actions/auth.action";
 import { useRouter } from "next/navigation";
 import useStorage from "@/hooks/storage.hook";
 import { StorageTypes } from "@/libs/enum";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { setAuth } from "@/slices/account/auth.slice";
+import { getNonce, verifyNonce } from "@/services/auth.service";
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -58,7 +58,7 @@ function SignInModal({ setModal }: Props) {
         setItem(StorageTypes.AUTH_USER, {
           name,
           username,
-          address,
+          wallet: address,
           createdAt,
           bioURI,
         });
@@ -67,7 +67,7 @@ function SignInModal({ setModal }: Props) {
         toast.success("Successfully signed in!", {
           id: loadToast,
         });
-        router.replace("/home");
+        router.push("/home");
       }
       if (!verifyRes?.ok) {
         toast.error(`${verifyRes?.errors}`, {

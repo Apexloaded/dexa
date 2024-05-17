@@ -18,3 +18,7 @@ export enum BucketVisibilityType {
   Private,
   Inherit,
 }
+
+export enum EventTypes {
+  HELLO = "HELLO",
+}

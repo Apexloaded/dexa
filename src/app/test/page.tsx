@@ -1,8 +1,6 @@
 "use client";
 
-import { selectSp, client } from "@/client";
 import Button from "@/components/Form/Button";
-import { useGreenField } from "@/context/greenfield.context";
 import { bucketResolver } from "@/schemas/welcome.schema";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -12,14 +10,13 @@ import Lottie from "lottie-react";
 import dbAnim from "@/assets/lottie/db.json";
 import { formatWalletAddress } from "@/libs/helpers";
 import { useDexa } from "@/context/dexa.context";
-import { BucketVisibilityType } from "@/libs/enum";
 import { ZeroAddress, ethers } from "ethers";
 
 function TestDev() {
   const [bucket, setBucket] = useState<string>();
   const { address, connector } = useAccount();
   const { writeContractAsync, isPending } = useWriteContract();
-  const { ERC20ABI, dexaCreator, CreatorABI, FeedsABI, dexaFeeds } = useDexa();
+  const { ERC20ABI, dexaCreator, CreatorABI, FeedsABI, dexaFeeds, feedsToken, FeedsTokenABI } = useDexa();
   const { data } = useReadContract({
     abi: CreatorABI,
     address: dexaCreator,
@@ -56,10 +53,12 @@ function TestDev() {
 
       const tx = await writeContractAsync(
         {
-          abi: CreatorABI,
-          address: dexaCreator,
-          functionName: "grantCreator",
-          args: ["0x719c1A5dac69C4C6b462Aa7E8Fb9bc90Ec9128b9"],
+          abi: FeedsTokenABI,
+          address: feedsToken,
+          functionName: "setTokenURI",
+          args: [
+            "https://gnfd-testnet-sp1.bnbchain.org/view/dexa/metadata/{id}.json",
+          ],
         },
         {
           onSuccess(data) {

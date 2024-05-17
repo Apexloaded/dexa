@@ -1,11 +1,14 @@
 export interface UserInterface {
   id: string;
-  name: string;
-  username: string;
-  address: string;
-  profileURI: string;
-  updatedAt: string;
-  createdAt: string;
+  name?: string;
+  username?: string;
+  wallet?: string;
+  bio?: string;
+  banner?: string;
+  pfp?: string;
+  updatedAt?: string;
+  createdAt?: string;
+  website?: string;
 }
 
 export interface FriendListInterface {

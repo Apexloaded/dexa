@@ -69,3 +69,15 @@ export const weiToUnit = (wei: string | number) => {
   const unit = Number(wei) / 1e18;
   return unit;
 };
+
+export const getFirstLetters = (fullName: string) => {
+  const words = fullName.split(" ");
+  let initials = "";
+  for (const word of words) {
+    const firstLetter = word[0]?.toUpperCase();
+    if (firstLetter) {
+      initials += firstLetter;
+    }
+  }
+  return initials;
+};

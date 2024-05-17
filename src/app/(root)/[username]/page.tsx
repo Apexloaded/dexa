@@ -8,11 +8,17 @@ import Aside from "@/components/Layouts/Aside";
 import BackButton from "@/components/ui/BackButton";
 import ProfileTabs from "@/components/Profile/ProfileTabs";
 
-export default function Profile() {
+type Props = {
+  params: { username: string };
+};
+
+export default function Profile({ params }: Props) {
+  const { username } = params;
+
   return (
     <div className="flex space-x-5">
       <Section>
-        <ProfileHeader />
+        <ProfileHeader username={username} />
         <ProfileTabs />
       </Section>
       <Aside>

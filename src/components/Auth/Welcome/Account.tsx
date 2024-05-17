@@ -10,11 +10,9 @@ import { config } from "@/config/wagmi.config";
 import { GREEN_SP, HOSTNAME } from "@/config/env";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useIndexDB } from "@/context/indexDB.context";
-import { Stores } from "@/hooks/indexDB.hook";
 import { StoreBucket } from "@/interfaces/bucket.interface";
-import { onboardComplete } from "@/actions/auth.action";
 import { useRouter } from "next/navigation";
+import { onboardComplete } from "@/services/auth.service";
 type Props = {
   nextStep: (value: number) => void;
   index: number;
@@ -32,22 +30,11 @@ const getError = (error: Error) => {
 
 export default function AccountStep({ nextStep, index }: Props) {
   const router = useRouter();
-  const { addData, getData, isDBInit } = useIndexDB();
   const { writeContractAsync } = useWriteContract({ config });
   const [defaultBucket, setDefaultBucket] = useState<StoreBucket>();
   const { address } = useAccount();
   const { dexaCreator, CreatorABI } = useDexa();
   let loadToast: string;
-
-  useEffect(() => {
-    const init = async () => {
-      if (!isDBInit) return;
-      const allBucket = await getData<StoreBucket>(Stores.Buckets);
-      const bucket = allBucket.find((f) => f.address == address && f.isDefault);
-      if (bucket) setDefaultBucket(bucket);
-    };
-    init();
-  }, [isDBInit]);
 
   const {
     handleSubmit,
@@ -63,13 +50,12 @@ export default function AccountStep({ nextStep, index }: Props) {
       const spInfo = GREEN_SP;
       const bioURI = `${spInfo}/view/dexa/creators/${address}/profile`;
       const { name, username } = data;
-      await addData(Stores.Users, { name, username, address });
       const tx = await writeContractAsync(
         {
           abi: CreatorABI,
           address: dexaCreator,
           functionName: "registerCreator",
-          args: [name, username, `${HOSTNAME}/${username}`, bioURI],
+          args: [name, username, `${HOSTNAME}/${username}`],
         },
         {
           onSuccess: async (data) => {
@@ -148,7 +134,7 @@ export default function AccountStep({ nextStep, index }: Props) {
           kind="primary"
           disabled={isSubmitting}
         >
-          Let's Proceed
+          Let&apos;s Proceed
         </Button>
       </div>
     </div>

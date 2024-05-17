@@ -27,11 +27,11 @@ export function StreamProvider({ children }: Props) {
       if (!user || !isConnected) return;
       let streamUser: User;
       streamUser = {
-        id: user.address,
+        id: `${user.wallet}`,
         name: user.name,
         image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
       };
-      const token = await getStreamToken(user.address);
+      const token = await getStreamToken(streamUser.id);
       if (!token) return;
       const cl = new StreamVideoClient({
         apiKey: STREAM_KEY!,

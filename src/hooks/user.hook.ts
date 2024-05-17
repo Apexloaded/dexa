@@ -1,19 +1,26 @@
 "use client";
 
-import { getAuthProgress, logUserOut } from "@/actions/auth.action";
-import { useIndexDB } from "@/context/indexDB.context";
 import { UserInterface } from "@/interfaces/user.interface";
 import { setSwitchChain } from "@/slices/account/switch-chain.slice";
-import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useAccount, useDisconnect, useSwitchChain } from "wagmi";
-import { Stores } from "./indexDB.hook";
+import {
+  useAccount,
+  useDisconnect,
+  useReadContract,
+  useSwitchChain,
+} from "wagmi";
 import useStorage from "./storage.hook";
 import { StorageTypes } from "@/libs/enum";
 import { useAppSelector } from "./redux.hook";
 import { selectAuth } from "@/slices/account/auth.slice";
+import { logUserOut } from "@/services/auth.service";
+import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
+import { DEXA_CREATOR } from "@/config/env";
+import { toOxString } from "@/libs/helpers";
+
+const CREATOR = toOxString(DEXA_CREATOR);
 
 function useUser() {
   const router = useRouter();
@@ -22,32 +29,29 @@ function useUser() {
   const isAuth = useAppSelector(selectAuth);
   const [ens, setEns] = useState<string>();
   const [user, setUser] = useState<UserInterface>();
-  const [progress, setProgress] = useState<number>();
   const { address, isConnected, isDisconnected, chainId } = useAccount();
   const { chains, switchChain } = useSwitchChain();
   const { disconnectAsync } = useDisconnect();
   const { getItem } = useStorage();
-
-  useEffect(() => {
-    const init = () => {
-      const user = getItem(StorageTypes.AUTH_USER);
-      setUser(user);
-    };
-    init();
-  }, [isConnected, isAuth]);
-
-  const { data: progressRes } = useQuery({
-    queryKey: [address, "progress"],
-    queryFn: () => getAuthProgress(),
-    enabled: isConnected,
+  const { data } = useReadContract({
+    abi: DexaCreator,
+    address: CREATOR,
+    functionName: "findCreator",
+    args: [address],
   });
 
   useEffect(() => {
-    if (progressRes && progressRes.code == 200 && progressRes.data) {
-      const progress = Number(progressRes.data.progress);
-      setProgress(progress);
-    }
-  }, [progressRes]);
+    const init = () => {
+      console.log(data);
+      if (data) {
+        setUser({
+          id: `${address}`,
+          ...data,
+        });
+      }
+    };
+    init();
+  }, [isConnected, isAuth, data]);
 
   useEffect(() => {
     if (!isConnected && isDisconnected && path != "/login") {
@@ -73,7 +77,7 @@ function useUser() {
     window.location.reload();
   };
 
-  return { ens, progress, logout, user };
+  return { ens, logout, user };
 }
 
 export default useUser;

@@ -6,21 +6,26 @@ export default function Label({
   title,
   isMargin = false,
   isLowerCase = false,
+  className,
 }: {
   isRequired?: boolean;
   title: string;
   isMargin?: boolean;
   isLowerCase?: boolean;
+  className?: string;
 }) {
   const caseClass = isLowerCase ? "capitalize" : "uppercase";
   return (
-    <p
-      className={clsx(`text-xs ${caseClass} text-dark/90 font-semibold`, {
-        "mb-2": isMargin,
-      })}
+    <label
+      className={clsx(
+        `${caseClass} ${className} text-dark/90 font-semibold text-xs`,
+        {
+          "mb-2": isMargin,
+        }
+      )}
     >
       {title}
       {isRequired && <span className="text-primary">*</span>}
-    </p>
+    </label>
   );
 }

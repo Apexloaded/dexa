@@ -4,13 +4,11 @@ import { NextFont } from "next/dist/compiled/@next/font";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type State, WagmiProvider } from "wagmi";
 import { config } from "@/config/wagmi.config";
-import { GreenFieldProvider } from "@/context/greenfield.context";
 import { DexaProvider } from "@/context/dexa.context";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import { AuthProvider } from "@/context/auth.context";
-import { IndexDBProvider } from "@/context/indexDB.context";
 import SwitchChain from "./Auth/SwitchChain";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { StreamProvider } from "@/context/stream.context";
@@ -32,7 +30,7 @@ export default function HTML({
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
           <WagmiProvider config={config} initialState={initialState}>
-            <IndexDBProvider>
+            
               <QueryClientProvider client={queryClient}>
                 <AuthProvider>
                   <DexaProvider>
@@ -50,7 +48,6 @@ export default function HTML({
                   </DexaProvider>
                 </AuthProvider>
               </QueryClientProvider>
-            </IndexDBProvider>
           </WagmiProvider>
         </Provider>
       </body>

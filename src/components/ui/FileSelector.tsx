@@ -9,28 +9,19 @@ interface FileSelectorProps
   onSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FileSelector = forwardRef(
+const FileSelector = React.forwardRef(
   (
     { onSelect, ...props }: FileSelectorProps,
     ref: ForwardedRef<HTMLInputElement>
-  ) => {
-    return (
-      <Input
-        type={"file"}
-        ref={ref}
-        onChange={onSelect}
-        className="hidden"
-        {...props}
-      />
-      //   <input
-      //     type={"file"}
-      //     ref={ref}
-      //     onChange={onSelect}
-      //     className="hidden"
-      //     {...props}
-      //   />
-    );
-  }
+  ) => (
+    <Input
+      type={"file"}
+      ref={ref}
+      onChange={onSelect}
+      className="hidden"
+      {...props}
+    />
+  )
 );
-
+FileSelector.displayName = "FileSelector";
 export default FileSelector;

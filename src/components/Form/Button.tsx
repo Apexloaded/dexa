@@ -1,6 +1,11 @@
 import React from "react";
 
 const buttonKind = {
+  clear: {
+    enabled: "",
+    disabled: "",
+    hover: "",
+  },
   default: {
     enabled: "bg-white text-dark",
     disabled: "bg-white/20 text-dark cursor-not-allowed",
@@ -38,7 +43,7 @@ export default function Button({
   hoverColor = true,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  kind: "default" | "error" | "primary" | "dark";
+  kind: "default" | "error" | "primary" | "dark" | "clear";
   size?: "SMALL" | "NORMAL" | "LARGE";
   shape?: "NORMAL" | "CIRCLE" | "ROUNDED";
   className?: string;

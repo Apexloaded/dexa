@@ -549,17 +549,43 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "displayName",
+        "name": "name",
         "type": "string"
       },
       {
         "internalType": "string",
         "name": "username",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "pfp",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "banner",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "bio",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "website",
+        "type": "string"
       }
     ],
-    "name": "emitRegistered",
-    "outputs": [],
+    "name": "editProfile",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -587,29 +613,61 @@
     "name": "findCreator",
     "outputs": [
       {
-        "internalType": "string",
-        "name": "displayName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "username",
-        "type": "string"
-      },
-      {
-        "internalType": "address payable",
-        "name": "wallet",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "profileURI",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "bioURI",
-        "type": "string"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "pfp",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "banner",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "dexaURI",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "updatedAt",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Creator",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -618,22 +676,69 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
+        "internalType": "string",
+        "name": "username",
+        "type": "string"
       }
     ],
-    "name": "getBalance",
+    "name": "findCreatorByUsername",
     "outputs": [
       {
-        "internalType": "uint256",
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "pfp",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "banner",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "dexaURI",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "updatedAt",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Creator",
         "name": "",
-        "type": "uint256"
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -798,11 +903,6 @@
       {
         "internalType": "string",
         "name": "dexaProfile",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "bioURI",
         "type": "string"
       }
     ],

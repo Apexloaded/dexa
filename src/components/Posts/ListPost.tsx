@@ -24,7 +24,7 @@ import Moment from "react-moment";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { selectPost } from "@/slices/posts/post-selected.slice";
-import { formatWalletAddress } from "@/libs/helpers";
+import { formatWalletAddress, getFirstLetters, weiToUnit } from "@/libs/helpers";
 import { Diamond } from "../Icons/Others";
 import BlueCheckMark from "../Profile/BlueCheck";
 
@@ -33,6 +33,7 @@ type Props = {
 };
 
 function ListPost({ post }: Props) {
+  const createdAt = new Date(Number(post.createdAt) * 1000).toISOString();
   const address = formatWalletAddress(post.creator.id);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -59,15 +60,25 @@ function ListPost({ post }: Props) {
     >
       <div className="flex items-start space-x-3">
         <div className="min-w-[2.5rem] sticky top-0 flex flex-col gap-3 items-center">
-          <Link href="" className="">
-            <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
-            <Image
-              height={100}
-              width={100}
-              alt=""
-              className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-700"
-              src={ape1}
-            />
+          <Link href={`/${post.creator.username}`} className="">
+            <div className="w-10">
+              <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
+              {post.creator.pfp ? (
+                <Image
+                  src={post.creator.pfp}
+                  height={400}
+                  width={400}
+                  alt={"PFP"}
+                  className="h-10 w-10 rounded-full"
+                />
+              ) : (
+                <div className="h-10 w-10 bg-white/90 border border-primary rounded-full flex justify-center items-center">
+                  <p className="text-base font-semibold text-primary">
+                    {getFirstLetters(`${post.creator?.name}`)}
+                  </p>
+                </div>
+              )}
+            </div>
           </Link>
           <div className="flex flex-col items-center">
             <Button
@@ -85,15 +96,18 @@ function ListPost({ post }: Props) {
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
-              <div className="flex items-center space-x-1">
+              <Link
+                href={`/${post.creator.username}`}
+                className="flex items-center space-x-1"
+              >
                 <p className="font-semibold text-sm capitalize text-dark dark:text-white">
                   {post.creator.name}
                 </p>
                 <BlueCheckMark />
                 <p className="text-xs text-medium">@{post.creator.username}</p>
-              </div>
+              </Link>
               <p className="text-xs text-medium">
-                <Moment fromNow>{post.createdAt}</Moment>
+                <Moment fromNow>{createdAt}</Moment>
               </p>
             </div>
             <div>
@@ -122,24 +136,26 @@ function ListPost({ post }: Props) {
               </div>
             )}
 
-            {post.media && post.media.map((media, index) => (
-              <div key={index} className="my-2 rounded-xl overflow-hidden">
-                <Image
-                  key={index}
-                  src={media.url}
-                  height={400}
-                  width={600}
-                  alt={post.id}
-                />
-              </div>
-            ))}
+            {post.media &&
+              post.media.map((media, index) => (
+                <div key={index} className="my-2 rounded-xl overflow-hidden">
+                  <Image
+                    key={index}
+                    src={media.url}
+                    height={400}
+                    width={600}
+                    alt={post.id}
+                  />
+                </div>
+              ))}
           </Link>
 
           <div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm">
-                  Mint ID <span className="text-primary">{post.onChainId}</span>
+                  Mint ID{" "}
+                  <span className="text-primary">{Number(post.tokenId)}</span>
                 </p>
               </div>
               <div className="flex items-center space-x-1">

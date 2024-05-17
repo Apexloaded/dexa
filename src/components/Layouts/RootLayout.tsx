@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import Sidebar from "../Menus/Sidebar";
 import MobileMenu from "../Menus/MobileMenu";
-import WithAuth from "../WithAuth";
 
 function RootLayout({
   children,
@@ -23,4 +22,4 @@ function RootLayout({
   );
 }
 
-export default WithAuth(RootLayout);
+export default RootLayout;
