@@ -14,7 +14,6 @@ export async function createSession(
   cookies().set(name, data, {
     maxAge: expiresIn,
     httpOnly: true,
-    domain: "localhost",
     path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV !== "development",
