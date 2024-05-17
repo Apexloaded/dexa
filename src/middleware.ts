@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { StorageTypes } from "./libs/enum";
 import { API_URL } from "./config/env";
-
-export const protectedRoutes = ["/home", "/welcome"];
-export const publicRoutes = ["/login", "/signup", "/test", "/"];
+import { protectedRoutes, publicRoutes } from "./libs/routes";
 
 const get = async (url: string, cookie?: string) => {
   const response = await fetch(`${API_URL}/${url}`, {

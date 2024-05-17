@@ -19,7 +19,7 @@ import { logUserOut } from "@/services/auth.service";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import { DEXA_CREATOR } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
-import { publicRoutes } from "@/middleware";
+import { publicRoutes } from "@/libs/routes";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
