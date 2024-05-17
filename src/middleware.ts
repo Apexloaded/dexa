@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { StorageTypes } from "./libs/enum";
 import { API_URL } from "./config/env";
-import { onboardingProgress } from "./db/controller/user.controller";
-import { onBoard } from "./actions/auth.action";
 
 const protectedRoutes = ["/home", "/welcome"];
 const publicRoutes = ["/login", "/signup", "/test", "/"];
@@ -33,25 +31,25 @@ export default async function middleware(req: NextRequest) {
   ) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
-  const onb = await onBoard();
-  console.log(onb);
-  // if (verifyRes?.data?.message == "success") {
-  //   const res = await get("auth/onboarding/progress", cookie);
-  //   if (
-  //     res?.data.progress < 100 &&
-  //     !req.nextUrl.pathname.startsWith("/welcome") &&
-  //     !isPublicRoute
-  //   ) {
-  //     return NextResponse.redirect(new URL("/welcome", req.nextUrl));
-  //   }
+  // const onb = await onBoard();
+  // console.log(onb);
+  if (verifyRes?.data?.message == "success") {
+    const res = await get("auth/onboarding/progress", cookie);
+    if (
+      res?.data.progress < 100 &&
+      !req.nextUrl.pathname.startsWith("/welcome") &&
+      !isPublicRoute
+    ) {
+      return NextResponse.redirect(new URL("/welcome", req.nextUrl));
+    }
 
-  //   if (
-  //     res.data.progress >= 100 &&
-  //     req.nextUrl.pathname.startsWith("/welcome")
-  //   ) {
-  //     return NextResponse.redirect(new URL("/home", req.nextUrl));
-  //   }
-  // }
+    if (
+      res.data.progress >= 100 &&
+      req.nextUrl.pathname.startsWith("/welcome")
+    ) {
+      return NextResponse.redirect(new URL("/home", req.nextUrl));
+    }
+  }
 
   return NextResponse.next();
 }
