@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import { StorageTypes } from "./libs/enum";
 import { API_URL } from "./config/env";
 
-const protectedRoutes = ["/home", "/welcome"];
-const publicRoutes = ["/login", "/signup", "/test", "/"];
+export const protectedRoutes = ["/home", "/welcome"];
+export const publicRoutes = ["/login", "/signup", "/test", "/"];
 
 const get = async (url: string, cookie?: string) => {
   const response = await fetch(`${API_URL}/${url}`, {
@@ -31,8 +31,7 @@ export default async function middleware(req: NextRequest) {
   ) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
-  // const onb = await onBoard();
-  // console.log(onb);
+
   if (verifyRes?.data?.message == "success") {
     const res = await get("auth/onboarding/progress", cookie);
     if (

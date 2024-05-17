@@ -19,6 +19,7 @@ import { logUserOut } from "@/services/auth.service";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import { DEXA_CREATOR } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
+import { publicRoutes } from "@/middleware";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
@@ -54,7 +55,7 @@ function useUser() {
   }, [isConnected, isAuth, data]);
 
   useEffect(() => {
-    if (!isConnected && isDisconnected && path != "/login") {
+    if (!isConnected && isDisconnected && !publicRoutes.includes(path)) {
       logout();
     }
   }, [isConnected, isDisconnected]);
