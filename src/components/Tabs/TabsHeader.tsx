@@ -34,7 +34,7 @@ function TabsHeader({
     >
       <p className={`${textColor}`}>{title}</p>
       {activeTabId === value && (
-        <div className={`h-1 bg-primary size-full absolute bottom-0`}></div>
+        <div className={`h-1 bg-primary w-10 rounded-md absolute bottom-0`}></div>
       )}
     </div>
   );

@@ -21,6 +21,7 @@ import Moment from "react-moment";
 import TipModal from "./TipModal";
 import { walletToLowercase } from "@/libs/helpers";
 import { useAccount } from "wagmi";
+import CreatorPFP from "./ListPost/CreatorPFP";
 
 type Props = {
   post?: Post;
@@ -35,16 +36,11 @@ function PostDetails({ post }: Props) {
     <div className="">
       <div className="flex items-center justify-between px-5">
         <div className="flex items-center space-x-2">
-          <Link href={`/${post?.creator.username}`} className="relative">
-            <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
-            <Image
-              height={100}
-              width={100}
-              alt=""
-              className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-700"
-              src={ape1}
-            />
-          </Link>
+          <CreatorPFP
+            pfp={post?.creator.pfp}
+            name={post?.creator.name}
+            username={post?.creator.username}
+          />
           <div className="flex flex-col">
             <Link
               href={`/${post?.creator.username}`}
@@ -113,9 +109,13 @@ function PostDetails({ post }: Props) {
                 </div>
               </Button>
             </div>
-            <p className="text-xs text-medium mt-2">
-              4 people tippped the creator.
-            </p>
+            {Number(post.tipCount) > 0 && (
+              <p className="text-xs text-medium mt-2">
+                {post.tipCount}{" "}
+                {Number(post.tipCount) > 1 ? `people` : `person`} tippped the
+                creator.
+              </p>
+            )}
           </div>
         )}
 
@@ -125,7 +125,6 @@ function PostDetails({ post }: Props) {
             <p className="text-sm text-medium">
               <Moment format="hh:mm A · MMM D, YYYY">{post?.createdAt}</Moment>
             </p>
-            {/* <p className="text-sm text-medium">3:39 AM · Apr 18, 2024</p> */}
             <p className="text-sm text-medium">
               <span className="font-semibold">1,191</span> Views
             </p>

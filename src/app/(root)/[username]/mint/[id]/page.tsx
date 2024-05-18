@@ -1,15 +1,16 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { mapPost } from "@/components/Home/Feeds";
 import Aside from "@/components/Layouts/Aside";
 import Section from "@/components/Layouts/Section";
 import PostDetails from "@/components/Posts/PostDetails";
 import BackButton from "@/components/ui/BackButton";
+import { useDexa } from "@/context/dexa.context";
 import { useAppSelector } from "@/hooks/redux.hook";
 import { Post } from "@/interfaces/feed.interface";
-import { getSinglePost } from "@/services/post.service";
 import { selectedPost } from "@/slices/posts/post-selected.slice";
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import { useReadContract } from "wagmi";
 
 type Props = {
   params: { username: string; id: string };
@@ -18,18 +19,20 @@ type Props = {
 function MintDetails({ params }: Props) {
   const { id, username } = params;
   const _post = useAppSelector(selectedPost);
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["post-details", id],
-    queryFn: async () => await getSinglePost(id),
-    enabled: !_post,
+  const { FeedsABI, dexaFeeds } = useDexa();
+  const { data } = useReadContract({
+    abi: FeedsABI,
+    address: dexaFeeds,
+    functionName: "postBygnfdId",
+    args: [id],
   });
   const [post, setPost] = useState<Post | undefined>(_post);
 
   useEffect(() => {
-    console.log(data);
-    if (data && data.status && data.statusCode == 200) {
-      const contents = data.data;
-      setPost(contents);
+    if (data) {
+      const content = data as Post;
+      const mapData = mapPost(content);
+      setPost(mapData);
     }
   }, [data]);
 

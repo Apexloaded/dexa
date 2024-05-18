@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TabsRoot from "../Tabs/TabsRoot";
 import TabsHeader from "../Tabs/TabsHeader";
 import TabsContent from "../Tabs/TabsContent";
 import TabsList from "../Tabs/TabsList";
-import Feeds from "../Home/Feeds";
 import UserFeeds from "./UserFeeds";
+import { Post } from "@/interfaces/feed.interface";
+import { useDexa } from "@/context/dexa.context";
+import { useReadContract } from "wagmi";
+import { sortPostByDate } from "../Home/Feeds";
+import Reminted from "./Reminted";
 
 type Props = {
   username: string;
@@ -14,13 +18,29 @@ type Props = {
 
 function ProfileTabs({ username }: Props) {
   const [activeTab, setActiveTab] = useState("tab1");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const { FeedsABI, dexaFeeds } = useDexa();
+  const { data: response } = useReadContract({
+    abi: FeedsABI,
+    address: dexaFeeds,
+    functionName: "postByCreator",
+    args: [username],
+  });
+
+  useEffect(() => {
+    if (response) {
+      const _posts = response as Post[];
+      const sortedPost = sortPostByDate(_posts);
+      setPosts(sortedPost);
+    }
+  }, [response]);
 
   const onTabChange = (tabId: string) => {
     setActiveTab(tabId);
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-5">
+    <div className="max-w-5xl w-full mx-auto mt-5">
       <div className="overflow-scroll scrollbar-hide">
         <TabsRoot>
           <TabsList className="border-b border-light">
@@ -31,14 +51,20 @@ function ProfileTabs({ username }: Props) {
               onTabChange={onTabChange}
             />
             <TabsHeader
-              title="Created"
+              title="Reminted"
               value="tab2"
               activeTabId={activeTab}
               onTabChange={onTabChange}
             />
             <TabsHeader
-              title="Collected"
+              title="Community"
               value="tab3"
+              activeTabId={activeTab}
+              onTabChange={onTabChange}
+            />
+            <TabsHeader
+              title="Tips"
+              value="tab4"
               activeTabId={activeTab}
               onTabChange={onTabChange}
             />
@@ -57,10 +83,10 @@ function ProfileTabs({ username }: Props) {
             /> */}
           </TabsList>
           <TabsContent value="tab1" activeTabId={activeTab}>
-            <UserFeeds username={username} />
+            <UserFeeds posts={posts} />
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
-            <div>Tab 2</div>
+            <Reminted posts={posts} />
           </TabsContent>
           {/* <TabsContent value="tab3" activeTabId={activeTab}>
             <div>Tab 3</div>

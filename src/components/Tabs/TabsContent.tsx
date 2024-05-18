@@ -13,7 +13,7 @@ function TabsContent({
 }>) {
   return (
     <div
-      className={`flex-grow ${
+      className={`flex-grow w-full ${
         value == activeTabId ? "block" : "hidden"
       } ${className}`}
     >
