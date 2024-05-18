@@ -13,19 +13,23 @@ import toast from "react-hot-toast";
 import { StoreBucket } from "@/interfaces/bucket.interface";
 import { useRouter } from "next/navigation";
 import { onboardComplete } from "@/services/auth.service";
+import { ContractError } from "@/libs/enum";
 type Props = {
   nextStep: (value: number) => void;
   index: number;
 };
 
-const getError = (error: Error) => {
-  if (error.message.includes("Dexa: 2")) {
-    return "User already registered";
-  }
-  if (error.message.includes("Dexa: 0")) {
-    return "Invalid display name or username";
-  }
-  return "An error occurred";
+const getError = (error: Error): string => {
+  const errorMessages: { [key: string]: string } = {
+    [ContractError.ERROR_DUPLICATE_RESOURCE]: "User already registered",
+    [ContractError.ERROR_INVALID_STRING]: "Invalid display name or username",
+  };
+
+  const foundMessage = Object.entries(errorMessages).find(([key]) =>
+    error.message.includes(key)
+  );
+
+  return foundMessage ? foundMessage[1] : "An error occurred";
 };
 
 export default function AccountStep({ nextStep, index }: Props) {

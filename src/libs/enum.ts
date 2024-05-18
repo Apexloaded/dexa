@@ -22,3 +22,12 @@ export enum BucketVisibilityType {
 export enum EventTypes {
   HELLO = "HELLO",
 }
+
+export enum ContractError {
+  ERROR_INVALID_STRING = "Dexa: 0",
+  ERROR_UNAUTHORISED_ACCESS = "Dexa: 1",
+  ERROR_DUPLICATE_RESOURCE = "Dexa: 2",
+  ERROR_NOT_FOUND = "Dexa: 3",
+  ERROR_INVALID_PRICE = "Dexa: 4",
+  ERROR_PROCESS_FAILED = "Dexa: 5",
+}

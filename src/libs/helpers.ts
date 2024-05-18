@@ -81,3 +81,8 @@ export const getFirstLetters = (fullName: string) => {
   }
   return initials;
 };
+
+export const timestampToDate = (time: string | number) => {
+  const date = new Date(Number(time) * 1000);
+  return date;
+};

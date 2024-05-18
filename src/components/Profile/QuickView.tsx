@@ -21,6 +21,7 @@ import { ethers } from "ethers";
 import { Tokens } from "@/config/tokens";
 import { walletToLowercase, weiToUnit } from "@/libs/helpers";
 import Link from "next/link";
+import QuickViewBal from "./QuickViewBal";
 
 function QuickView() {
   const swiperElRef = useRef(null);
@@ -59,7 +60,10 @@ function QuickView() {
         <p className="text-xl font-semibold">Profile</p>
         <div className="flex gap-4 items-center justify-end text-right">
           <div className="name">
-            <Link href={`/${user?.username}`} className="font-bold flex items-center gap-1 capitalize">
+            <Link
+              href={`/${user?.username}`}
+              className="font-bold flex items-center gap-1 capitalize"
+            >
               <BlueCheckMark />
               <span>{user?.name}</span>{" "}
             </Link>
@@ -91,7 +95,7 @@ function QuickView() {
               </div>
             ) : (
               <>
-                {balances.length > 0 ? (
+                {balances.length > 1 ? (
                   <Swiper
                     modules={[Autoplay]}
                     autoplay={{ delay: 5000 }}
@@ -103,25 +107,28 @@ function QuickView() {
                   >
                     {balances.map((bal, index) => (
                       <SwiperSlide key={index}>
-                        <p className="flex items-center gap-1">
-                          <span className="text-3xl font-semibold">
-                            {Number(bal.balance) > 0
-                              ? weiToUnit(bal.balance)
-                              : "0.00"}
-                          </span>
-                          {bal.icon && <bal.icon />}
-                        </p>
-                        <p className="text-sm font-light">$0.00</p>
+                        <QuickViewBal
+                          balance={bal.balance}
+                          icon={bal.icon ? <bal.icon /> : <></>}
+                        />
                       </SwiperSlide>
                     ))}
                   </Swiper>
                 ) : (
                   <>
-                    <p className="flex items-center gap-1">
-                      <span className="text-3xl font-semibold">0.00</span>
-                      <BNB />
-                    </p>
-                    <p className="text-sm font-light">$0.00</p>
+                    {balances.length < 1 ? (
+                      <QuickViewBal balance="0.00" icon={<BNB />} />
+                    ) : (
+                      <>
+                        {balances.map((bal, index) => (
+                          <QuickViewBal
+                            key={index}
+                            balance={bal.balance}
+                            icon={bal.icon ? <bal.icon /> : <></>}
+                          />
+                        ))}
+                      </>
+                    )}
                   </>
                 )}
               </>

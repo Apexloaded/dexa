@@ -6,8 +6,13 @@ import TabsHeader from "../Tabs/TabsHeader";
 import TabsContent from "../Tabs/TabsContent";
 import TabsList from "../Tabs/TabsList";
 import Feeds from "../Home/Feeds";
+import UserFeeds from "./UserFeeds";
 
-function ProfileTabs() {
+type Props = {
+  username: string;
+};
+
+function ProfileTabs({ username }: Props) {
   const [activeTab, setActiveTab] = useState("tab1");
 
   const onTabChange = (tabId: string) => {
@@ -52,7 +57,7 @@ function ProfileTabs() {
             /> */}
           </TabsList>
           <TabsContent value="tab1" activeTabId={activeTab}>
-            <Feeds />
+            <UserFeeds username={username} />
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
             <div>Tab 2</div>

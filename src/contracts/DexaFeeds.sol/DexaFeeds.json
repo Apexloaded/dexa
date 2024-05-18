@@ -694,6 +694,16 @@
             "internalType": "struct PostCreator",
             "name": "creator",
             "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReminted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remintedPost",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Post",
@@ -932,6 +942,16 @@
             "internalType": "struct PostCreator",
             "name": "creator",
             "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReminted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remintedPost",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Post[]",
@@ -1008,9 +1028,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
+        "internalType": "string",
+        "name": "username",
+        "type": "string"
       }
     ],
     "name": "postByCreator",
@@ -1110,6 +1130,16 @@
             "internalType": "struct PostCreator",
             "name": "creator",
             "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReminted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remintedPost",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Post[]",
@@ -1225,6 +1255,16 @@
             "internalType": "struct PostCreator",
             "name": "creator",
             "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "isReminted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remintedPost",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Post",
@@ -1288,6 +1328,16 @@
         "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "content",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "newPostId",
+        "type": "string"
       }
     ],
     "name": "remintPost",

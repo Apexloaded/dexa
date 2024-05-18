@@ -208,7 +208,7 @@ export default function TipModal({ post, open, setOpen }: Props) {
                       <div className="bg-primary/25 px-6 pt-5 pb-10 relative">
                         <div className="flex items-center gap-2 mb-6">
                           <p className="font-bold text-lg text-dark">
-                            Tip Creator&apos;s Post
+                            Tip Feed #{Number(post.tokenId)}
                           </p>
                         </div>
 

@@ -19,7 +19,7 @@ export default function Profile({ params }: Props) {
     <div className="flex space-x-5">
       <Section>
         <ProfileHeader username={username} />
-        <ProfileTabs />
+        <ProfileTabs username={username} />
       </Section>
       <Aside>
         <div className="w-full p-3 shadow rounded-lg bg-white dark:bg-gray-700">

@@ -3,49 +3,25 @@
 import React, { useEffect, useState } from "react";
 import ListPost from "../Posts/ListPost/ListPost";
 import { Post } from "@/interfaces/feed.interface";
+import { useQuery } from "@tanstack/react-query";
+import { getAllPost } from "@/services/post.service";
 import { useReadContract } from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import { timestampToDate, weiToUnit } from "@/libs/helpers";
+import { sortPostByDate } from "../Home/Feeds";
 
-export const sortPostByDate = (post: Post[]) => {
-  return post
-    .sort((a, b) => {
-      const dateA = timestampToDate(a.createdAt).getTime();
-      const dateB = timestampToDate(b.createdAt).getTime();
-      return dateB - dateA;
-    })
-    .map((p: Post) => mapPost(p));
+type Props = {
+  username: string;
 };
 
-export const mapPost = (post: Post) => {
-  const {
-    createdAt,
-    remintPrice,
-    tokenId,
-    remintCount,
-    tipCount,
-    remintedPost,
-    ...payload
-  } = post;
-  return {
-    createdAt: timestampToDate(post.createdAt).toISOString(),
-    remintPrice: weiToUnit(post.remintPrice).toString(),
-    remintCount: Number(post.remintCount).toString(),
-    tokenId: Number(post.tokenId).toString(),
-    tipCount: Number(post.tipCount).toString(),
-    remintedPost: Number(remintedPost).toString(),
-    ...payload,
-  } as Post;
-};
-
-function Feeds() {
+function UserFeeds({ username }: Props) {
   const [posts, setPosts] = useState<Post[]>([]);
   const { FeedsABI, dexaFeeds } = useDexa();
   const { data: response } = useReadContract({
     abi: FeedsABI,
     address: dexaFeeds,
-    functionName: "listAllPosts",
-    args: [],
+    functionName: "postByCreator",
+    args: [username],
   });
 
   useEffect(() => {
@@ -70,4 +46,4 @@ function Feeds() {
   );
 }
 
-export default Feeds;
+export default UserFeeds;

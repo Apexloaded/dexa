@@ -15,8 +15,13 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   remintPrice: string;
+  remintCount: string;
+  tipCount: string;
   remintToken: string;
   media: MediaType[];
+  isReminted: boolean;
+  remintedPost: string;
+  remintedBy: string[];
 }
 
 export interface CreatePost {

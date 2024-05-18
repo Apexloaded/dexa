@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import ListPost from "../Posts/ListPost";
+import ListPost from "./ListPost/ListPost";
 import NewPost from "./NewPost";
 import { Post } from "@/interfaces/feed.interface";
 

@@ -29,6 +29,7 @@ import { createPost } from "@/services/post.service";
 import { useAuth } from "@/context/auth.context";
 import { getFirstLetters } from "@/libs/helpers";
 import useToast from "@/hooks/toast.hook";
+import CreatorPFP from "./ListPost/CreatorPFP";
 
 function NewPost() {
   const [maxWord] = useState(70);
@@ -140,26 +141,7 @@ function NewPost() {
 
   return (
     <div className="px-5 pt-2 flex items-start space-x-3">
-      <Link href={`/${user?.username}`}>
-        <div className="w-10">
-          <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
-          {user?.pfp && user.pfp != "" ? (
-            <Image
-              src={user.pfp}
-              height={400}
-              width={400}
-              alt={"PFP"}
-              className="h-10 w-10 rounded-full"
-            />
-          ) : (
-            <div className="h-10 w-10 bg-white/90 border border-primary rounded-full flex justify-center items-center">
-              <p className="text-base font-semibold text-primary">
-                {getFirstLetters(`${user?.name}`)}
-              </p>
-            </div>
-          )}
-        </div>
-      </Link>
+      <CreatorPFP username={user?.username} name={user?.name} pfp={user?.pfp} />
       <div className="flex-1 flex flex-col relative">
         <div className="flex justify-between items-center">
           <RemintFee
