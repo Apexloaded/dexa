@@ -10,6 +10,9 @@ type Props = {
   className?: string;
 };
 function CreatorPFP({ pfp, username, name, className }: Props) {
+  const prevent = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+  };
   return (
     <Link href={`/${username}`} className="">
       <div className="w-10">

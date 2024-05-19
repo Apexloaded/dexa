@@ -22,6 +22,10 @@ import TipModal from "./TipModal";
 import { walletToLowercase } from "@/libs/helpers";
 import { useAccount } from "wagmi";
 import CreatorPFP from "./ListPost/CreatorPFP";
+import LikeButton from "./PostButtons/LikeButton";
+import CommentButton from "./PostButtons/CommentButton";
+import ShareButton from "./PostButtons/ShareButton";
+import BookmarkButton from "./PostButtons/BookmarkButton";
 
 type Props = {
   post?: Post;
@@ -138,73 +142,28 @@ function PostDetails({ post }: Props) {
         </div>
       </div>
 
-      <div className="py-2 flex px-5 items-center justify-between border-y border-light">
-        <div className="flex items-center space-x-1 group">
-          <Button
-            type={"button"}
-            kind={"default"}
-            shape={"CIRCLE"}
-            className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-            hoverColor={false}
-            title="Comments"
-          >
-            <MessageSquareTextIcon height={23} />
-          </Button>
-          <p className="text-sm group-hover:text-primary">12</p>
+      {post && (
+        <div className="py-2 flex px-5 items-center justify-between border-y border-light">
+          <div className="flex items-center space-x-1 group">
+            <CommentButton post={post} />
+          </div>
+          <div className="flex items-center space-x-1 group">
+            <LikeButton post={post} />
+          </div>
+          <div className="flex items-center space-x-1 group">
+            <ShareButton post={post} />
+          </div>
+          <div className="flex items-center space-x-1 group">
+            <BookmarkButton post={post} />
+          </div>
         </div>
-        <div className="flex items-center space-x-1 group">
-          <Button
-            type={"button"}
-            kind={"default"}
-            shape={"CIRCLE"}
-            className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-            hoverColor={false}
-            title="Like"
-          >
-            <ThumbsUpIcon height={23} />
-          </Button>
-          <p className="text-sm group-hover:text-primary">12</p>
+      )}
+
+      {post && (
+        <div>
+          <PostsComment post={post} />
         </div>
-        <div className="flex items-center space-x-1 group">
-          <Button
-            type={"button"}
-            kind={"default"}
-            shape={"CIRCLE"}
-            className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-            hoverColor={false}
-            title="Share"
-          >
-            <Share2Icon height={23} />
-          </Button>
-          <p className="text-sm group-hover:text-primary">12</p>
-        </div>
-        <div className="flex items-center space-x-1 group">
-          <Button
-            type={"button"}
-            kind={"default"}
-            shape={"CIRCLE"}
-            className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-            hoverColor={false}
-            title="Remint"
-          >
-            <Repeat2Icon height={23} />
-          </Button>
-          <p className="text-sm group-hover:text-primary">12</p>
-        </div>
-        <div className="flex items-center space-x-1 group">
-          <Button
-            type={"button"}
-            kind={"default"}
-            shape={"CIRCLE"}
-            className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-            hoverColor={false}
-            title="Comments"
-          >
-            <BookmarkIcon height={23} />
-          </Button>
-        </div>
-      </div>
-      <div>{/* <PostsComment /> */}</div>
+      )}
       {post && <TipModal post={post} open={tipModal} setOpen={setTipModal} />}
     </div>
   );

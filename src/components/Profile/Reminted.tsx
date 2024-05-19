@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import ListPost from "../Posts/ListPost/ListPost";
 import { Post } from "@/interfaces/feed.interface";
+import EmtpyBox from "../ui/EmtpyBox";
 
 type Props = {
   posts: Post[];
+  username: string;
 };
 
-function Reminted({ posts }: Props) {
+function Reminted({ posts, username }: Props) {
   const [reminted, setReminted] = useState<Post[]>([]);
   useEffect(() => {
     if (posts) {
@@ -28,8 +30,11 @@ function Reminted({ posts }: Props) {
         </>
       ) : (
         <div>
-          <div className="py-20 text-center">
-            <p className="text-2xl font-semibold">Nothing in trash</p>
+          <div className="text-center">
+            <EmtpyBox
+              title="Empty remints"
+              message={`${username} haven't reminted any mintable`}
+            />
           </div>
         </div>
       )}

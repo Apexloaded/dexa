@@ -36,6 +36,7 @@ import TipModal from "../TipModal";
 import CreatorPFP from "../ListPost/CreatorPFP";
 import CreatorName from "./CreatorName";
 import RemintedPost from "./RemintedPost";
+import PostButtons from "../PostButtons/PostButtons";
 
 type Props = {
   post: Post;
@@ -51,7 +52,7 @@ function RemintedPostLayout({ post }: Props) {
   }, []);
 
   const postDetails = () => {
-    //router.push(`/${post.creator.username}/mint/${post.id}`);
+    router.push(`/${post.creator.username}/mint/${post.id}`);
     dispatch(selectPost(post));
     //router.push(`/${post.creator.username}/mint/${post.id}`);
   };
@@ -95,99 +96,24 @@ function RemintedPostLayout({ post }: Props) {
                 </Button>
               </div>
             </div>
-            <Link href={`/${post.creator.username}/mint/${post.id}`}>
-              {post && post.content && (
-                <div className="mt-2">
-                  <ShowMore
-                    onClick={postDetails}
-                    data={post.content}
-                    dataType={"HTML"}
-                    isShowMore={true}
-                  />
-                </div>
-              )}
-            </Link>
+            {/* <Link href={`/${post.creator.username}/mint/${post.id}`}> */}
+            {post && post.content && (
+              <div className="mt-2">
+                <ShowMore
+                  onClick={postDetails}
+                  data={post.content}
+                  dataType={"HTML"}
+                  isShowMore={true}
+                />
+              </div>
+            )}
+            {/* </Link> */}
 
             <div className="my-2">
               <RemintedPost postId={post.remintedPost} />
             </div>
 
-            <div className="pt-2 flex items-center justify-between">
-              <div className="flex items-center space-x-1 group">
-                <Button
-                  type={"button"}
-                  kind={"default"}
-                  shape={"CIRCLE"}
-                  className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                  hoverColor={false}
-                  onClick={(e) => {
-                    prevent(e);
-                    setTipModal(true);
-                  }}
-                  title="Tip"
-                >
-                  <HandCoinsIcon height={18} />
-                </Button>
-              </div>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-4 lg:space-x-6">
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Comments"
-                    >
-                      <MessageSquareTextIcon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Like"
-                    >
-                      <ThumbsUpIcon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                  <div className="hidden md:flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Share"
-                    >
-                      <Share2Icon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                </div>
-
-                <div className="hidden md:flex items-center space-x-2">
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Comments"
-                    >
-                      <BookmarkIcon height={18} />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PostButtons setTipModal={setTipModal} post={post} />
           </div>
         </div>
       </div>

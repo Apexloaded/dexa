@@ -86,7 +86,7 @@ function ProfileTabs({ username }: Props) {
             <UserFeeds posts={posts} />
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
-            <Reminted posts={posts} />
+            <Reminted posts={posts} username={username} />
           </TabsContent>
           {/* <TabsContent value="tab3" activeTabId={activeTab}>
             <div>Tab 3</div>

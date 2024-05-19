@@ -35,6 +35,7 @@ import BlueCheckMark from "../../Profile/BlueCheck";
 import TipModal from "../TipModal";
 import CreatorPFP from "./CreatorPFP";
 import CreatorName from "./CreatorName";
+import PostButtons from "../PostButtons/PostButtons";
 
 type Props = {
   post: Post;
@@ -52,7 +53,7 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
   }, []);
 
   const postDetails = () => {
-    //router.push(`/${post.creator.username}/mint/${post.id}`);
+    router.push(`/${post.creator.username}/mint/${post.id}`);
     dispatch(selectPost(post));
     //router.push(`/${post.creator.username}/mint/${post.id}`);
   };
@@ -100,7 +101,7 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
               username={post.creator.username}
               createdAt={post.createdAt}
             />
-            <Link href={`/${post.creator.username}/mint/${post.id}`}>
+            {/* <Link href={`/${post.creator.username}/mint/${post.id}`}> */}
               {post && post.content && (
                 <div className="mt-2">
                   <ShowMore
@@ -125,98 +126,26 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
                     />
                   </div>
                 ))}
-            </Link>
+            {/* </Link> */}
 
-            <div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm">
-                    Mint ID{" "}
-                    <span className="text-primary">{post.tokenId}</span>
-                  </p>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <TrendingDownIcon size={18} className="text-danger" />
-                  <p className="text-danger text-sm text-right">Bearish</p>
+            {!post.isMintable && (
+              <div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm">
+                      Mint ID{" "}
+                      <span className="text-primary">{post.tokenId}</span>
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <TrendingDownIcon size={18} className="text-danger" />
+                    <p className="text-danger text-sm text-right">Bearish</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="pt-2 flex items-center justify-between">
-              <div className="flex items-center space-x-1 group">
-                <Button
-                  type={"button"}
-                  kind={"default"}
-                  shape={"CIRCLE"}
-                  className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                  hoverColor={false}
-                  onClick={(e) => {
-                    prevent(e);
-                    setTipModal(true);
-                  }}
-                  title="Tip"
-                >
-                  <HandCoinsIcon height={18} />
-                </Button>
-              </div>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-4 lg:space-x-6">
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Comments"
-                    >
-                      <MessageSquareTextIcon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Like"
-                    >
-                      <ThumbsUpIcon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                  <div className="hidden md:flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Share"
-                    >
-                      <Share2Icon height={18} />
-                    </Button>
-                    <p className="text-sm group-hover:text-primary">12</p>
-                  </div>
-                </div>
+            )}
 
-                <div className="hidden md:flex items-center space-x-2">
-                  <div className="flex items-center space-x-1 group">
-                    <Button
-                      type={"button"}
-                      kind={"default"}
-                      shape={"CIRCLE"}
-                      className="text-dark group-hover:text-primary group-hover:bg-primary/20"
-                      hoverColor={false}
-                      title="Comments"
-                    >
-                      <BookmarkIcon height={18} />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PostButtons setTipModal={setTipModal} post={post} />
           </div>
         </div>
       </div>

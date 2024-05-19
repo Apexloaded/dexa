@@ -22,6 +22,10 @@ export interface Post {
   isReminted: boolean;
   remintedPost: string;
   remintedBy: string[];
+  likedBy: string[];
+  parentId: number;
+  commentCount: number;
+  isMintable: boolean;
 }
 
 export interface CreatePost {

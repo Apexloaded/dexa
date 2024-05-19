@@ -51,7 +51,11 @@ function RemintedPost({ postId, postItem }: Props) {
 
   return (
     <div
-      onClick={postDetails}
+      role="button"
+      onClick={(e) => {
+        postDetails;
+        e.stopPropagation();
+      }}
       className="hover:bg-light cursor-pointer border border-medium/30 rounded-2xl pt-3"
     >
       <div className="flex gap-x-2 items-center px-3">

@@ -25,6 +25,8 @@ export const mapPost = (post: Post) => {
     remintCount,
     tipCount,
     remintedPost,
+    parentId,
+    commentCount,
     ...payload
   } = post;
   return {
@@ -34,6 +36,8 @@ export const mapPost = (post: Post) => {
     tokenId: Number(post.tokenId).toString(),
     tipCount: Number(post.tipCount).toString(),
     remintedPost: Number(remintedPost).toString(),
+    commentCount: Number(post.commentCount),
+    parentId: Number(post.parentId),
     ...payload,
   } as Post;
 };
@@ -52,6 +56,7 @@ function Feeds() {
     if (response) {
       const _posts = response as Post[];
       const sortedPost = sortPostByDate(_posts);
+      console.log(sortedPost);
       setPosts(sortedPost);
     }
   }, [response]);
