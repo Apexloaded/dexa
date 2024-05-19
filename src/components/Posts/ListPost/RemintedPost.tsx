@@ -44,9 +44,11 @@ function RemintedPost({ postId, postItem }: Props) {
   }, [post]);
 
   const postDetails = () => {
-    //router.push(`/${post.creator.username}/mint/${post.id}`);
-    if (post) dispatch(selectPost(post));
-    //router.push(`/${post.creator.username}/mint/${post.id}`);
+    if (post) {
+      router.push(`/${post.creator.username}/mint/${post.id}`);
+      dispatch(selectPost(post));
+      //router.push(`/${post.creator.username}/mint/${post.id}`);
+    }
   };
 
   return (
@@ -71,7 +73,7 @@ function RemintedPost({ postId, postItem }: Props) {
         />
       </div>
       <div>
-        <Link href={`/${post?.creator.username}/mint/${post?.id}`}>
+        {/* <Link href={`/${post?.creator.username}/mint/${post?.id}`}> */}
           <div className="px-3">
             {post && post.content && (
               <div className="mt-2">
@@ -97,7 +99,7 @@ function RemintedPost({ postId, postItem }: Props) {
                 />
               </div>
             ))}
-        </Link>
+        {/* </Link> */}
       </div>
     </div>
   );
