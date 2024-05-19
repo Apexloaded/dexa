@@ -12,6 +12,9 @@ function BookmarkButton({ post }: Props) {
       shape={"CIRCLE"}
       className="text-dark group-hover:text-primary group-hover:bg-primary/20"
       hoverColor={false}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
       title="Bookmark"
     >
       <BookmarkIcon height={18} />

@@ -18,6 +18,7 @@ function TipButton({ post, setTipModal }: Props) {
       hoverColor={false}
       onClick={(e) => {
         setTipModal(true);
+        e.stopPropagation();
       }}
       title="Tip"
     >

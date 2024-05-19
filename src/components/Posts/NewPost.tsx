@@ -30,8 +30,11 @@ import { useAuth } from "@/context/auth.context";
 import { getFirstLetters } from "@/libs/helpers";
 import useToast from "@/hooks/toast.hook";
 import CreatorPFP from "./ListPost/CreatorPFP";
+import { useRouter } from "next/navigation";
 
 function NewPost() {
+  const router = useRouter();
+  router.prefetch("/live");
   const [maxWord] = useState(70);
   const [remintFee, setRemintFee] = useState<string>("0");
   const [token, selectToken] = useState<Coin>();
@@ -260,13 +263,14 @@ function NewPost() {
             >
               <CalendarPlusIcon size={18} />
             </Button>
-            <Link
-              href="/live"
+            <div
+              onClick={() => router.push('/live')}
+              role="button"
               className="flex gap-1 rounded-md select-none text-white cursor-pointer hover:bg-danger/90 bg-danger items-center px-[0.5rem] py-[0.2rem]"
             >
               <VideoIcon size={18} />
               <p className="text-sm">Live</p>
-            </Link>
+            </div>
           </div>
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1">
