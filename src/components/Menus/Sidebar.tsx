@@ -84,6 +84,7 @@ export default function Sidebar() {
           <div>
             {navigation.map((nav, idx) => (
               <Link
+                prefetch={true}
                 href={nav.href}
                 key={idx}
                 className="flex justify-end xl:justify-start group px-3 md:pl-5 md:pr-5 xl:pl-0 xl:pr-0"

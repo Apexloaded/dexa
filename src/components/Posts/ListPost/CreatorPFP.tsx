@@ -18,7 +18,7 @@ function CreatorPFP({ pfp, username, name, className }: Props) {
   }, [username]);
 
   const profile = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    event?.stopPropagation();
+    e.stopPropagation();
     router.push(`/${username}`);
   };
 
