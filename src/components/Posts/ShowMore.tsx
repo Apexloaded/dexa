@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import parse from "html-react-parser";
+import parseHtmlToJsx from "./HtmlToJsx";
 
 interface Props {
   data: string;
-  dataType?: "HTML" | "STRING";
   more?: string;
   less?: string;
   truncatedEndingComponent?: string;
@@ -13,73 +13,114 @@ interface Props {
   onClick?: () => void;
 }
 
-const highlightUsernames = (text: string) => {
-  const regex = /@(\w+)/g;
-  return text.replace(
-    regex,
-    '<span class="text-primary hover:underline"><a href="/$1" onClick="(event) => event.stopPropagation()">$&</a></span>'
-  );
-};
-
-const highlightHashtags = (text: string) => {
-  const regex = /#(\w+)/g;
-  return text.replace(
-    regex,
-    '<span class="text-primary hover:underline"><a href="/hashtag/$1" onClick="(event) => event.stopPropagation()">$&</a></span>'
-  );
-};
-
-const highlightSign = (text: string) => {
-  const regex = /$(\w+)/g;
-  return text.replace(
-    regex,
-    `<span class="text-primary hover:underline">
-      ${(<Link href={"hashtag/$1"}>$&</Link>)}
-      <a href="hashtag/$1" onClick="(event) => event.stopPropagation()">$&</a>
-    </span>`
-  );
-};
-
 function ShowMore({
   data,
   truncatedEndingComponent = "...",
   less = "Show less",
   more = "Show more",
   endLength = 250,
-  dataType = "STRING",
   isShowMore = false,
   onClick,
 }: Props) {
   const [showMore, setShowMore] = useState<boolean>(isShowMore);
-  const postData = highlightHashtags(highlightUsernames(data));
-  const post =
-    data.length > endLength && showMore
-      ? `${postData?.substring(
-          0,
-          endLength
-        )}<span className={"text-primary"}>${truncatedEndingComponent}</span>`
-      : postData;
+
+  const truncateString = (str: string, length:number) => {
+    if (str.length <= length) return str;
+
+    // Find the last complete sentence within the limit
+    const sentenceRegex = /[^.!?]*[.!?]/g;
+    let match;
+    let lastMatchIndex = 0;
+
+    while ((match = sentenceRegex.exec(str)) !== null) {
+      if (match.index + match[0].length <= length) {
+        lastMatchIndex = match.index + match[0].length;
+      } else {
+        break;
+      }
+    }
+
+    if (lastMatchIndex === 0) {
+      // If no full sentence is found within the limit, truncate at the nearest word boundary
+      const words = str.substring(0, length).split(" ");
+      words.pop();
+      return words.join(" ") + "...";
+    }
+
+    return str.substring(0, lastMatchIndex) + "...";
+  };
+
+  const contentToDisplay = showMore
+    ? parseHtmlToJsx(truncateString(data, endLength))
+    : parseHtmlToJsx(data);
+
+  // const onLinkClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  //   e.stopPropagation();
+  // };
+
+  // const post = parse(data, {
+  //   replace(domNode, index) {
+  //     if (domNode.type === "text") {
+  //       const textContent = domNode.data;
+  //       if (textContent) {
+  //         const mentionRegex = /@(\w+)/g;
+  //         const hashtagRegex = /#(\w+)/g;
+  //         const dollarRegex = /\$([a-zA-Z]+)/g;
+
+  //         const parts = textContent.split(/(@\w+|#\w+|\$[a-zA-Z]+)/g);
+
+  //         const elements = parts.map((part, index) => {
+  //           if (part.match(mentionRegex)) {
+  //             const username = part.slice(1);
+  //             return (
+  //               <Link
+  //                 onClick={onLinkClick}
+  //                 prefetch={true}
+  //                 key={`${username}-${index}`}
+  //                 href={`/${username}`}
+  //               >
+  //                 @{username}
+  //               </Link>
+  //             );
+  //           } else if (part.match(hashtagRegex)) {
+  //             const hashtag = part.slice(1);
+  //             return (
+  //               <Link
+  //                 onClick={onLinkClick}
+  //                 prefetch={true}
+  //                 key={`${hashtag}-${index}`}
+  //                 href={`/hashtag/${hashtag}`}
+  //               >
+  //                 #{hashtag}
+  //               </Link>
+  //             );
+  //           } else if (part.match(dollarRegex)) {
+  //             const tag = part.slice(1);
+  //             return (
+  //               <Link
+  //                 onClick={onLinkClick}
+  //                 prefetch={true}
+  //                 key={`${tag}-${index}`}
+  //                 href={`/search?q=${tag}`}
+  //               >
+  //                 ${tag}
+  //               </Link>
+  //             );
+  //           } else {
+  //             return part;
+  //           }
+  //         });
+
+  //         return <>{elements}</>;
+  //       }
+  //     }
+  //   },
+  // });
 
   return (
     <>
       <div>
-        {dataType === "HTML" ? (
-          <>
-            <div
-              className="html-data"
-              dangerouslySetInnerHTML={{
-                __html: post,
-              }}
-            ></div>
-          </>
-        ) : (
-          <span>
-            {data.substring(0, endLength)}
-            {data.length > endLength && (
-              <span className={"text-primary"}>{truncatedEndingComponent}</span>
-            )}
-          </span>
-        )}
+        <div className="html-data">{contentToDisplay}</div>
         {showMore && data.length > endLength && (
           <button
             className={`text-primary font-semibold text-sm gap-1 items-center ${

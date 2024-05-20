@@ -53,7 +53,7 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
   }, []);
 
   const postDetails = () => {
-    router.push(`/${post.creator.username}/mint/${post.id}`);
+    router.push(`/${post.creator.username}/mint/${post.id}`, { scroll: false });
     dispatch(selectPost(post));
     //router.push(`/${post.creator.username}/mint/${post.id}`);
   };
@@ -96,36 +96,50 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
           </div>
 
           <div className="flex-1">
-            <CreatorName
-              name={post.creator.name}
-              username={post.creator.username}
-              createdAt={post.createdAt}
-            />
+            <div className="flex items-center justify-between">
+              <CreatorName
+                name={post.creator.name}
+                username={post.creator.username}
+                createdAt={post.createdAt}
+              />
+              <div>
+                <Button
+                  type={"button"}
+                  kind={"default"}
+                  shape={"CIRCLE"}
+                  className="hover:bg-primary/20 hover:text-primary"
+                  hoverColor={false}
+                  title="More"
+                  onClick={prevent}
+                >
+                  <EllipsisIcon size={18} />
+                </Button>
+              </div>
+            </div>
             {/* <Link href={`/${post.creator.username}/mint/${post.id}`}> */}
-              {post && post.content && (
-                <div className="mt-2">
-                  <ShowMore
-                    onClick={postDetails}
-                    data={post.content}
-                    dataType={"HTML"}
-                    isShowMore={true}
+            {post && post.content && (
+              <div className="mt-2">
+                <ShowMore
+                  onClick={postDetails}
+                  data={post.content}
+                  isShowMore={true}
+                />
+              </div>
+            )}
+
+            {post.media &&
+              post.media.map((media, index) => (
+                <div key={index} className="my-2 rounded-xl overflow-hidden">
+                  <Image
+                    key={index}
+                    src={media.url}
+                    height={400}
+                    width={600}
+                    alt={post.id}
+                    priority
                   />
                 </div>
-              )}
-
-              {post.media &&
-                post.media.map((media, index) => (
-                  <div key={index} className="my-2 rounded-xl overflow-hidden">
-                    <Image
-                      key={index}
-                      src={media.url}
-                      height={400}
-                      width={600}
-                      alt={post.id}
-                      priority
-                    />
-                  </div>
-                ))}
+              ))}
             {/* </Link> */}
 
             {!post.isMintable && (

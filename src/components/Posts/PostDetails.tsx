@@ -79,7 +79,7 @@ function PostDetails({ post }: Props) {
       </div>
       {post && (
         <div className="mt-2 px-5">
-          <ShowMore data={post.content} dataType={"HTML"} />
+          <ShowMore data={post.content} />
           <div className="rounded-xl mt-2 overflow-hidden">
             {post?.media.map((media, index) => (
               <Image

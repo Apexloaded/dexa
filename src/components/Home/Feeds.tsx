@@ -55,8 +55,7 @@ function Feeds() {
   useEffect(() => {
     if (response) {
       const _posts = response as Post[];
-      const sortedPost = sortPostByDate(_posts);
-      console.log(sortedPost);
+      const sortedPost = sortPostByDate(_posts).filter((p) => !p.isMintable);
       setPosts(sortedPost);
     }
   }, [response]);

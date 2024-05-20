@@ -96,18 +96,16 @@ function RemintedPostLayout({ post }: Props) {
                 </Button>
               </div>
             </div>
-            {/* <Link href={`/${post.creator.username}/mint/${post.id}`}> */}
+            
             {post && post.content && (
               <div className="mt-2">
                 <ShowMore
                   onClick={postDetails}
                   data={post.content}
-                  dataType={"HTML"}
                   isShowMore={true}
                 />
               </div>
             )}
-            {/* </Link> */}
 
             <div className="my-2">
               <RemintedPost postId={post.remintedPost} />

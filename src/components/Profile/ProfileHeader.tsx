@@ -187,11 +187,7 @@ function ProfileHeader({ username }: Props) {
               </div>
               {user?.bio && (
                 <div className="mt-1">
-                  <ShowMore
-                    data={user.bio}
-                    isShowMore={true}
-                    dataType="HTML"
-                  ></ShowMore>
+                  <ShowMore data={user.bio} isShowMore={true}></ShowMore>
                 </div>
               )}
 

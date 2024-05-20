@@ -80,7 +80,6 @@ function RemintedPost({ postId, postItem }: Props) {
                 <ShowMore
                   onClick={postDetails}
                   data={post.content}
-                  dataType={"HTML"}
                   isShowMore={true}
                 />
               </div>
