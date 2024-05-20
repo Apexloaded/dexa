@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import Link from "next/link";
-import parse from "html-react-parser";
-import parseHtmlToJsx from "./HtmlToJsx";
+import parseHtmlToJsx from "./HtmlToJxs";
 
 interface Props {
   data: string;
