@@ -1,4 +1,4 @@
-import greenFieldHook from "@/hooks/gnfd.hook";
+import useGreenFieldHook from "@/hooks/gnfd.hook";
 import {
   IReturnOffChainAuthKeyPairAndUpload,
   TxResponse,
@@ -26,7 +26,7 @@ export const GnfdContext = createContext<GnfdContextType | undefined>(
 );
 
 export function GnfdProvider({ children }: Props) {
-  const gnfd = greenFieldHook();
+  const gnfd = useGreenFieldHook();
 
   return <GnfdContext.Provider value={gnfd}>{children}</GnfdContext.Provider>;
 }

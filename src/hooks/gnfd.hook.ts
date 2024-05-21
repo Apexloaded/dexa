@@ -4,7 +4,7 @@ import { VisibilityType, Long } from "@bnb-chain/greenfield-js-sdk";
 import { useEffect } from "react";
 import { Connector, useAccount } from "wagmi";
 
-function greenFieldHook() {
+function useGreenFieldHook() {
   const { address, connector } = useAccount();
 
   useEffect(() => {
@@ -39,4 +39,4 @@ function greenFieldHook() {
   return { createBucket, getOffChainAuth };
 }
 
-export default greenFieldHook;
+export default useGreenFieldHook;
