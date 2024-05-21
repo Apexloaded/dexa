@@ -16,26 +16,10 @@ import { VisibilityType } from "@bnb-chain/greenfield-js-sdk";
 
 function TestDev() {
   const [bucket, setBucket] = useState<string>();
-  const { address, connector } = useAccount();
-  const { createBucket, getOffChainAuth } = useGnfd();
+  const { address } = useAccount();
+  //const { createBucket } = useGnfd();
   const { writeContractAsync, isPending } = useWriteContract();
-  const {
-    ERC20ABI,
-    dexaCreator,
-    CreatorABI,
-    FeedsABI,
-    dexaFeeds,
-    feedsToken,
-    FeedsTokenABI,
-  } = useDexa();
-  const { data } = useReadContract({
-    abi: CreatorABI,
-    address: dexaCreator,
-    functionName: "getBalance",
-    args: ["0x691889F5944126906F0051c5ca087e975BADABb3", ZeroAddress],
-  });
-
-  console.log(data);
+  const { FeedsABI, dexaFeeds } = useDexa();
 
   const {
     setValue,
@@ -62,36 +46,10 @@ function TestDev() {
         position: "bottom-center",
       });
 
-      const res = await createBucket(
-        bucket,
-        VisibilityType.VISIBILITY_TYPE_PUBLIC_READ
-      );
-
-      console.log(res);
-      // const tx = await writeContractAsync(
-      //   {
-      //     abi: FeedsTokenABI,
-      //     address: feedsToken,
-      //     functionName: "setTokenURI",
-      //     args: [
-      //       "https://gnfd-testnet-sp1.bnbchain.org/view/dexa/metadata/{id}.json",
-      //     ],
-      //   },
-      //   {
-      //     onSuccess(data) {
-      //       toast.success("Role Granted", {
-      //         id: loadToast,
-      //       });
-      //       console.log(data);
-      //     },
-      //     onError(err) {
-      //       toast.error(err.message, {
-      //         id: loadToast,
-      //       });
-      //     },
-      //   }
+      // const res = await createBucket(
+      //   bucket,
+      //   VisibilityType.VISIBILITY_TYPE_PUBLIC_READ
       // );
-      // console.log(tx);
     } catch (err) {
       console.log(typeof err);
       console.log(err);
