@@ -13,6 +13,7 @@ import SwitchChain from "./Auth/SwitchChain";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { StreamProvider } from "@/context/stream.context";
 import "swiper/css";
+import { GnfdProvider } from "@/context/gnfd.context";
 
 const queryClient = new QueryClient();
 
@@ -30,11 +31,11 @@ export default function HTML({
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
           <WagmiProvider config={config} initialState={initialState}>
-            
-              <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                  <DexaProvider>
-                    <StreamProvider>
+            <QueryClientProvider client={queryClient}>
+              <AuthProvider>
+                <DexaProvider>
+                  <StreamProvider>
+                    <GnfdProvider>
                       <ProgressBar
                         height="4px"
                         color="#4338ca"
@@ -44,10 +45,11 @@ export default function HTML({
                       <SwitchChain />
                       <main>{children}</main>
                       <Toaster />
-                    </StreamProvider>
-                  </DexaProvider>
-                </AuthProvider>
-              </QueryClientProvider>
+                    </GnfdProvider>
+                  </StreamProvider>
+                </DexaProvider>
+              </AuthProvider>
+            </QueryClientProvider>
           </WagmiProvider>
         </Provider>
       </body>

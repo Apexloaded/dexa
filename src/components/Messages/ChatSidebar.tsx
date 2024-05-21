@@ -9,12 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import FriendList from "./FriendList";
 
-const friendLists: FriendListInterface[] = [
-  {
-    name: "James Harden",
-    pubkey: "0x3943B432C4161D92fc3e511EC653d0b0e712C58F",
-  },
-];
+const friendLists: FriendListInterface[] = [];
 
 function ChatSidebar() {
   const [width, setWidth] = useState(0);

@@ -22,6 +22,7 @@ import { Tokens } from "@/config/tokens";
 import { walletToLowercase, weiToUnit } from "@/libs/helpers";
 import Link from "next/link";
 import QuickViewBal from "./QuickViewBal";
+import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 
 function QuickView() {
   const swiperElRef = useRef(null);
@@ -61,6 +62,7 @@ function QuickView() {
         <div className="flex gap-4 items-center justify-end text-right">
           <div className="name">
             <Link
+              prefetch={true}
               href={`/${user?.username}`}
               className="font-bold flex items-center gap-1 capitalize"
             >
@@ -69,9 +71,11 @@ function QuickView() {
             </Link>
             <p className="text-neutral-400 text-sm">Professional</p>
           </div>
-          <div className="w-10 h-10 overflow-hidden rounded-full border border-light">
-            {/* <Image src={Avatar} alt={`avatar`} /> */}
-          </div>
+          <CreatorPFP
+            username={user?.username}
+            name={user?.name}
+            pfp={user?.pfp}
+          />
         </div>
       </div>
       <div>
@@ -142,7 +146,7 @@ function QuickView() {
             >
               Add Fund
             </Button>
-            <Link href="/withdraw">
+            <Link prefetch={true} href="/withdraw">
               <Button
                 shape={"ROUNDED"}
                 kind="primary"

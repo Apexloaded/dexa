@@ -11,12 +11,23 @@ import dbAnim from "@/assets/lottie/db.json";
 import { formatWalletAddress } from "@/libs/helpers";
 import { useDexa } from "@/context/dexa.context";
 import { ZeroAddress, ethers } from "ethers";
+import { useGnfd } from "@/context/gnfd.context";
+import { VisibilityType } from "@bnb-chain/greenfield-js-sdk";
 
 function TestDev() {
   const [bucket, setBucket] = useState<string>();
   const { address, connector } = useAccount();
+  const { createBucket, getOffChainAuth } = useGnfd();
   const { writeContractAsync, isPending } = useWriteContract();
-  const { ERC20ABI, dexaCreator, CreatorABI, FeedsABI, dexaFeeds, feedsToken, FeedsTokenABI } = useDexa();
+  const {
+    ERC20ABI,
+    dexaCreator,
+    CreatorABI,
+    FeedsABI,
+    dexaFeeds,
+    feedsToken,
+    FeedsTokenABI,
+  } = useDexa();
   const { data } = useReadContract({
     abi: CreatorABI,
     address: dexaCreator,
@@ -51,30 +62,36 @@ function TestDev() {
         position: "bottom-center",
       });
 
-      const tx = await writeContractAsync(
-        {
-          abi: FeedsTokenABI,
-          address: feedsToken,
-          functionName: "setTokenURI",
-          args: [
-            "https://gnfd-testnet-sp1.bnbchain.org/view/dexa/metadata/{id}.json",
-          ],
-        },
-        {
-          onSuccess(data) {
-            toast.success("Role Granted", {
-              id: loadToast,
-            });
-            console.log(data);
-          },
-          onError(err) {
-            toast.error(err.message, {
-              id: loadToast,
-            });
-          },
-        }
+      const res = await createBucket(
+        bucket,
+        VisibilityType.VISIBILITY_TYPE_PUBLIC_READ
       );
-      console.log(tx);
+
+      console.log(res);
+      // const tx = await writeContractAsync(
+      //   {
+      //     abi: FeedsTokenABI,
+      //     address: feedsToken,
+      //     functionName: "setTokenURI",
+      //     args: [
+      //       "https://gnfd-testnet-sp1.bnbchain.org/view/dexa/metadata/{id}.json",
+      //     ],
+      //   },
+      //   {
+      //     onSuccess(data) {
+      //       toast.success("Role Granted", {
+      //         id: loadToast,
+      //       });
+      //       console.log(data);
+      //     },
+      //     onError(err) {
+      //       toast.error(err.message, {
+      //         id: loadToast,
+      //       });
+      //     },
+      //   }
+      // );
+      // console.log(tx);
     } catch (err) {
       console.log(typeof err);
       console.log(err);

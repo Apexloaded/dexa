@@ -243,7 +243,7 @@ export default function TipModal({ post, open, setOpen }: Props) {
                               name={"amount"}
                               render={({ field: { onChange, value } }) => (
                                 <Input
-                                  type={"tel"}
+                                  type={"text"}
                                   className="text-xl font-semibold px-0"
                                   isOutline={false}
                                   onChange={(e) => {
