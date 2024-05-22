@@ -25,12 +25,29 @@ import { useDexa } from "@/context/dexa.context";
 import RemintFee from "./RemintFee";
 import { Coin } from "@/interfaces/feed.interface";
 import { ethers } from "ethers";
-import { createPost } from "@/services/post.service";
+//import { createPost } from "@/services/post.service";
 import { useAuth } from "@/context/auth.context";
 import { getFirstLetters } from "@/libs/helpers";
 import useToast from "@/hooks/toast.hook";
 import CreatorPFP from "./ListPost/CreatorPFP";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { API_URL } from "@/config/env";
+import { useCookies } from "react-cookie";
+import { StorageTypes } from "@/libs/enum";
+
+async function createPost(payload: FormData, cookie: string) {
+  const response = await axios
+    .post(`${API_URL}/posts/create`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${cookie}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+  return response;
+}
 
 function NewPost() {
   const router = useRouter();
@@ -42,6 +59,7 @@ function NewPost() {
   const mediaRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const [percentage, setPercentage] = useState(0);
+  const [cookie] = useCookies([StorageTypes.ACCESS_TOKEN]);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [exceededCount, setExceededCount] = useState(0);
   const { address } = useAccount();
@@ -73,36 +91,36 @@ function NewPost() {
       formData.append("visibility", access_level);
       formData.append("bucketName", "dexa");
 
-      const response = await createPost(formData);
+      const response = await createPost(formData, cookie[StorageTypes.ACCESS_TOKEN]);
       if (response.statusCode == 201 && response.status == true) {
         success({ msg: "Metadata generated" });
-        loading({ msg: "Minting post" });
+        //loading({ msg: "Minting post" });
         const { tokenURI, nft, postId } = response.data;
         const price = remintFee != "" ? remintFee : "0";
-        writeContractAsync(
-          {
-            abi: FeedsABI,
-            address: dexaFeeds,
-            functionName: "mintPost",
-            args: [
-              postId,
-              content,
-              ethers.parseEther(price),
-              token?.address,
-              tokenURI,
-              [nft],
-            ],
-          },
-          {
-            onSuccess: async (data) => {
-              success({ msg: "Post created" });
-              resetForm();
-            },
-            onError(err) {
-              error({ msg: `${err.message}` });
-            },
-          }
-        );
+        // writeContractAsync(
+        //   {
+        //     abi: FeedsABI,
+        //     address: dexaFeeds,
+        //     functionName: "mintPost",
+        //     args: [
+        //       postId,
+        //       content,
+        //       ethers.parseEther(price),
+        //       token?.address,
+        //       tokenURI,
+        //       [nft],
+        //     ],
+        //   },
+        //   {
+        //     onSuccess: async (data) => {
+        //       success({ msg: "Post created" });
+        //       resetForm();
+        //     },
+        //     onError(err) {
+        //       error({ msg: `${err.message}` });
+        //     },
+        //   }
+        // );
       } else {
         error({ msg: "error creating post" });
       }
@@ -264,7 +282,7 @@ function NewPost() {
               <CalendarPlusIcon size={18} />
             </Button>
             <div
-              onClick={() => router.push('/live')}
+              onClick={() => router.push("/live")}
               role="button"
               className="flex gap-1 rounded-md select-none text-white cursor-pointer hover:bg-danger/90 bg-danger items-center px-[0.5rem] py-[0.2rem]"
             >

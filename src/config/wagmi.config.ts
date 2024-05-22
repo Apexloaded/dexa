@@ -8,7 +8,10 @@ export const config = createConfig({
   storage: createStorage({
     storage: cookieStorage,
   }),
-  connectors: [metaMask(), coinbaseWallet({ appName: "Dexa" })],
+  connectors: [
+    metaMask({ dappMetadata: { name: "Dexa", url: "https://dexa.ink" } }),
+    coinbaseWallet({ appName: "Dexa" }),
+  ],
   transports: {
     [bsc.id]: http(),
     [bscTestnet.id]: http(),

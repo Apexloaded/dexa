@@ -1,3 +1,5 @@
+"use client";
+
 import useGreenFieldHook from "@/hooks/gnfd.hook";
 import {
   IReturnOffChainAuthKeyPairAndUpload,

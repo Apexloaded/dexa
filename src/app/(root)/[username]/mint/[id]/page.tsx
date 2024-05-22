@@ -1,41 +1,30 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { mapPost } from "@/components/Home/Feeds";
+import React from "react";
 import Aside from "@/components/Layouts/Aside";
 import Section from "@/components/Layouts/Section";
 import PostDetails from "@/components/Posts/PostDetails";
 import BackButton from "@/components/ui/BackButton";
-import { useDexa } from "@/context/dexa.context";
-import { useAppSelector } from "@/hooks/redux.hook";
 import { Post } from "@/interfaces/feed.interface";
-import { selectedPost } from "@/slices/posts/post-selected.slice";
-import { useReadContract } from "wagmi";
+import { Contract, ethers } from "ethers";
+import { BSC_RPC_URL, DEXA_FEEDS } from "@/config/env";
+import { getAllFeedsABI } from "@/contracts/DexaFeeds.sol/getAllFeeds";
+
+export const revalidate = 0;
+
+export async function generateStaticParams() {
+  const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
+  const contract = new Contract(DEXA_FEEDS!, getAllFeedsABI, provider);
+  const feeds = await contract.listAllPosts();
+  return feeds.map((feed: Post) => ({
+    username: feed.creator.username,
+    id: feed.id,
+  }));
+}
 
 type Props = {
   params: { username: string; id: string };
 };
 
-function MintDetails({ params }: Props) {
-  const { id, username } = params;
-  const _post = useAppSelector(selectedPost);
-  const { FeedsABI, dexaFeeds } = useDexa();
-  const { data } = useReadContract({
-    abi: FeedsABI,
-    address: dexaFeeds,
-    functionName: "postBygnfdId",
-    args: [id],
-  });
-  const [post, setPost] = useState<Post | undefined>(_post);
-
-  useEffect(() => {
-    if (data) {
-      const content = data as Post;
-      const mapData = mapPost(content);
-      setPost(mapData);
-    }
-  }, [data]);
-
+function MintDetails({ params: { id } }: Props) {
   return (
     <div className="flex space-x-5">
       <Section>
@@ -46,7 +35,7 @@ function MintDetails({ params }: Props) {
           </div>
         </div>
         <div>
-          <PostDetails post={post} />
+          <PostDetails id={id} />
         </div>
       </Section>
       <Aside>

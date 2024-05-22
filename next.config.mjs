@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: false,
   // experimental: {
   //   esmExternals: "loose",
@@ -14,6 +15,7 @@ const nextConfig = {
         pathname: "/view/dexa/**",
       },
     ],
+    unoptimized: true,
   },
 };
 

@@ -8,16 +8,38 @@ import {
   Wallet2Icon,
   XIcon,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import useStorage from "@/hooks/storage.hook";
-import { StorageTypes } from "@/libs/enum";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { setAuth } from "@/slices/account/auth.slice";
-import { getNonce, verifyNonce } from "@/services/auth.service";
+import axios from "axios";
+import { API_URL } from "@/config/env";
+import { useAuth } from "@/context/auth.context";
+import { AuthData } from "@/interfaces/user.interface";
+import useToast from "@/hooks/toast.hook";
+
+async function getNonce(wallet: string) {
+  const response = await axios
+    .get(`${API_URL}/auth/nonce/generate?wallet=${wallet}`)
+    .then((res) => res.data)
+    .catch((err) => err);
+  return response;
+}
+
+async function verifyNonce(message: string, signature: string) {
+  const siwe = new SiweMessage(JSON.parse(message));
+  const payload = {
+    message: siwe,
+    signature: signature,
+  };
+  const response = await axios
+    .post(`${API_URL}/auth/nonce/verify`, payload)
+    .then((res) => res.data)
+    .catch((err) => err);
+  return response;
+}
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,18 +49,15 @@ function SignInModal({ setModal }: Props) {
   const router = useRouter();
   const { chainId, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
-  const { setItem } = useStorage();
+  const { setSession } = useAuth();
+  const { loading, success, error } = useToast();
   const dispatch = useAppDispatch();
 
   const signMessage = async () => {
-    let loadToast;
     try {
-      if (!address) return;
-      const res = await getNonce(address);
       if (!address || !chainId) return;
-      loadToast = toast.loading("Waiting...", {
-        position: "bottom-center",
-      });
+      const res = await getNonce(address);
+      loading({ msg: "Verifying..." });
       const message = new SiweMessage({
         domain: window.location.host,
         address,
@@ -47,38 +66,26 @@ function SignInModal({ setModal }: Props) {
         uri: window.location.origin,
         version: "1",
         chainId,
-        nonce: res.nonce,
+        nonce: res.data.nonce,
       });
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
       const verifyRes = await verifyNonce(JSON.stringify(message), signature);
-      if (verifyRes.ok) {
-        const { createdAt, name, username, bioURI } = verifyRes.user;
-        setItem(StorageTypes.AUTH_USER, {
-          name,
-          username,
-          wallet: address,
-          createdAt,
-          bioURI,
-        });
+      if (verifyRes.status && verifyRes.statusCode == 201) {
+        const payload = verifyRes.data as AuthData;
+        setSession(payload);
         setModal(false);
         dispatch(setAuth(true));
-        toast.success("Successfully signed in!", {
-          id: loadToast,
-        });
+        success({ msg: "Successfully signed in!" });
         router.push("/home");
       }
-      if (!verifyRes?.ok) {
-        toast.error(`${verifyRes?.errors}`, {
-          id: loadToast,
-        });
+      if (!verifyRes?.status) {
+        error({ msg: "Something went wrong" });
       }
     } catch (e: any) {
+      error({ msg: e.code === 4001 ? "Failed to sign in!" : e.response.data });
       console.log(e);
-      toast.error(e.code === 4001 ? "Failed to sign in!" : e.response.data, {
-        id: loadToast,
-      });
     }
   };
 

@@ -1,21 +1,19 @@
-"use server";
-
 import axios from "axios";
-import { cookies } from "next/headers";
 import { API_URL } from "@/config/env";
 import { StorageTypes } from "@/libs/enum";
 
 const API = API_URL;
-const cookie = cookies().get(StorageTypes.ACCESS_TOKEN)?.value;
+const cookie = "";
 
 export const getApi = async (url: string) => {
+  console.log(cookie);
   const apiUrl = `${API}/${url}`;
   return axios
     .get(apiUrl, {
       withCredentials: true,
-      headers: {
-        Cookie: `${StorageTypes.ACCESS_TOKEN}=${cookie}`,
-      },
+    //   headers: {
+    //     Cookie: `${StorageTypes.ACCESS_TOKEN}=${cookie}`,
+    //   },
     })
     .then((response) => {
       return response.data;
@@ -88,7 +86,6 @@ export const uploadApi = async (
   data: any
   //setProgress: (value: number) => void
 ) => {
-  console.log(cookies().get(StorageTypes.ACCESS_TOKEN));
   const apiUrl = `${API_URL}/${url}`;
   const payload = data;
   return axios
@@ -104,7 +101,6 @@ export const uploadApi = async (
           (progressEv.loaded * 100) / progressEv.total
         );
         console.log(percentage);
-        //setProgress(percentage);
       },
     })
     .then((response) => {

@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.scss";
 import HTML from "@/components/HTML";
-import { headers } from "next/headers";
-import { cookieToInitialState } from "wagmi";
-import { config } from "@/config/wagmi.config";
+// import { headers } from "next/headers";
+// import { cookieToInitialState } from "wagmi";
+// import { config } from "@/config/wagmi.config";
+
+export const dynamicParams = true;
 
 const poppins = Poppins({
   subsets: ["latin-ext"],
@@ -22,9 +24,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState(config, headers().get("cookie"));
+  // const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
-    <HTML font={poppins} initialState={initialState}>
+    <HTML font={poppins}>
       {children}
     </HTML>
   );

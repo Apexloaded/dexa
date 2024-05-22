@@ -1,12 +1,14 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import DexaFeeds from "@/contracts/DexaFeeds.sol/DexaFeeds.json";
 import FeedsToken from "@/contracts/FeedsToken.sol/FeedsToken.json";
 import ERC20Token from "@/contracts/ERC20/ERC20.json";
 import { DEXA_FEEDS, DEXA_CREATOR, FEEDS_TOKEN } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
+import { useAccount, useReadContract } from "wagmi";
+import { UserInterface } from "@/interfaces/user.interface";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 const FEEDS = toOxString(DEXA_FEEDS);
@@ -31,6 +33,7 @@ export const DexaContext = createContext<DexaContextType | undefined>(
 );
 
 export function DexaProvider({ children }: Props) {
+  const { address } = useAccount();
   const [CreatorABI] = useState(DexaCreator);
   const [FeedsABI] = useState(DexaFeeds);
   const [FeedsTokenABI] = useState(FeedsToken);
@@ -49,7 +52,7 @@ export function DexaProvider({ children }: Props) {
         dexaCreator,
         dexaFeeds,
         feedsToken,
-        ERC20ABI
+        ERC20ABI,
       }}
     >
       {children}

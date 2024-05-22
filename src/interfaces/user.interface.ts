@@ -18,17 +18,9 @@ export interface FriendListInterface {
 
 export interface AuthData {
   expiresIn: number;
-  ok: boolean;
+  ok?: boolean;
   token: string;
   user: UserInterface;
-}
-
-export interface OnBoardComplete {
-  isOnboarded: boolean;
-  bioURI: string;
-  name?: string;
-  username?: string;
-  profile?: string;
 }
 
 export interface UserBalance {

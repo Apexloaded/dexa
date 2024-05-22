@@ -1,4 +1,4 @@
-export const BSC_RPC_URL = process.env.BSC_RPC_MAINNET!;
+export const BSC_RPC_URL = process.env.NEXT_PUBLIC_BSC_RPC_TESTNET!;
 export const BSC_CHAIN_ID = parseInt(
   process.env.NEXT_PUBLIC_BSC_TESTNET_CHAIN!
 );

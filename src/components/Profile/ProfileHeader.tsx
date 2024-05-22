@@ -2,34 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  ArrowLeft,
   BadgeCheckIcon,
-  Banknote,
   Calendar,
   Camera,
-  CameraIcon,
-  CheckIcon,
   HandCoinsIcon,
   LinkIcon,
-  MessageCircle,
   MessageSquareShare,
-  PencilIcon,
-  TwitterIcon,
   WalletIcon,
 } from "lucide-react";
 import Button from "../Form/Button";
 import ShowMore from "../Posts/ShowMore";
 import Link from "next/link";
-import TabsHeader from "../Tabs/TabsHeader";
-import TabsList from "../Tabs/TabsList";
-import TabsRoot from "../Tabs/TabsRoot";
-import TabsContent from "../Tabs/TabsContent";
-import ProfileTabs from "./ProfileTabs";
 import BackButton from "../ui/BackButton";
-import { useAccount, useReadContract } from "wagmi";
+import { useReadContract } from "wagmi";
 import { formatWalletAddress, getFirstLetters } from "@/libs/helpers";
-import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "@/services/user.service";
 import { UserInterface } from "@/interfaces/user.interface";
 import Moment from "react-moment";
 import { useAuth } from "@/context/auth.context";

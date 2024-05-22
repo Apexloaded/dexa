@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Label from "@/components/Form/Label";
 import Input from "@/components/Form/Input";
 import Button from "@/components/Form/Button";
 import { profileResolver } from "@/schemas/welcome.schema";
 import ShowError from "@/components/Form/ShowError";
-import { useAccount, useWriteContract } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import { config } from "@/config/wagmi.config";
-import { GREEN_SP, HOSTNAME } from "@/config/env";
+import { HOSTNAME } from "@/config/env";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { StoreBucket } from "@/interfaces/bucket.interface";
 import { useRouter } from "next/navigation";
-import { onboardComplete } from "@/services/auth.service";
 import { ContractError } from "@/libs/enum";
+import { useAuth } from "@/context/auth.context";
 type Props = {
   nextStep: (value: number) => void;
   index: number;
@@ -35,8 +34,7 @@ const getError = (error: Error): string => {
 export default function AccountStep({ nextStep, index }: Props) {
   const router = useRouter();
   const { writeContractAsync } = useWriteContract({ config });
-  const [defaultBucket, setDefaultBucket] = useState<StoreBucket>();
-  const { address } = useAccount();
+  const { setProfileProgress } = useAuth();
   const { dexaCreator, CreatorABI } = useDexa();
   let loadToast: string;
 
@@ -51,10 +49,8 @@ export default function AccountStep({ nextStep, index }: Props) {
       loadToast = toast.loading("Processing...", {
         position: "bottom-center",
       });
-      const spInfo = GREEN_SP;
-      const bioURI = `${spInfo}/view/dexa/creators/${address}/profile`;
       const { name, username } = data;
-      const tx = await writeContractAsync(
+      await writeContractAsync(
         {
           abi: CreatorABI,
           address: dexaCreator,
@@ -63,16 +59,10 @@ export default function AccountStep({ nextStep, index }: Props) {
         },
         {
           onSuccess: async (data) => {
-            await onboardComplete({
-              isOnboarded: true,
-              bioURI,
-              name,
-              username,
-              profile: `${HOSTNAME}/${username}`,
-            });
             toast.success("Profile created", {
               id: loadToast,
             });
+            setProfileProgress(100);
             router.replace("/home");
           },
           onError(error) {

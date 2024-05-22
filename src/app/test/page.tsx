@@ -19,7 +19,13 @@ function TestDev() {
   const { address } = useAccount();
   //const { createBucket } = useGnfd();
   const { writeContractAsync, isPending } = useWriteContract();
-  const { FeedsABI, dexaFeeds } = useDexa();
+  const { FeedsABI, dexaFeeds, CreatorABI, dexaCreator } = useDexa();
+  const { data } = useReadContract({
+    abi: CreatorABI,
+    address: dexaCreator,
+    functionName: "getCreatorAddress",
+    args: [],
+  });
 
   const {
     setValue,
@@ -27,6 +33,10 @@ function TestDev() {
     control,
     formState: { errors },
   } = useForm({ ...bucketResolver });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   useEffect(() => {
     const generateBucket = () => {
@@ -46,6 +56,13 @@ function TestDev() {
         position: "bottom-center",
       });
 
+      await writeContractAsync({
+        abi: CreatorABI,
+        address: dexaCreator,
+        functionName: "setCreators",
+        args: [],
+      });
+      toast.success("Done", { id: loadToast });
       // const res = await createBucket(
       //   bucket,
       //   VisibilityType.VISIBILITY_TYPE_PUBLIC_READ

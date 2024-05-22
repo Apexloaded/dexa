@@ -296,6 +296,19 @@
   },
   {
     "inputs": [],
+    "name": "DEXA_MESSENGER_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "DEXA_STORAGE_ROLE",
     "outputs": [
       {
@@ -409,6 +422,24 @@
     "name": "acceptPayment",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "friend",
+        "type": "address"
+      }
+    ],
+    "name": "addFriend",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -603,6 +634,76 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "findAllCreators",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "pfp",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "banner",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "dexaURI",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "updatedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "friends",
+            "type": "address[]"
+          }
+        ],
+        "internalType": "struct Creator[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -663,6 +764,11 @@
             "internalType": "uint256",
             "name": "updatedAt",
             "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "friends",
+            "type": "address[]"
           }
         ],
         "internalType": "struct Creator",
@@ -734,11 +840,29 @@
             "internalType": "uint256",
             "name": "updatedAt",
             "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "friends",
+            "type": "address[]"
           }
         ],
         "internalType": "struct Creator",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCreatorAddress",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -868,6 +992,11 @@
         "internalType": "address",
         "name": "_dexaFeed",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dexaMessenger",
+        "type": "address"
       }
     ],
     "name": "init_roles",
@@ -957,6 +1086,19 @@
     ],
     "name": "setAdminFee",
     "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setCreators",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },

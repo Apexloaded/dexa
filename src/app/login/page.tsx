@@ -9,7 +9,6 @@ import { config } from "@/config/wagmi.config";
 import toast from "react-hot-toast";
 import { getWagmiError } from "@/libs/helpers";
 import SignInModal from "@/components/Auth/Login/Signature";
-import { getNonce } from "@/services/auth.service";
 
 export default function Login() {
   const [signModal, setSignModal] = useState<boolean>(false);
@@ -18,7 +17,6 @@ export default function Login() {
       config,
     });
   const { isConnected, address } = useAccount();
-  const [_, setNonce] = useState<string>();
   const [toastId, setToastId] = useState<string>();
 
   useEffect(() => {
@@ -40,13 +38,7 @@ export default function Login() {
   useEffect(() => {
     async function fetchNonce() {
       if (isConnected && address) {
-        try {
-          setSignModal(true);
-          const res = await getNonce(address);
-          setNonce(res.nonce);
-        } catch (error: any) {
-          toast.error(error.message);
-        }
+        setSignModal(true);
       }
     }
     fetchNonce();

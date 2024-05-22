@@ -8,7 +8,7 @@ import {
 } from "@stream-io/video-react-sdk";
 import { useAuth } from "./auth.context";
 import { STREAM_KEY } from "@/config/env";
-import { getStreamToken } from "@/actions/stream.action";
+//import { getStreamToken } from "@/actions/stream.action";
 import { useAccount } from "wagmi";
 
 export type IndexDBContextType = {};
@@ -23,24 +23,24 @@ export function StreamProvider({ children }: Props) {
   const [client, setClient] = useState<StreamVideoClient>();
 
   useEffect(() => {
-    const initClient = async () => {
-      if (!user || !isConnected) return;
-      let streamUser: User;
-      streamUser = {
-        id: `${user.wallet}`,
-        name: user.name,
-        image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
-      };
-      const token = await getStreamToken(streamUser.id);
-      if (!token) return;
-      const cl = new StreamVideoClient({
-        apiKey: STREAM_KEY!,
-        user: streamUser,
-        token: token,
-      });
-      setClient(cl);
-    };
-    initClient();
+    // const initClient = async () => {
+    //   if (!user || !isConnected) return;
+    //   let streamUser: User;
+    //   streamUser = {
+    //     id: `${user.wallet}`,
+    //     name: user.name,
+    //     image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
+    //   };
+    //   const token = await getStreamToken(streamUser.id);
+    //   if (!token) return;
+    //   const cl = new StreamVideoClient({
+    //     apiKey: STREAM_KEY!,
+    //     user: streamUser,
+    //     token: token,
+    //   });
+    //   setClient(cl);
+    // };
+    // initClient();
   }, [user, isConnected]);
 
   if (!client) return <>{children}</>;

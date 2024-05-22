@@ -3,6 +3,7 @@
 import React from "react";
 import Sidebar from "../Menus/Sidebar";
 import MobileMenu from "../Menus/MobileMenu";
+import withAuth from "../WithAuth";
 
 function RootLayout({
   children,
@@ -22,4 +23,4 @@ function RootLayout({
   );
 }
 
-export default RootLayout;
+export default withAuth(RootLayout);

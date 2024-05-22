@@ -48,7 +48,7 @@ function Feeds() {
   const { data: response } = useReadContract({
     abi: FeedsABI,
     address: dexaFeeds,
-    functionName: "listAllPosts",
+    functionName: "listOnlyMainPosts",
     args: [],
   });
 

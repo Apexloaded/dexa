@@ -1,16 +1,12 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import ape1 from "@/assets/nft/1.png";
 import Link from "next/link";
 import {
   BadgeCheck,
-  BookmarkIcon,
   EllipsisIcon,
   HandCoinsIcon,
-  MessageSquareTextIcon,
-  Repeat2Icon,
-  Share2Icon,
-  ThumbsUpIcon,
   TrendingDownIcon,
 } from "lucide-react";
 import Button from "../Form/Button";
@@ -20,21 +16,41 @@ import { Post } from "@/interfaces/feed.interface";
 import Moment from "react-moment";
 import TipModal from "./TipModal";
 import { walletToLowercase } from "@/libs/helpers";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import CreatorPFP from "./ListPost/CreatorPFP";
 import LikeButton from "./PostButtons/LikeButton";
 import CommentButton from "./PostButtons/CommentButton";
 import ShareButton from "./PostButtons/ShareButton";
 import BookmarkButton from "./PostButtons/BookmarkButton";
+import { useAppSelector } from "@/hooks/redux.hook";
+import { selectedPost } from "@/slices/posts/post-selected.slice";
+import { useDexa } from "@/context/dexa.context";
+import { mapPost } from "../Home/Feeds";
 
 type Props = {
-  post?: Post;
+  id: string;
 };
 
-function PostDetails({ post }: Props) {
+function PostDetails({ id }: Props) {
   const { address } = useAccount();
   const [tipModal, setTipModal] = useState<boolean>(false);
-  const handleClick = () => {};
+  const _post = useAppSelector(selectedPost);
+  const { FeedsABI, dexaFeeds } = useDexa();
+  const { data } = useReadContract({
+    abi: FeedsABI,
+    address: dexaFeeds,
+    functionName: "postBygnfdId",
+    args: [id],
+  });
+  const [post, setPost] = useState<Post | undefined>(_post);
+
+  useEffect(() => {
+    if (data) {
+      const content = data as Post;
+      const mapData = mapPost(content);
+      setPost(mapData);
+    }
+  }, [data]);
 
   return (
     <div className="">

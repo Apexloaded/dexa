@@ -1,12 +1,16 @@
 import useUser from "@/hooks/user.hook";
-import { UserInterface } from "@/interfaces/user.interface";
-import { createContext, useContext } from "react";
+import { AuthData, UserInterface } from "@/interfaces/user.interface";
+import { Dispatch, SetStateAction, createContext, useContext } from "react";
 
 export type AuthContextType = {
   ens?: string;
   progress?: number;
   logout: () => Promise<void>;
-  user?: UserInterface
+  user?: UserInterface;
+  profileProgress?: number;
+  setProfileProgress: Dispatch<SetStateAction<number | undefined>>;
+  setSession: (payload: AuthData) => void;
+  isAuth: boolean;
 };
 
 interface Props {

@@ -1,21 +1,27 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { StepsNavigation } from "@/components/ui/Step";
 import { StepperInterface } from "@/interfaces/stepper.interface";
-import { DatabaseZapIcon, UserRoundPlusIcon } from "lucide-react";
+import { UserRoundPlusIcon } from "lucide-react";
 import IndexStepper from "@/components/Auth/Welcome/Index";
-import { useWriteContract } from "wagmi";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth.context";
 
 export default function Welcome() {
-  const { progress, ens } = useAuth();
+  const { profileProgress } = useAuth();
   const [activeStep, setActiveStep] = useState<number>(1);
 
-  // useEffect(() => {
-  //   if (progress && progress > 50) setActiveStep(2);
-  // }, [progress]);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (profileProgress) {
+      if (profileProgress >= 100 && pathname.startsWith("/welcome")) {
+        router.replace("/home");
+      }
+    }
+  }, [profileProgress]);
 
   const updateStep = (step: number) => {
     if (step > steps.length) return;
