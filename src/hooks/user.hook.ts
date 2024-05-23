@@ -133,12 +133,12 @@ function useUser() {
   };
 
   const logout = async () => {
-    // await disconnectAsync();
-    // removeCookie(StorageTypes.ACCESS_TOKEN);
-    // dispatch(setAuth(false));
-    // if (!publicRoutes.includes(path)) {
-    //   router.replace("/login");
-    // }
+    await disconnectAsync();
+    removeCookie(StorageTypes.ACCESS_TOKEN);
+    dispatch(setAuth(false));
+    if (!publicRoutes.includes(path)) {
+      router.replace("/login");
+    }
   };
 
   return {
