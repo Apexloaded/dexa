@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   BadgeCheckIcon,
+  BellIcon,
   Calendar,
   Camera,
   HandCoinsIcon,
@@ -14,25 +15,45 @@ import Button from "../Form/Button";
 import ShowMore from "../Posts/ShowMore";
 import Link from "next/link";
 import BackButton from "../ui/BackButton";
-import { useReadContract } from "wagmi";
-import { formatWalletAddress, getFirstLetters } from "@/libs/helpers";
-import { UserInterface } from "@/interfaces/user.interface";
+import { useReadContract, useAccount } from "wagmi";
+import {
+  formatWalletAddress,
+  getFirstLetters,
+  toOxString,
+} from "@/libs/helpers";
+import {
+  FriendListInterface,
+  UserInterface,
+} from "@/interfaces/user.interface";
 import Moment from "react-moment";
 import { useAuth } from "@/context/auth.context";
 import EditProfile from "./EditProfile";
 import { useDexa } from "@/context/dexa.context";
 import Image from "next/image";
+import ConnectButton from "./ConnectButton";
+import { useDexaMessenger } from "@/context/dexa-messenger.context";
+import { ChatInterface } from "@/interfaces/message.interface";
+import { useRouter } from "next/navigation";
+
+export type Status = {
+  isRequest: boolean;
+  isAccepted: boolean;
+};
 
 type Props = {
   username: string;
 };
 
 function ProfileHeader({ username }: Props) {
-  const [ismine] = useState(false);
+  const { address } = useAccount();
+  const router = useRouter();
   const [user, setUser] = useState<UserInterface>();
+  const [connections, setConnections] = useState<FriendListInterface[]>([]);
   const [editModal, setEditModal] = useState<boolean>(false);
+  const [status, setStatus] = useState<Status>();
   const { user: authUser } = useAuth();
-  const { dexaCreator, CreatorABI } = useDexa();
+  const { messages, setMessages } = useDexaMessenger();
+  const { dexaCreator, CreatorABI, MessengerABI, dexaMessenger } = useDexa();
   const isOwner =
     user?.wallet?.toLowerCase() == authUser?.wallet?.toLowerCase();
 
@@ -43,6 +64,35 @@ function ProfileHeader({ username }: Props) {
     args: [username],
   });
 
+  const { data: isFriend } = useReadContract({
+    abi: MessengerABI,
+    address: dexaMessenger,
+    functionName: "checkFriendStatus",
+    args: [username],
+    account: address,
+  });
+
+  const { data: friends } = useReadContract({
+    abi: MessengerABI,
+    address: dexaMessenger,
+    functionName: "getFriendsList",
+    account: toOxString(`${user?.wallet}`),
+    query: { enabled: user?.wallet ? true : false },
+  });
+
+  useEffect(() => {
+    if (friends) {
+      setConnections(friends as FriendListInterface[]);
+    }
+  }, [friends]);
+
+  useEffect(() => {
+    if (isFriend) {
+      const data = isFriend as boolean[];
+      setStatus({ isRequest: data[0], isAccepted: data[1] });
+    }
+  }, [isFriend]);
+
   useEffect(() => {
     if (response) {
       const { createdAt, ...payload } = response as UserInterface;
@@ -50,6 +100,27 @@ function ProfileHeader({ username }: Props) {
       setUser({ ...payload, createdAt: date });
     }
   }, [response]);
+
+  const initChat = () => {
+    const isMessage = messages.find((m) => m.profile.id == user?.wallet);
+    if (!isMessage && user) {
+      setMessages((prev) => {
+        const temp = [...prev];
+        const newChat: ChatInterface = {
+          profile: {
+            id: `${user.wallet}`,
+            name: `${user.name}`,
+            username: `${user.username}`,
+            pfp: `${user.pfp}`,
+          },
+          chats: [],
+        };
+        temp.push(newChat);
+        return temp;
+      });
+    }
+    router.push(`/messages/${user?.wallet}`);
+  };
 
   return (
     <>
@@ -135,7 +206,7 @@ function ProfileHeader({ username }: Props) {
                 shape={"CIRCLE"}
                 className="border border-medium text-sm"
               >
-                <MessageSquareShare size={18} />
+                <BellIcon size={18} />
               </Button>
               <Button
                 type="button"
@@ -145,14 +216,22 @@ function ProfileHeader({ username }: Props) {
               >
                 <HandCoinsIcon size={18} />
               </Button>
-              <Button
-                type="button"
-                kind={"primary"}
-                shape={"ROUNDED"}
-                className="text-sm"
-              >
-                Follow
-              </Button>
+              {status && !status.isAccepted ? (
+                <ConnectButton to={`${user?.wallet}`} status={status} />
+              ) : (
+                <Button
+                  onClick={initChat}
+                  type="button"
+                  kind={"primary"}
+                  shape={"ROUNDED"}
+                  className="text-sm"
+                >
+                  <div className="flex items-center gap-x-2">
+                    <p>Message</p>
+                    <MessageSquareShare size={18} />
+                  </div>
+                </Button>
+              )}
             </div>
           )}
           <div className="md:flex px-5 items-center justify-between">
@@ -209,14 +288,14 @@ function ProfileHeader({ username }: Props) {
                   </p>
                 </div>
               </div>
-              <div className="flex space-x-4 items-center mt-3">
+              <div className="flex items-center mt-3">
                 <div className="flex items-center space-x-1">
-                  <p className="font-extrabold text-sm text-dark">50</p>
-                  <p className="text-medium text-sm">Following</p>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <p className="font-extrabold text-sm text-dark">14,000</p>
-                  <p className="text-medium text-sm">Followers</p>
+                  <p className="font-extrabold text-sm text-dark">
+                    {connections.length}
+                  </p>
+                  <p className="text-medium text-sm">
+                    Connection{connections.length > 1 ? "s" : ""}
+                  </p>
                 </div>
               </div>
             </div>

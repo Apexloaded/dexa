@@ -30,7 +30,7 @@ function Reminted({ posts, username }: Props) {
         </>
       ) : (
         <div>
-          <div className="text-center">
+          <div className="text-center py-20">
             <EmtpyBox
               title="Empty remints"
               message={`${username} haven't reminted any mintable`}

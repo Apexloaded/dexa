@@ -12,8 +12,10 @@ export interface UserInterface {
 }
 
 export interface FriendListInterface {
+  id: string;
   name: string;
-  pubkey: string;
+  username: string;
+  pfp: string;
 }
 
 export interface AuthData {

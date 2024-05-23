@@ -5,6 +5,7 @@ export const BSC_CHAIN_ID = parseInt(
 export const DEXA_CREATOR = process.env.NEXT_PUBLIC_DEXA_CREATOR;
 export const DEXA_FEEDS = process.env.NEXT_PUBLIC_DEXA_FEEDS;
 export const FEEDS_TOKEN = process.env.NEXT_PUBLIC_FEEDS_TOKEN;
+export const DEXA_MESSENGER = process.env.NEXT_PUBLIC_DEXA_MESSENGER;
 export const API_URL = process.env.NEXT_PUBLIC_DEXA_API;
 export const HOSTNAME = process.env.NEXT_PUBLIC_DEXA_HOST;
 

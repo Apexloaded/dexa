@@ -1,11 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
   reactStrictMode: false,
   // experimental: {
   //   esmExternals: "loose",
   //   serverComponentsExternalPackages: ["mongoose"],
   // },
+  webpack: (config) => {
+    config.externals.push("pino-pretty", "lokijs", "encoding");
+    return config;
+  },
   images: {
     remotePatterns: [
       {
@@ -15,7 +18,6 @@ const nextConfig = {
         pathname: "/view/dexa/**",
       },
     ],
-    unoptimized: true,
   },
 };
 

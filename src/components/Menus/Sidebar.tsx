@@ -10,6 +10,7 @@ import {
   PodcastIcon,
   Rows3Icon,
   SettingsIcon,
+  Users2Icon,
   UsersIcon,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -40,6 +41,11 @@ export default function Sidebar() {
       name: "Notifications",
       href: "/notifications",
       icon: BellDotIcon,
+    },
+    {
+      name: "Connections",
+      href: "/connections",
+      icon: Users2Icon,
     },
     {
       name: "Transactions",

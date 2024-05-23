@@ -8,11 +8,13 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import FriendList from "./FriendList";
-
-const friendLists: FriendListInterface[] = [];
+import { useDexa } from "@/context/dexa.context";
+import { useReadContract } from "wagmi";
+import { useDexaMessenger } from "@/context/dexa-messenger.context";
 
 function ChatSidebar() {
   const [width, setWidth] = useState(0);
+  const { messages, currentMsg, setMessages } = useDexaMessenger();
 
   useEffect(() => {
     function handleResize() {
@@ -28,7 +30,24 @@ function ChatSidebar() {
     };
   }, []);
 
+  useEffect(() => {
+    if (currentMsg) {
+      const isExist = messages.find(
+        (f) => f.profile?.id == currentMsg.profile?.id
+      );
+      if (!isExist) {
+        setMessages((prev) => {
+          const temp = [...prev];
+          temp.push(currentMsg);
+          return temp;
+        });
+      }
+    }
+  }, [currentMsg, messages]);
+
   const newContact = () => {};
+
+  const showChat = () => {};
 
   return (
     <div className="w-full md:w-4/5 lg:w-[20rem] xl:w-[25rem] border-r border-light relative">
@@ -53,7 +72,7 @@ function ChatSidebar() {
               </button>
             </div>
           </div>
-          <div className="px-4 bg-primary/20 h-14 flex items-center">
+          <div className="px-4 bg-primary/15 h-14 flex items-center">
             <input
               type="search"
               name=""
@@ -63,15 +82,17 @@ function ChatSidebar() {
           </div>
         </header>
         <section className="overflow-y-scroll">
-          {friendLists && friendLists.length > 0 ? (
+          {messages && messages.length > 0 ? (
             <>
-              {friendLists.map((contact, index) => (
+              {messages.map((contact, index) => (
                 <div
                   key={index}
-                  //   onClick={() => showChat(contact)}
                   className={`hover:cursor-pointer border-b border-light hover:bg-primary/5 py-2 px-4`}
                 >
-                  <FriendList contact={contact} />
+                  <FriendList
+                    contact={contact.profile}
+                    messages={contact.chats}
+                  />
                 </div>
               ))}
             </>

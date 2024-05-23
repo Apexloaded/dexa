@@ -14,26 +14,30 @@ import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { StreamProvider } from "@/context/stream.context";
 import "swiper/css";
 import { CookiesProvider } from "react-cookie";
+import { DexaMessengerProvider } from "@/context/dexa-messenger.context";
 
 const queryClient = new QueryClient();
 
 export default function HTML({
   children,
   font,
+  initialState
 }: Readonly<{
   children: React.ReactNode;
   font: NextFont;
+  initialState?: State
 }>) {
   return (
     <html lang="en" className="overflow-hidden">
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
-          <WagmiProvider config={config}>
+          <WagmiProvider config={config} initialState={initialState}>
             <QueryClientProvider client={queryClient}>
               <CookiesProvider defaultSetOptions={{ path: "/" }}>
                 <AuthProvider>
                   <DexaProvider>
-                    <StreamProvider>
+                    <DexaMessengerProvider>
+                      <StreamProvider>
                         <ProgressBar
                           height="4px"
                           color="#4338ca"
@@ -43,7 +47,8 @@ export default function HTML({
                         <SwitchChain />
                         <main>{children}</main>
                         <Toaster />
-                    </StreamProvider>
+                      </StreamProvider>
+                    </DexaMessengerProvider>
                   </DexaProvider>
                 </AuthProvider>
               </CookiesProvider>

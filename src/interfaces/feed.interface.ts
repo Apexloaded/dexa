@@ -1,7 +1,7 @@
 import { VisibilityType } from "@bnb-chain/greenfield-js-sdk";
 import { UserInterface } from "./user.interface";
 
-interface MediaType {
+export interface MediaType {
   url: string;
   type: string;
 }

@@ -10,16 +10,16 @@ import { BSC_RPC_URL, DEXA_CREATOR } from "@/config/env";
 import { findAllCreatorsABI } from "@/contracts/DexaCreator.sol/findAllCreators";
 import { UserInterface } from "@/interfaces/user.interface";
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
-export async function generateStaticParams() {
-  const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
-  const contract = new Contract(DEXA_CREATOR!, findAllCreatorsABI, provider);
-  const creators = await contract.findAllCreators();
-  return creators.map((creator: UserInterface) => ({
-    username: creator.username,
-  }));
-}
+// export async function generateStaticParams() {
+//   const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
+//   const contract = new Contract(DEXA_CREATOR!, findAllCreatorsABI, provider);
+//   const creators = await contract.findAllCreators();
+//   return creators.map((creator: UserInterface) => ({
+//     username: creator.username,
+//   }));
+// }
 
 type Props = {
   params: { username: string };

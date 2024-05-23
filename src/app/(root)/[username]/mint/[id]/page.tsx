@@ -8,17 +8,17 @@ import { Contract, ethers } from "ethers";
 import { BSC_RPC_URL, DEXA_FEEDS } from "@/config/env";
 import { getAllFeedsABI } from "@/contracts/DexaFeeds.sol/getAllFeeds";
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
-export async function generateStaticParams() {
-  const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
-  const contract = new Contract(DEXA_FEEDS!, getAllFeedsABI, provider);
-  const feeds = await contract.listAllPosts();
-  return feeds.map((feed: Post) => ({
-    username: feed.creator.username,
-    id: feed.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
+//   const contract = new Contract(DEXA_FEEDS!, getAllFeedsABI, provider);
+//   const feeds = await contract.listAllPosts();
+//   return feeds.map((feed: Post) => ({
+//     username: feed.creator.username,
+//     id: feed.id,
+//   }));
+// }
 
 type Props = {
   params: { username: string; id: string };

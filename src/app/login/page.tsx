@@ -20,6 +20,10 @@ export default function Login() {
   const [toastId, setToastId] = useState<string>();
 
   useEffect(() => {
+    console.log(connectors)
+  },[connectors])
+
+  useEffect(() => {
     const check = () => {
       if (isSuccess) {
         toast.success("Wallet connected", {
@@ -81,29 +85,30 @@ export default function Login() {
         </div>
         <div className="flex flex-col border border-primary/50 rounded-lg overflow-hidden">
           {connectors.map((connector) => (
-            <Button
-              key={connector.uid}
-              kind={`default`}
-              onClick={() => connectToWallet(connector)}
-              className="py-[1rem] capitalize border-b border-primary/50 hover:bg-primary/5 rounded-none last:border-none"
-            >
-              <p className="flex justify-between items-center">
-                <span className="flex items-center">
-                  <Image
+           
+              <Button
+                key={connector.uid}
+                kind={`default`}
+                onClick={() => connectToWallet(connector)}
+                className="py-[1rem] capitalize border-b border-primary/50 hover:bg-primary/5 rounded-none last:border-none"
+              >
+                <p className="flex justify-between items-center">
+                  <span className="flex items-center">
+                    {/* <Image
                     src={connectorIcons[connector.id].icon}
                     alt={connectorIcons[connector.id].key}
                     height={25}
                     width={25}
-                  />
-                  <span className="ml-3 font-medium">{connector.name}</span>
-                </span>
-                {connector.id === "metaMaskSDK" && (
-                  <span className="text-xs bg-primary text-white px-3 rounded-sm">
-                    Popular
+                  /> */}
+                    <span className="ml-3 font-medium">{connector.name}</span>
                   </span>
-                )}
-              </p>
-            </Button>
+                  {connector.id === "metaMaskSDK" && (
+                    <span className="text-xs bg-primary text-white px-3 rounded-sm">
+                      Popular
+                    </span>
+                  )}
+                </p>
+              </Button>
           ))}
         </div>
       </div>

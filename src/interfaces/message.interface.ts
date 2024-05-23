@@ -1,12 +1,18 @@
+import { MediaType } from "./feed.interface";
 import { FriendListInterface } from "./user.interface";
 
+export interface RequestInterface {
+  sender: string;
+  createdAt: string;
+}
 export interface MessageInterface {
   sender: string;
   message: string;
-  timestamp: Date;
+  media: MediaType[];
+  createdAt: string;
 }
 
 export interface ChatInterface {
-  user: FriendListInterface;
-  chat: MessageInterface[];
+  profile: FriendListInterface;
+  chats: MessageInterface[];
 }
