@@ -23,4 +23,4 @@ function RootLayout({
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;
