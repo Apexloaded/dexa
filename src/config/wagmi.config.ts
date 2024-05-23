@@ -9,11 +9,13 @@ export const config = createConfig({
     storage: cookieStorage,
   }),
   connectors: [
-    // metaMask,
-    // coinbaseWallet({ appName: "Dexa" }),
-    walletConnect({
-      projectId: "020eb0ca134f43e7080c5727412239d3",
+    metaMask({
+      dappMetadata: { url: "https://dexa.ink", name: "Dexa App", iconUrl: "" },
     }),
+    coinbaseWallet({ appName: "Dexa" }),
+    // walletConnect({
+    //   projectId: "020eb0ca134f43e7080c5727412239d3",
+    // }),
   ],
   transports: {
     [bsc.id]: http(),
