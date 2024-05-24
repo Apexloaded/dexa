@@ -1,5 +1,5 @@
 import { type Chain } from "viem";
-import { GREEN_CHAIN_ID, GREENFIELD_RPC_URL } from "./env";
+import { GREEN_CHAIN_ID, GRPC_URL } from "./env";
 
 export const greenFieldTestnet = {
   id: GREEN_CHAIN_ID,
@@ -7,10 +7,10 @@ export const greenFieldTestnet = {
   nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
   rpcUrls: {
     default: {
-      http: [GREENFIELD_RPC_URL],
+      http: [GRPC_URL],
     },
     public: {
-      http: [GREENFIELD_RPC_URL],
+      http: [GRPC_URL],
     },
   },
   blockExplorers: {
