@@ -45,7 +45,7 @@ export const mapPost = (post: Post) => {
 function Feeds() {
   const [posts, setPosts] = useState<Post[]>([]);
   const { FeedsABI, dexaFeeds } = useDexa();
-  const { data: response } = useReadContract({
+  const { data: response, isFetching } = useReadContract({
     abi: FeedsABI,
     address: dexaFeeds,
     functionName: "listOnlyMainPosts",

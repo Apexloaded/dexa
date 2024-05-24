@@ -22,7 +22,7 @@ function TipButton({ post, setTipModal }: Props) {
       }}
       title="Tip"
     >
-      <HandCoinsIcon height={18} />
+      <HandCoinsIcon size={18} />
     </Button>
   );
 }

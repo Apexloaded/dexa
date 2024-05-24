@@ -13,7 +13,6 @@ import SwitchChain from "./Auth/SwitchChain";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { StreamProvider } from "@/context/stream.context";
 import "swiper/css";
-import { CookiesProvider } from "react-cookie";
 import { DexaMessengerProvider } from "@/context/dexa-messenger.context";
 
 const queryClient = new QueryClient();
@@ -21,19 +20,18 @@ const queryClient = new QueryClient();
 export default function HTML({
   children,
   font,
-  initialState
+  initialState,
 }: Readonly<{
   children: React.ReactNode;
   font: NextFont;
-  initialState?: State
+  initialState?: State;
 }>) {
   return (
     <html lang="en" className="overflow-hidden">
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
           <WagmiProvider config={config} initialState={initialState}>
-            <QueryClientProvider client={queryClient}>
-              <CookiesProvider defaultSetOptions={{ path: "/" }}>
+              <QueryClientProvider client={queryClient}>
                 <AuthProvider>
                   <DexaProvider>
                     <DexaMessengerProvider>
@@ -51,8 +49,7 @@ export default function HTML({
                     </DexaMessengerProvider>
                   </DexaProvider>
                 </AuthProvider>
-              </CookiesProvider>
-            </QueryClientProvider>
+              </QueryClientProvider>
           </WagmiProvider>
         </Provider>
       </body>

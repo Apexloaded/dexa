@@ -1,6 +1,6 @@
 "use client";
 
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useState, useRef, useEffect } from "react";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import {
   ChatInterface,
@@ -8,8 +8,16 @@ import {
 } from "@/interfaces/message.interface";
 import { useAccount, useWriteContract } from "wagmi";
 import Button from "../Form/Button";
-import { PaperclipIcon, SendHorizonalIcon, SmilePlusIcon } from "lucide-react";
+import {
+  ImageIcon,
+  PaperclipIcon,
+  SendHorizonalIcon,
+  SmilePlusIcon,
+} from "lucide-react";
 import CLEditor from "../Editor/Editor";
+import PreviewMedia from "./PreviewMedia";
+import FileSelector from "../ui/FileSelector";
+import { uploadMsgMedia } from "@/actions/message.action";
 
 type Props = {
   endOfMsgRef: React.RefObject<HTMLParagraphElement>;
@@ -19,35 +27,57 @@ type Props = {
 
 const SendMessage = ({ endOfMsgRef, setChats, chats }: Props) => {
   const { address } = useAccount();
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>();
+  const [files, setFiles] = useState<File[]>([]);
+  const mediaRef = useRef<HTMLInputElement>(null);
+  const [isPreview, setIsPreview] = useState<boolean>(false);
   const { currentMsg, setCurrentMsg, dexaMessenger, MessengerABI } =
     useDexaMessenger();
   const { writeContractAsync } = useWriteContract();
+
+  useEffect(() => {
+    if (files && files.length > 0) {
+      setIsPreview(true);
+    }
+  }, [files]);
 
   const scrollToBottom = (prop: any) => {
     if (endOfMsgRef.current) endOfMsgRef.current.scrollIntoView(prop);
   };
 
   const initSendMessage = async () => {
-    if (!msg || !address || !currentMsg) return;
+    if (!msg || !address || !currentMsg || msg == "") return;
+    let media = [];
+    setIsDisabled(true);
+    if (files.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+      }
+      const res = await uploadMsgMedia(formData);
+      media = res.data;
+    }
     await writeContractAsync({
       abi: MessengerABI,
       address: dexaMessenger,
       functionName: "sendMessage",
-      args: [`${currentMsg?.profile.id}`, msg, []],
+      args: [`${currentMsg?.profile.id}`, msg, media],
     });
     const chat: MessageInterface = {
       sender: address,
       message: msg,
-      media: [],
+      media,
       createdAt: new Date().toISOString(),
     };
     setCurrentMsg({
       profile: currentMsg.profile,
       chats: [...currentMsg.chats, chat],
     });
-    // setChats([...chats, chat]);
     setMsg("");
+    setIsPreview(false);
+    setFiles([]);
+    setIsDisabled(false);
     scrollToBottom({ behavior: "smooth", block: "start" });
   };
 
@@ -65,19 +95,51 @@ const SendMessage = ({ endOfMsgRef, setChats, chats }: Props) => {
               placeholder="Type a message..."
               value={msg}
             ></textarea>
-            <Button type={"button"} kind={"clear"}>
-              <PaperclipIcon size={14} />
-            </Button>
+            <>
+              <FileSelector
+                onSelect={(ev) => {
+                  if (ev.target.files) {
+                    const file = ev.target.files;
+                    const array = Array.from(file);
+                    setFiles(array);
+                    // setValue("images", file);
+                    // onChange(file);
+                  }
+                }}
+                ref={mediaRef}
+                accept="image/png, image/jpeg"
+                multiple={true}
+              />
+              <Button
+                type={"button"}
+                kind={"clear"}
+                onClick={() => mediaRef.current?.click()}
+              >
+                <ImageIcon size={14} />
+              </Button>
+            </>
           </div>
+
           <Button
             type={"button"}
             kind={"primary"}
             shape={"CIRCLE"}
             onClick={initSendMessage}
+            disabled={isDisabled}
           >
             <SendHorizonalIcon size={14} />
           </Button>
         </footer>
+        <PreviewMedia
+          isOpen={isPreview}
+          setIsOpen={setIsPreview}
+          files={files}
+          setFiles={setFiles}
+          msg={msg}
+          setMsg={setMsg}
+          onSubmit={initSendMessage}
+          isDisabled={isDisabled}
+        />
       </form>
     </>
   );

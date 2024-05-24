@@ -2,19 +2,23 @@ import React from "react";
 import { useAccount } from "wagmi";
 import { MessageInterface } from "@/interfaces/message.interface";
 import Moment from "react-moment";
+import ChatMedia from "./ChatMedia";
+
 type Props = {
   chat: MessageInterface;
 };
+
 function ChatItem({ chat }: Props) {
   const { address } = useAccount();
   const isOwnerMsg = chat.sender == address;
 
   return (
     <div
-      className={`flex flex-col space-x-2 my-5 ${
+      className={`flex flex-col my-5 ${
         isOwnerMsg ? "justify-end items-end" : "items-start"
       }`}
     >
+      {chat.media.length > 0 && <ChatMedia chat={chat} />}
       <div
         className={`relative space-x-2 px-3 py-2 max-w-xs rounded-2xl ${
           isOwnerMsg

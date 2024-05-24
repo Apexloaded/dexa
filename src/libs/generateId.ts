@@ -1,4 +1,5 @@
 import { customRandom, customAlphabet, random } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 export const tokenNumeric = "1234567890";
 export const lowerAlphabet = "abcdefghijklnmopqrstuvwxyz";
@@ -15,3 +16,6 @@ export function generateToken(type: string, length: number, isRand?: boolean) {
   return nanoid();
 }
 
+export async function generateId() {
+  return uuidv4();
+}

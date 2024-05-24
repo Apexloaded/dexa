@@ -19,7 +19,7 @@ function ShareButton({ post }: Props) {
         onClick={(e) => {e.stopPropagation()}}
         title="Share"
       >
-        <Share2Icon height={23} />
+        <Share2Icon size={18} />
       </Button>
       <p className="text-sm group-hover:text-primary">12</p>
     </>

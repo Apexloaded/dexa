@@ -12,7 +12,7 @@ const nextConfig = {
         hostname: "gnfd-testnet-sp1.bnbchain.org",
         port: "",
         pathname: "/view/dexa/**",
-      },
+      }
     ],
   },
 };

@@ -17,7 +17,7 @@ function BookmarkButton({ post }: Props) {
       }}
       title="Bookmark"
     >
-      <BookmarkIcon height={18} />
+      <BookmarkIcon size={18} />
     </Button>
   );
 }

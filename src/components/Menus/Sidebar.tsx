@@ -37,11 +37,11 @@ export default function Sidebar() {
       href: "/messages",
       icon: MailIcon,
     },
-    {
-      name: "Notifications",
-      href: "/notifications",
-      icon: BellDotIcon,
-    },
+    // {
+    //   name: "Notifications",
+    //   href: "/notifications",
+    //   icon: BellDotIcon,
+    // },
     {
       name: "Connections",
       href: "/connections",
@@ -52,16 +52,16 @@ export default function Sidebar() {
       href: "/transactions",
       icon: BanknoteIcon,
     },
-    {
-      name: "My Collections",
-      href: "/collections",
-      icon: Rows3Icon,
-    },
-    {
-      name: "Stats",
-      href: "/stats",
-      icon: CandlestickChart,
-    },
+    // {
+    //   name: "My Collections",
+    //   href: "/collections",
+    //   icon: Rows3Icon,
+    // },
+    // {
+    //   name: "Stats",
+    //   href: "/stats",
+    //   icon: CandlestickChart,
+    // },
     {
       name: "Settings",
       href: "/settings",

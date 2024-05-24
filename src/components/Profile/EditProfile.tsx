@@ -14,7 +14,7 @@ import Label from "../Form/Label";
 import TextArea from "../Form/TextArea";
 import useToast from "@/hooks/toast.hook";
 import { useDexa } from "@/context/dexa.context";
-import { updateProfile } from "@/services/user.service";
+import { updateProfile } from "@/actions/auth.action";
 import { useWriteContract } from "wagmi";
 
 type Props = {
@@ -61,7 +61,7 @@ function EditProfile({ user, isOpen, setIsOpen }: Props) {
       formData.append("bio", bio);
       formData.append("website", website);
       const res = await updateProfile(formData);
-      if (res.status && res.statusCode == 201) {
+      if (res.status == true) {
         await writeContractAsync(
           {
             abi: CreatorABI,

@@ -5,11 +5,10 @@ import { Dispatch, SetStateAction, createContext, useContext } from "react";
 export type AuthContextType = {
   ens?: string;
   progress?: number;
-  logout: () => Promise<void>;
+  logout: () => void;
   user?: UserInterface;
   profileProgress?: number;
   setProfileProgress: Dispatch<SetStateAction<number | undefined>>;
-  setSession: (payload: AuthData) => void;
   isAuth: boolean;
 };
 

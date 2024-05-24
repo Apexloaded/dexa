@@ -11,15 +11,13 @@ import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Post } from "@/interfaces/feed.interface";
 import Button from "../Form/Button";
 import {
-  CalendarPlusIcon,
   ImageIcon,
-  ShieldQuestionIcon,
   SmilePlusIcon,
 } from "lucide-react";
 import { GifIcon } from "@heroicons/react/24/outline";
 import FileSelector from "../ui/FileSelector";
 import PostCounter from "./PostCounter";
-import { generatePostId } from "@/services/post.service";
+import { generateId } from "@/libs/generateId";
 
 type Props = {
   post: Post;
@@ -62,7 +60,7 @@ function NewComment({ post }: Props) {
   const onSubmit = async (data: FieldValues) => {
     try {
       if (!post) return;
-      const commentId = await generatePostId();
+      const commentId = await generateId();
 
       loading({
         msg: "Posting reply",

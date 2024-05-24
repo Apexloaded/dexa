@@ -84,7 +84,7 @@ export default function Login() {
           </p>
         </div>
         <div className="flex flex-col border border-primary/50 rounded-lg overflow-hidden">
-          {connectors.map((connector) => (
+          {connectors.toReversed().map((connector) => (
             <Button
               key={connector.uid}
               kind={`default`}
@@ -93,15 +93,37 @@ export default function Login() {
             >
               <p className="flex justify-between items-center">
                 <span className="flex items-center">
-                  <Image
+                  {connectorIcons[connector.id] ? (
+                    <Image
+                      src={connectorIcons[connector.id].icon}
+                      alt={connectorIcons[connector.id].key}
+                      height={25}
+                      width={25}
+                    />
+                  ) : (
+                    <Image
+                      unoptimized
+                      src={decodeURIComponent(`${connector.icon}`)}
+                      alt={""}
+                      height={25}
+                      width={25}
+                    />
+                  )}
+                  {/* <Image
                     src={connectorIcons[connector.id].icon}
                     alt={connectorIcons[connector.id].key}
                     height={25}
                     width={25}
-                  />
+                  /> */}
+                  {/* <Image
+                    src={decodeURIComponent(`${connector.icon}`)}
+                    alt={""}
+                    height={25}
+                    width={25}
+                  /> */}
                   <span className="ml-3 font-medium">{connector.name}</span>
                 </span>
-                {connector.id === "metaMaskSDK" && (
+                {connector.id === "io.metamask" && (
                   <span className="text-xs bg-primary text-white px-3 rounded-sm">
                     Popular
                   </span>

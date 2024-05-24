@@ -100,7 +100,6 @@ const ReadMessage: NextPage<Props> = ({ params }) => {
     eventName: "ChatSent",
     onLogs(logs) {
       const { args } = logs[0] as any;
-      console.log(args);
       const { chatCode, _from, _to } = args;
       const verifyChatCode = getChatCode(_from, _to);
       if (verifyChatCode.toString() === chatCode.toString()) {
@@ -143,10 +142,8 @@ const ReadMessage: NextPage<Props> = ({ params }) => {
   }, [userChats, status?.isAccepted, userProfile]);
 
   useEffect(() => {
-    if (endOfMsgRef && endOfMsgRef.current) {
-      scrollToBottom();
-    }
-  }, [endOfMsgRef.current]);
+    scrollToBottom();
+  }, [currentMsg, endOfMsgRef, status?.isAccepted, elementRef]);
 
   const scrollToBottom = () => {
     if (endOfMsgRef.current)

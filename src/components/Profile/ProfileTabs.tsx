@@ -19,6 +19,7 @@ type Props = {
 function ProfileTabs({ username }: Props) {
   const [activeTab, setActiveTab] = useState("tab1");
   const [posts, setPosts] = useState<Post[]>([]);
+  const [replies, setReplies] = useState<Post[]>([]);
   const { FeedsABI, dexaFeeds } = useDexa();
   const { data: response } = useReadContract({
     abi: FeedsABI,
@@ -30,7 +31,9 @@ function ProfileTabs({ username }: Props) {
   useEffect(() => {
     if (response) {
       const _posts = response as Post[];
-      const sortedPost = sortPostByDate(_posts);
+      const filterReplies = sortPostByDate(_posts.filter((p) => p.isMintable));
+      const sortedPost = sortPostByDate(_posts.filter((p) => !p.isMintable));
+      setReplies(filterReplies);
       setPosts(sortedPost);
     }
   }, [response]);
@@ -57,14 +60,20 @@ function ProfileTabs({ username }: Props) {
               onTabChange={onTabChange}
             />
             <TabsHeader
-              title="Community"
+              title="Replies"
               value="tab3"
               activeTabId={activeTab}
               onTabChange={onTabChange}
             />
             <TabsHeader
-              title="Tips"
+              title="Community"
               value="tab4"
+              activeTabId={activeTab}
+              onTabChange={onTabChange}
+            />
+            <TabsHeader
+              title="Tips"
+              value="tab5"
               activeTabId={activeTab}
               onTabChange={onTabChange}
             />
@@ -87,6 +96,9 @@ function ProfileTabs({ username }: Props) {
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
             <Reminted posts={posts} username={username} />
+          </TabsContent>
+          <TabsContent value="tab3" activeTabId={activeTab}>
+            <UserFeeds posts={replies} />
           </TabsContent>
           {/* <TabsContent value="tab3" activeTabId={activeTab}>
             <div>Tab 3</div>

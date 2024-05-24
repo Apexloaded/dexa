@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 import { FriendListInterface } from "@/interfaces/user.interface";
 import Link from "next/link";
@@ -14,9 +14,11 @@ type Props = {
 };
 function ListConnection({ connection }: Props) {
   const router = useRouter();
-  router.prefetch("/messages");
-
   const { setMessages, messages } = useDexaMessenger();
+
+  useEffect(() => {
+    router.prefetch("/messages");
+  }, []);
 
   const initChat = () => {
     const isMessage = messages.find((m) => m.profile.id == connection.id);
@@ -25,7 +27,7 @@ function ListConnection({ connection }: Props) {
         const temp = [...prev];
         const newChat: ChatInterface = {
           profile: connection,
-          chats: []
+          chats: [],
         };
         temp.push(newChat);
         return temp;

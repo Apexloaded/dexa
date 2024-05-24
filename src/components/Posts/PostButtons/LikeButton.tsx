@@ -54,7 +54,7 @@ function LikeButton({ post }: Props) {
         hoverColor={false}
         title="Like"
       >
-        <ThumbsUpIcon height={18} />
+        <ThumbsUpIcon size={18} />
       </Button>
       {post.likedBy.length > 0 && (
         <p

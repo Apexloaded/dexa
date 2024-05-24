@@ -12,15 +12,13 @@ import {
   useSwitchChain,
 } from "wagmi";
 import useStorage from "./storage.hook";
-import { StorageTypes } from "@/libs/enum";
 import { useAppSelector } from "./redux.hook";
 import { selectAuth, setAuth } from "@/slices/account/auth.slice";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import { DEXA_CREATOR } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
 import { publicRoutes } from "@/libs/routes";
-import { useCookies } from "react-cookie";
-import { jwtDecode } from "jwt-decode";
+import { clearSession } from "@/actions/auth.action";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
@@ -32,13 +30,10 @@ function useUser() {
   const [user, setUser] = useState<UserInterface>();
   const [profileProgress, setProfileProgress] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cookies, setCookie, removeCookie] = useCookies([
-    StorageTypes.ACCESS_TOKEN,
-  ]);
   const { address, isConnected, isDisconnected, chainId, isReconnecting } =
     useAccount();
   const { chains } = useSwitchChain();
-  const { disconnectAsync } = useDisconnect();
+  const { disconnect } = useDisconnect();
   const { getItem, setItem } = useStorage();
 
   const { data } = useReadContract({
@@ -67,10 +62,6 @@ function useUser() {
   }, [data]);
 
   useEffect(() => {
-    verifyAuth();
-  }, [cookies]);
-
-  useEffect(() => {
     const init = () => {
       if (data) {
         setUser({
@@ -83,12 +74,7 @@ function useUser() {
   }, [isConnected, isAuth, data]);
 
   useEffect(() => {
-    if (
-      !isConnected &&
-      isDisconnected &&
-      !publicRoutes.includes(path) &&
-      !isLoading
-    ) {
+    if (!isConnected && isDisconnected && !publicRoutes.includes(path)) {
       logout();
     }
   }, [isConnected, isDisconnected]);
@@ -105,40 +91,10 @@ function useUser() {
     checkChain();
   }, [chainId, chains, isConnected]);
 
-  const setSession = (payload: AuthData) => {
-    const { token, expiresIn } = payload;
-    setCookie(StorageTypes.ACCESS_TOKEN, token, {
-      maxAge: expiresIn,
-      httpOnly: process.env.NODE_ENV !== "development",
-      path: "/",
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
-    });
-  };
-
-  const verifyAuth = () => {
-    const authToken = cookies[StorageTypes.ACCESS_TOKEN];
-    const decoded = authToken ? jwtDecode(authToken) : ("" as any);
-    let currentDate = new Date();
-    if (
-      decoded.exp * 1000 < currentDate.getTime() ||
-      decoded == "" ||
-      !decoded
-    ) {
-      logout();
-    } else {
-      dispatch(setAuth(true));
-    }
-    setIsLoading(false);
-  };
-
-  const logout = async () => {
-    await disconnectAsync();
-    removeCookie(StorageTypes.ACCESS_TOKEN);
-    dispatch(setAuth(false));
-    if (!publicRoutes.includes(path)) {
-      router.replace("/login");
-    }
+  const logout = () => {
+    // disconnect();
+    // dispatch(setAuth(false));
+    // clearSession();
   };
 
   return {
@@ -146,7 +102,6 @@ function useUser() {
     user,
     profileProgress,
     setProfileProgress,
-    setSession,
     isAuth,
   };
 }

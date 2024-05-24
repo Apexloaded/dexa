@@ -20,7 +20,7 @@ function CommentButton({ post }: Props) {
         }}
         title="Comments"
       >
-        <MessageSquareTextIcon height={23} />
+        <MessageSquareTextIcon size={18} />
       </Button>
       {post.commentCount > 0 && (
         <p className="text-sm group-hover:text-primary">{post.commentCount}</p>

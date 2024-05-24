@@ -31,3 +31,10 @@ export enum ContractError {
   ERROR_INVALID_PRICE = "Dexa: 4",
   ERROR_PROCESS_FAILED = "Dexa: 5",
 }
+
+export enum Path {
+  CREATORS = "creators",
+  FEEDS = "feeds",
+  METADATA = "metadata",
+  TIP = "tips",
+}

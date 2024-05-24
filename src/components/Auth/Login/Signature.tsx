@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Button from "@/components/Form/Button";
 import { formatWalletAddress } from "@/libs/helpers";
 import {
@@ -8,38 +9,13 @@ import {
   Wallet2Icon,
   XIcon,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { setAuth } from "@/slices/account/auth.slice";
-import axios from "axios";
-import { API_URL } from "@/config/env";
-import { useAuth } from "@/context/auth.context";
-import { AuthData } from "@/interfaces/user.interface";
 import useToast from "@/hooks/toast.hook";
-
-async function getNonce(wallet: string) {
-  const response = await axios
-    .get(`${API_URL}/auth/nonce/generate?wallet=${wallet}`)
-    .then((res) => res.data)
-    .catch((err) => err);
-  return response;
-}
-
-async function verifyNonce(message: string, signature: string) {
-  const siwe = new SiweMessage(JSON.parse(message));
-  const payload = {
-    message: siwe,
-    signature: signature,
-  };
-  const response = await axios
-    .post(`${API_URL}/auth/nonce/verify`, payload)
-    .then((res) => res.data)
-    .catch((err) => err);
-  return response;
-}
+import { verifyNonce, getNonce } from "@/actions/auth.action";
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,7 +25,6 @@ function SignInModal({ setModal }: Props) {
   const router = useRouter();
   const { chainId, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
-  const { setSession } = useAuth();
   const { loading, success, error } = useToast();
   const dispatch = useAppDispatch();
 
@@ -71,10 +46,11 @@ function SignInModal({ setModal }: Props) {
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
-      const verifyRes = await verifyNonce(JSON.stringify(message), signature);
-      if (verifyRes.status && verifyRes.statusCode == 201) {
-        const payload = verifyRes.data as AuthData;
-        setSession(payload);
+      const verifyRes = await verifyNonce({
+        signature,
+        message: JSON.stringify(message),
+      });
+      if (verifyRes?.status) {
         setModal(false);
         dispatch(setAuth(true));
         success({ msg: "Successfully signed in!" });

@@ -1,7 +1,6 @@
-import RootLayout from "@/components/Layouts/RootLayout";
 import MobileMenu from "@/components/Menus/MobileMenu";
 import Sidebar from "@/components/Menus/Sidebar";
-import type { Metadata, NextPageContext } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +12,17 @@ function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <RootLayout>{children}</RootLayout>;
+  return (
+    <div className="max-w-7xl mx-auto bg-white">
+      <div className="flex h-screen overflow-hidden relative overscroll-contain">
+        <div className="hidden xs:inline md:w-1/5">
+          <Sidebar />
+        </div>
+        <div className="flex-1 w-4/5">{children}</div>
+        <MobileMenu />
+      </div>
+    </div>
+  );
 }
 
 export default MainLayout;

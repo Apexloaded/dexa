@@ -32,8 +32,8 @@ import {
 } from "wagmi";
 import useToast from "@/hooks/toast.hook";
 import { ZeroAddress, ethers } from "ethers";
-import { generatePostId } from "@/services/post.service";
 import { ContractError } from "@/libs/enum";
+import { generateId } from "@/libs/generateId";
 
 const getError = (error: Error): string => {
   const errorMessages: { [key: string]: string } = {
@@ -130,7 +130,7 @@ export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
   const onRemint = async (data: FieldValues) => {
     try {
       if (!post) return;
-      const postId = await generatePostId();
+      const postId = await generateId();
       setNewPostId(postId);
       const notNative = request && post?.remintToken != ZeroAddress;
       if (notNative) {

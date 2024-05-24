@@ -4,22 +4,21 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, EarthLockIcon, EarthIcon, LucideIcon } from "lucide-react";
 import { GnfVisibility } from "@/interfaces/bucket.interface";
-import { VisibilityType } from "@bnb-chain/greenfield-js-sdk";
 
 type Options = {
-  id: VisibilityType;
+  id: GnfVisibility;
   title: string;
   icon: LucideIcon;
 };
 
 const options: Options[] = [
   {
-    id: VisibilityType.VISIBILITY_TYPE_PUBLIC_READ,
+    id: "VISIBILITY_TYPE_PUBLIC_READ",
     title: "Public",
     icon: EarthIcon,
   },
   {
-    id: VisibilityType.VISIBILITY_TYPE_PRIVATE,
+    id: "VISIBILITY_TYPE_PRIVATE",
     title: "Private",
     icon: EarthLockIcon,
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "@/components/Form/Button";
 import {
   CalendarPlusIcon,
@@ -25,7 +25,6 @@ import { useDexa } from "@/context/dexa.context";
 import RemintFee from "./RemintFee";
 import { Coin } from "@/interfaces/feed.interface";
 import { ethers } from "ethers";
-//import { createPost } from "@/services/post.service";
 import { useAuth } from "@/context/auth.context";
 import { getFirstLetters } from "@/libs/helpers";
 import useToast from "@/hooks/toast.hook";
@@ -33,25 +32,11 @@ import CreatorPFP from "./ListPost/CreatorPFP";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { API_URL } from "@/config/env";
-import { useCookies } from "react-cookie";
 import { StorageTypes } from "@/libs/enum";
-
-async function createPost(payload: FormData, cookie: string) {
-  const response = await axios
-    .post(`${API_URL}/posts/create`, payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => res.data)
-    .catch((err) => err);
-  return response;
-}
+import { createPost } from "@/actions/post.action";
 
 function NewPost() {
   const router = useRouter();
-  router.prefetch("/live");
   const [maxWord] = useState(70);
   const [remintFee, setRemintFee] = useState<string>("0");
   const [token, selectToken] = useState<Coin>();
@@ -59,7 +44,6 @@ function NewPost() {
   const mediaRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const [percentage, setPercentage] = useState(0);
-  const [cookie] = useCookies([StorageTypes.ACCESS_TOKEN]);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [exceededCount, setExceededCount] = useState(0);
   const { address } = useAccount();
@@ -80,6 +64,10 @@ function NewPost() {
   const content = watch("content", "");
   const isEmptyContent = content === "<p></p>";
 
+  useEffect(() => {
+    router.prefetch("/live");
+  }, []);
+
   const onSubmit = async (data: FieldValues) => {
     try {
       const { content, access_level } = data;
@@ -91,36 +79,36 @@ function NewPost() {
       formData.append("visibility", access_level);
       formData.append("bucketName", "dexa");
 
-      const response = await createPost(formData, cookie[StorageTypes.ACCESS_TOKEN]);
-      if (response.statusCode == 201 && response.status == true) {
+      const response = await createPost(formData);
+      if (response.status == true) {
         success({ msg: "Metadata generated" });
-        //loading({ msg: "Minting post" });
+        loading({ msg: "Minting post" });
         const { tokenURI, nft, postId } = response.data;
         const price = remintFee != "" ? remintFee : "0";
-        // writeContractAsync(
-        //   {
-        //     abi: FeedsABI,
-        //     address: dexaFeeds,
-        //     functionName: "mintPost",
-        //     args: [
-        //       postId,
-        //       content,
-        //       ethers.parseEther(price),
-        //       token?.address,
-        //       tokenURI,
-        //       [nft],
-        //     ],
-        //   },
-        //   {
-        //     onSuccess: async (data) => {
-        //       success({ msg: "Post created" });
-        //       resetForm();
-        //     },
-        //     onError(err) {
-        //       error({ msg: `${err.message}` });
-        //     },
-        //   }
-        // );
+        writeContractAsync(
+          {
+            abi: FeedsABI,
+            address: dexaFeeds,
+            functionName: "mintPost",
+            args: [
+              postId,
+              content,
+              ethers.parseEther(price),
+              token?.address,
+              tokenURI,
+              [nft],
+            ],
+          },
+          {
+            onSuccess: async (data) => {
+              success({ msg: "Post created" });
+              resetForm();
+            },
+            onError(err) {
+              error({ msg: `${err.message}` });
+            },
+          }
+        );
       } else {
         error({ msg: "error creating post" });
       }
@@ -131,7 +119,6 @@ function NewPost() {
       if (err && typeof err === "object") {
         error({ msg: err.details });
       }
-      console.log(err);
     }
   };
 
