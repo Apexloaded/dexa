@@ -1,15 +1,41 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import Button from "../Form/Button";
 import { BellIcon, BoxIcon, HomeIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import ape1 from "@/assets/nft/1.png";
+import { useRouter } from "next/navigation";
+import { useDexaMessenger } from "@/context/dexa-messenger.context";
+import { useAuth } from "@/context/auth.context";
+import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 
 function MobileMenu() {
+  const router = useRouter();
+  const { setIsMsgBoxOn, isMsgBoxOn } = useDexaMessenger();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    router.prefetch("/messages");
+    router.prefetch("/home");
+    router.prefetch("/messages");
+    router.prefetch("/messages");
+    router.prefetch("/messages");
+  }, []);
+
+  const navigateTo = (url: string) => {
+    router.push(url);
+  };
+
   return (
-    <div className="h-14 xs:hidden bg-white/80 shadow-sm border-t border-light absolute w-full -bottom-0">
+    <div
+      className={`h-14 xs:hidden bg-white/80 shadow-sm border-t border-light w-full ${
+        isMsgBoxOn && "hidden"
+      }`}
+    >
       <div className="px-5 flex items-center h-full justify-between">
         <Button
+          onClick={() => navigateTo("/home")}
           type={"button"}
           kind={"default"}
           shape={"CIRCLE"}
@@ -19,6 +45,10 @@ function MobileMenu() {
           <HomeIcon height={23} />
         </Button>
         <Button
+          onClick={() => {
+            navigateTo("/messages");
+            setIsMsgBoxOn(false);
+          }}
           type={"button"}
           kind={"default"}
           shape={"CIRCLE"}
@@ -45,16 +75,11 @@ function MobileMenu() {
         >
           <BellIcon height={23} />
         </Button>
-        <Link href="" className="sticky top-0">
-          <div className="hover:bg-dark/20 cursor-pointer h-8 w-8 rounded-full absolute"></div>
-          <Image
-            height={100}
-            width={100}
-            alt=""
-            className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-700"
-            src={ape1}
-          />
-        </Link>
+        <CreatorPFP
+          username={user?.username}
+          name={user?.name}
+          pfp={user?.pfp}
+        />
       </div>
     </div>
   );

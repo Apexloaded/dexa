@@ -32,7 +32,7 @@ export async function verifyNonce({
         path: "/",
         sameSite: "strict",
         secure: false,
-        expires: Date.now() + exp,
+        expires: Date.now() + exp * 1000,
       });
       return { status: true, message: "success" };
     }

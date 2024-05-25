@@ -33,6 +33,8 @@ export type DexaMessengerType = {
   mapChats: (value: ChatInterface) => ChatInterface;
   mapMessages: (value: MessageInterface[]) => MessageInterface[];
   getChatCode: (addressFrom: string, addressTo: string) => string;
+  isMsgBoxOn: boolean;
+  setIsMsgBoxOn: React.Dispatch<SetStateAction<boolean>>;
 };
 
 interface Props {
@@ -51,6 +53,7 @@ export function DexaMessengerProvider({ children }: Props) {
   const [dexaMessenger] = useState<`0x${string}`>(MESSENGER);
   const [messages, setMessages] = useState<ChatInterface[]>([]);
   const [currentMsg, setCurrentMsg] = useState<ChatInterface>();
+  const [isMsgBoxOn, setIsMsgBoxOn] = useState<boolean>(false);
 
   const { data: msgList } = useReadContract({
     abi: MessengerABI,
@@ -139,6 +142,8 @@ export function DexaMessengerProvider({ children }: Props) {
         mapChats,
         mapMessages,
         getChatCode,
+        isMsgBoxOn,
+        setIsMsgBoxOn
       }}
     >
       {children}

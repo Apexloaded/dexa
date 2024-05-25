@@ -14,11 +14,13 @@ function MainLayout({
 }>) {
   return (
     <div className="max-w-7xl mx-auto bg-white">
-      <div className="flex h-screen overflow-hidden relative overscroll-contain">
+      <div className="flex flex-col justify-between xs:justify-start xs:flex-row h-screen overflow-hidden relative overscroll-contain">
         <div className="hidden xs:inline md:w-1/5">
           <Sidebar />
         </div>
-        <div className="flex-1 w-4/5">{children}</div>
+        <div className="flex-1 w-full lg:w-4/5 overflow-hidden">
+          {children}
+        </div>
         <MobileMenu />
       </div>
     </div>

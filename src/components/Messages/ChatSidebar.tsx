@@ -1,6 +1,5 @@
 "use client";
 
-import { FriendListInterface } from "@/interfaces/user.interface";
 import {
   EllipsisVerticalIcon,
   MessageSquareMoreIcon,
@@ -8,13 +7,11 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import FriendList from "./FriendList";
-import { useDexa } from "@/context/dexa.context";
-import { useReadContract } from "wagmi";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 
 function ChatSidebar() {
   const [width, setWidth] = useState(0);
-  const { messages, currentMsg, setMessages } = useDexaMessenger();
+  const { messages, currentMsg, setMessages, isMsgBoxOn } = useDexaMessenger();
 
   useEffect(() => {
     function handleResize() {
@@ -47,10 +44,12 @@ function ChatSidebar() {
 
   const newContact = () => {};
 
-  const showChat = () => {};
-
   return (
-    <div className="w-full md:w-4/5 lg:w-[20rem] xl:w-[25rem] border-r border-light relative">
+    <div
+      className={`w-full ${width < 1024 ? "w-full" : "w-4/5"} ${
+        isMsgBoxOn && width <= 1024 && "hidden"
+      } lg:w-[20rem] xl:w-[25rem] border-r border-light relative`}
+    >
       <div className="overflow-y-scroll h-screen">
         <header className="sticky top-0">
           <div className="flex items-center justify-between h-14 bg-primary/40 px-4">
@@ -105,7 +104,7 @@ function ChatSidebar() {
             </div>
           )}
         </section>
-        <div className="absolute bottom-5 right-5">
+        <div className="absolute bottom-20 xs:bottom-5 right-5">
           <button
             onClick={newContact}
             className="w-14 flex items-center justify-center h-14 bg-gradient-to-r from-primary via-primary to-primary/60 text-white rounded-full"

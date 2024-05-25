@@ -17,7 +17,7 @@ const FriendList = ({ contact, messages }: Props) => {
 
   const { address } = useAccount();
   const [lastMsg, setLastMsg] = useState<MessageInterface>();
-  const { setCurrentMsg, mapMessages } = useDexaMessenger();
+  const { setCurrentMsg, mapMessages, setIsMsgBoxOn } = useDexaMessenger();
   const { MessengerABI, dexaMessenger } = useDexa();
   const { data: message } = useReadContract({
     abi: MessengerABI,
@@ -51,6 +51,7 @@ const FriendList = ({ contact, messages }: Props) => {
   };
 
   const initChat = () => {
+    setIsMsgBoxOn(true);
     setCurrentMsg({ profile: contact, chats: messages });
     router.push(`/messages/${contact.id}`);
   };

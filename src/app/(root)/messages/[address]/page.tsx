@@ -17,6 +17,9 @@ import CreatorPFP from "@/components/Posts/ListPost/CreatorPFP";
 import SendMessage from "@/components/Messages/SendMessage";
 import { useMutationObserver } from "@/hooks/mutation.hook";
 import useReadMessenger from "@/hooks/read.messenger.hook";
+import Button from "@/components/Form/Button";
+import { ArrowLeftIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type ScrollIntoViewProps = {
   behavior: ScrollBehavior | undefined;
@@ -28,6 +31,7 @@ type Props = {
 };
 
 const ReadMessage: NextPage<Props> = ({ params }) => {
+  const router = useRouter();
   const { address } = useAccount();
   const [status, setStatus] = useState<Status>();
   const { CreatorABI, dexaCreator } = useDexa();
@@ -38,6 +42,7 @@ const ReadMessage: NextPage<Props> = ({ params }) => {
     setCurrentMsg,
     mapChats,
     getChatCode,
+    setIsMsgBoxOn,
   } = useDexaMessenger();
   const [userProfile, setUserProfile] = useState<UserInterface>();
 
@@ -112,6 +117,10 @@ const ReadMessage: NextPage<Props> = ({ params }) => {
   });
 
   useEffect(() => {
+    setIsMsgBoxOn(true);
+  }, []);
+
+  useEffect(() => {
     if (user) {
       setUserProfile(user as UserInterface);
     }
@@ -153,15 +162,24 @@ const ReadMessage: NextPage<Props> = ({ params }) => {
       });
   };
 
+  const back = () => {
+    router.push('/messages');
+    setIsMsgBoxOn(false);
+  };
+
   return (
-    <div>
+    <div className="h-full">
       {status?.isAccepted ? (
         <div
-          className={`w-auto flex flex-col justify-between bg-white md:bg-primary/5 h-screen`}
+          className={`w-auto flex flex-col justify-between bg-white md:bg-primary/5 h-full`}
         >
-          <header className="sticky top-0 z-10">
+          <header className="h-14 z-10">
             <div className="flex items-center justify-between h-14 bg-white md:bg-primary/10 border-light border-b px-4">
-              <div className="flex">Back</div>
+              <div className="flex lg:hidden -translate-x-3">
+                <Button onClick={back} type={"button"} kind="clear" shape={'CIRCLE'}>
+                  <ArrowLeftIcon size={18} />
+                </Button>
+              </div>
               <div className="max-w-[10rem] md:max-w-xs">
                 <p className="font-semibold truncate text-gray-800 dark:text-gray-400">
                   {currentMsg?.profile.name}

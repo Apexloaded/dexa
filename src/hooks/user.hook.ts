@@ -92,9 +92,9 @@ function useUser() {
   }, [chainId, chains, isConnected]);
 
   const logout = () => {
-    // disconnect();
-    // dispatch(setAuth(false));
-    // clearSession();
+    disconnect();
+    dispatch(setAuth(false));
+    clearSession();
   };
 
   return {
