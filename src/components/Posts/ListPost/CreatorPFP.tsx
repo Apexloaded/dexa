@@ -9,8 +9,9 @@ type Props = {
   username?: string;
   name?: string;
   className?: string;
+  isClickable?: boolean;
 };
-function CreatorPFP({ pfp, username, name, className }: Props) {
+function CreatorPFP({ pfp, username, name, isClickable = true, className }: Props) {
   const router = useRouter();
 
   useEffect(() => {

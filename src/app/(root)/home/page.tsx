@@ -7,11 +7,15 @@ import Section from "@/components/Layouts/Section";
 import Aside from "@/components/Layouts/Aside";
 import Bucket from "@/components/Auth/Welcome/Bucket";
 import QuickView from "@/components/Profile/QuickView";
+import Header from "@/components/ui/Header";
 
 export default function Home() {
   return (
     <div className="flex space-x-5">
       <Section>
+        <div className="border-b bg-white/40 z-20 border-light px-3 top-0 sticky">
+          <Header title="Feeds" isBack={false} />
+        </div>
         <div className="border-b border-light">
           <NewPost />
         </div>

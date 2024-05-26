@@ -13,6 +13,23 @@ type IVerifyNonce = {
   signature: string;
 };
 
+export async function registerUser(wallet: string) {
+  try {
+    const payload = {
+      wallet,
+      nonce: "",
+    };
+    const response = await postApi("auth/register", payload);
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success" };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
+
 export async function verifyNonce({
   signature,
   message,

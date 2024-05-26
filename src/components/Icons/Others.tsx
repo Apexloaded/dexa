@@ -1,3 +1,7 @@
+import Image from "next/image";
+import { favicon } from "./Connector";
+import Link from "next/link";
+
 export function Diamond({
   height = "25",
   width = "25",
@@ -53,5 +57,20 @@ export function Diamond({
         points="187.891,74.189 256,237.404 324.109,74.189 "
       />
     </svg>
+  );
+}
+
+export function DexaLogo() {
+  return (
+    <Link href={"/"} prefetch={true} className={`flex items-center gap-x-1`}>
+      <Image
+        src={favicon.main}
+        width={260}
+        height={260}
+        alt={`dexa`}
+        className="h-12 w-12"
+      />
+      <p className="text-3xl font-black text-primary">Dexa</p>
+    </Link>
   );
 }

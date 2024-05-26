@@ -14,7 +14,7 @@ function MainLayout({
 }>) {
   return (
     <div className="max-w-7xl mx-auto bg-white">
-      <div className="flex flex-col justify-between xs:justify-start xs:flex-row h-screen overflow-hidden relative overscroll-contain">
+      <div className="flex flex-col justify-between xs:justify-start xs:flex-row h-svh overflow-hidden relative overscroll-contain">
         <div className="hidden xs:inline md:w-1/5">
           <Sidebar />
         </div>

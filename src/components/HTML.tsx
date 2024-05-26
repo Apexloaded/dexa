@@ -31,25 +31,25 @@ export default function HTML({
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
           <WagmiProvider config={config} initialState={initialState}>
-              <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                  <DexaProvider>
-                    <DexaMessengerProvider>
-                      <StreamProvider>
-                        <ProgressBar
-                          height="4px"
-                          color="#4338ca"
-                          options={{ showSpinner: false }}
-                          shallowRouting
-                        />
-                        <SwitchChain />
-                        <main>{children}</main>
-                        <Toaster />
-                      </StreamProvider>
-                    </DexaMessengerProvider>
-                  </DexaProvider>
-                </AuthProvider>
-              </QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+              <AuthProvider>
+                <DexaProvider>
+                  <DexaMessengerProvider>
+                    <StreamProvider>
+                      <ProgressBar
+                        height="4px"
+                        color="#4338ca"
+                        options={{ showSpinner: false }}
+                        shallowRouting
+                      />
+                      <SwitchChain />
+                      <main>{children}</main>
+                      <Toaster />
+                    </StreamProvider>
+                  </DexaMessengerProvider>
+                </DexaProvider>
+              </AuthProvider>
+            </QueryClientProvider>
           </WagmiProvider>
         </Provider>
       </body>

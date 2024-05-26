@@ -7,6 +7,8 @@ import { UserRoundPlusIcon } from "lucide-react";
 import IndexStepper from "@/components/Auth/Welcome/Index";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth.context";
+import Image from "next/image";
+import { DexaLogo } from "@/components/Icons/Others";
 
 export default function Welcome() {
   const { profileProgress } = useAuth();
@@ -16,11 +18,11 @@ export default function Welcome() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (profileProgress) {
-      if (profileProgress >= 100 && pathname.startsWith("/welcome")) {
-        router.replace("/home");
-      }
-    }
+    // if (profileProgress) {
+    //   if (profileProgress >= 100 && pathname.startsWith("/welcome")) {
+    //     router.replace("/home");
+    //   }
+    // }
   }, [profileProgress]);
 
   const updateStep = (step: number) => {
@@ -33,7 +35,7 @@ export default function Welcome() {
       title: "Hello",
       headline: "Welcome!, let's get your started",
       icons: UserRoundPlusIcon,
-      description: "You can always change them later",
+      description: "Mint your perfect Dexa handle now.",
     },
     // {
     //   title: "Shelve",
@@ -46,16 +48,10 @@ export default function Welcome() {
   return (
     <div className="h-screen w-full overflow-scroll bg-light px-5 md:px-0">
       <div className="max-w-2xl mx-auto h-full">
-        <div className="pt-8 pb-10">
-          {/* <div className="text-center flex items-center justify-center">
-            <Image
-              src={logos.main}
-              width={260}
-              height={45}
-              alt={`logo`}
-              className="h-10 w-28"
-            />
-          </div> */}
+        <div className="pt-20 pb-10">
+          <div className="flex justify-center">
+            <DexaLogo />
+          </div>
         </div>
         {steps.length > 1 && (
           <div className="flex justify-center items-center text-center overflow-hidden">

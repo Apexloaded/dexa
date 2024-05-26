@@ -14,7 +14,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen overflow-hidden relative overscroll-contain">
+    <div className="flex h-svh overflow-hidden relative overscroll-contain">
       <ChatSidebar />
       <div className="flex-1 w-4/5">{children}</div>
     </div>

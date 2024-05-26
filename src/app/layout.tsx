@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, Reddit_Mono } from "next/font/google";
 import "./globals.scss";
 import HTML from "@/components/HTML";
 import { headers } from "next/headers";
@@ -8,10 +8,10 @@ import { config } from "@/config/wagmi.config";
 
 // export const dynamicParams = true;
 
-const poppins = Poppins({
+const poppins = Reddit_Mono({
   subsets: ["latin-ext"],
   style: "normal",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {

@@ -5,7 +5,9 @@ import {
   BellDotIcon,
   BoxIcon,
   CandlestickChart,
+  EllipsisIcon,
   HomeIcon,
+  LogOutIcon,
   MailIcon,
   PodcastIcon,
   Rows3Icon,
@@ -20,16 +22,21 @@ import { usePathname, useRouter } from "next/navigation";
 import Button from "../Form/Button";
 import { favicon } from "../Icons/Connector";
 import MintPostModal from "../Posts/MintPostModal";
+import { useAuth } from "@/context/auth.context";
+import CreatorPFP from "../Posts/ListPost/CreatorPFP";
+import * as Popover from "@radix-ui/react-popover";
+import { getFirstLetters } from "@/libs/helpers";
 
 export default function Sidebar() {
   const path = usePathname();
   const [mintModal, setMintModal] = useState<boolean>(false);
+  const { user, logout } = useAuth();
 
   const navigation = [
     { name: "Home", href: "/home", icon: HomeIcon },
     {
-      name: "NFTlies",
-      href: "/nftlies",
+      name: "Explore",
+      href: "/explore",
       icon: BoxIcon,
     },
     {
@@ -121,7 +128,69 @@ export default function Sidebar() {
             </div>
           </div>
         </div>
-        <div></div>
+        <div className="mb-2 px-3">
+          <Popover.Root>
+            <Popover.Trigger className="w-full">
+              <div className="outline-none flex justify-end xl:justify-start w-full">
+                <div className="py-3 px-3 rounded-full  hover:bg-light cursor-pointer flex items-center justify-end xl:justify-between w-auto xl:w-full">
+                  <div className="flex justify-end items-center gap-2">
+                    {/* <CreatorPFP
+                      username={user?.username}
+                      name={user?.name}
+                      pfp={user?.pfp}
+                      isClickable={false}
+                    /> */}
+                    <div className="w-10">
+                      <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
+                      {user?.pfp ? (
+                        <Image
+                          src={user.pfp}
+                          height={400}
+                          width={400}
+                          alt={"PFP"}
+                          className="h-10 w-10 rounded-full"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 bg-white/90 border border-primary rounded-full flex justify-center items-center">
+                          <p className="text-base font-semibold text-primary">
+                            {getFirstLetters(`${user?.name}`)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="hidden xl:inline">
+                      <p className="font-semibold mt-1">{user?.name}</p>
+                      <p className="text-medium -mt-2">@{user?.username}</p>
+                    </div>
+                  </div>
+                  <EllipsisIcon className="hidden xl:inline" size={25} />
+                </div>
+              </div>
+            </Popover.Trigger>
+            <Popover.Portal>
+              <Popover.Content
+                className="rounded-xl shadow-xl w-auto lg:w-60 bg-white cursor-pointer overflow-hidden"
+                sideOffset={5}
+              >
+                <div className="flex flex-col">
+                  <div
+                    onClick={logout}
+                    role="button"
+                    className="p-3 flex hover:bg-light items-center gap-2"
+                  >
+                    <LogOutIcon className="" size={15} />
+                    <p className="font-semibold">
+                      Logout{" "}
+                      <span className="hidden lg:inline">
+                        @{user?.username}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </Popover.Content>
+            </Popover.Portal>
+          </Popover.Root>
+        </div>
       </div>
       <MintPostModal isOpen={mintModal} setIsOpen={setMintModal} />
     </>
