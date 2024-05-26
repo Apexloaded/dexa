@@ -18,6 +18,7 @@ import { debounce } from "lodash";
 import { CheckCheckIcon, CircleAlertIcon, XIcon } from "lucide-react";
 import WalletConnectModal from "../WalletConnectModal";
 import useToast from "@/hooks/toast.hook";
+import Link from "next/link";
 
 type Props = {
   nextStep: (value: number) => void;
@@ -174,6 +175,7 @@ export default function AccountStep({ nextStep, index }: Props) {
           >
             Mint Profile
           </Button>
+          <p className="text-center font-semibold">Already registered? <Link href="/login" className="text-primary">Login</Link></p>
         </div>
       </div>
     </>

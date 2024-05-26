@@ -46,7 +46,7 @@ export default function Welcome() {
   ]);
 
   return (
-    <div className="h-screen w-full overflow-scroll bg-light px-5 md:px-0">
+    <div className="h-svh w-full overflow-scroll bg-light px-5 md:px-0">
       <div className="max-w-2xl mx-auto h-full">
         <div className="pt-20 pb-10">
           <div className="flex justify-center">

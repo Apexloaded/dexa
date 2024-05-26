@@ -100,7 +100,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="px-5 h-screen max-w-4xl mx-auto">
+    <div className="px-5 h-svh overflow-y-scroll max-w-4xl mx-auto">
       <div className="bg-primary/10 absolute inset-0 -z-10 flex">
         <div className="flex-1"></div>
         <div className="flex-1 bg-white hidden md:inline"></div>
