@@ -26,6 +26,9 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import { selectedPost } from "@/slices/posts/post-selected.slice";
 import { useDexa } from "@/context/dexa.context";
 import { mapPost } from "../Home/Feeds";
+import { Diamond } from "../Icons/Others";
+import MintPostModal from "./MintPostModal";
+import RemintedPost from "./ListPost/RemintedPost";
 
 type Props = {
   id: string;
@@ -34,6 +37,7 @@ type Props = {
 function PostDetails({ id }: Props) {
   const { address } = useAccount();
   const [tipModal, setTipModal] = useState<boolean>(false);
+  const [mintModal, setMintModal] = useState<boolean>(false);
   const _post = useAppSelector(selectedPost);
   const { FeedsABI, dexaFeeds } = useDexa();
   const { data } = useReadContract({
@@ -80,7 +84,13 @@ function PostDetails({ id }: Props) {
           </div>
         </div>
 
-        <div>
+        <div className="flex items-center gap-x-2">
+          <div className="flex items-center bg-danger/20 py-1 px-3 space-x-1 rounded-sm">
+            <TrendingDownIcon size={18} className="text-danger" />
+            <p className="text-danger font-semibold text-sm text-right">
+              Bearish
+            </p>
+          </div>
           <Button
             type={"button"}
             kind={"default"}
@@ -107,6 +117,12 @@ function PostDetails({ id }: Props) {
               />
             ))}
           </div>
+        </div>
+      )}
+
+      {post?.isReminted && (
+        <div className="px-5 pt-5">
+          <RemintedPost postId={post.remintedPost} />
         </div>
       )}
 
@@ -141,7 +157,7 @@ function PostDetails({ id }: Props) {
 
       <div className="mb-3 pt-5 px-5">
         <div className="flex items-center justify-between space-x-1">
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
             <p className="text-sm text-medium">
               <Moment format="hh:mm A · MMM D, YYYY">{post?.createdAt}</Moment>
             </p>
@@ -149,12 +165,24 @@ function PostDetails({ id }: Props) {
               <span className="font-semibold">1,191</span> Views
             </p>
           </div>
-          <div className="flex items-center bg-danger/20 py-1 px-3 space-x-1 rounded-sm">
-            <TrendingDownIcon size={18} className="text-danger" />
-            <p className="text-danger font-semibold text-sm text-right">
-              Bearish
-            </p>
-          </div>
+          {Number(post?.remintPrice) > 0 && (
+            <div className="flex items-center gap-x-2">
+              {post?.remintedBy && post.remintedBy.length > 0 && (
+                <p className="text-primary text-sm">
+                  {post.remintedBy.length} Reminted
+                </p>
+              )}
+              <Button
+                onClick={() => setMintModal(true)}
+                type={"button"}
+                kind={"primary"}
+                shape={"CIRCLE"}
+                title="Tip"
+              >
+                <Diamond />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -181,6 +209,13 @@ function PostDetails({ id }: Props) {
         </div>
       )}
       {post && <TipModal post={post} open={tipModal} setOpen={setTipModal} />}
+      {post && (
+        <MintPostModal
+          post={post}
+          isOpen={mintModal}
+          setIsOpen={setMintModal}
+        />
+      )}
     </div>
   );
 }

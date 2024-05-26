@@ -55,7 +55,7 @@ function RemintedPost({ postId, postItem }: Props) {
     <div
       role="button"
       onClick={(e) => {
-        postDetails;
+        postDetails();
         e.stopPropagation();
       }}
       className="hover:bg-light cursor-pointer border border-medium/30 rounded-2xl pt-3"
@@ -95,6 +95,7 @@ function RemintedPost({ postId, postItem }: Props) {
                   width={600}
                   alt={post.id}
                   priority
+                  className="size-full"
                 />
               </div>
             ))}

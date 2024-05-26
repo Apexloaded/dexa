@@ -13,12 +13,12 @@ type Options = {
 
 const options: Options[] = [
   {
-    id: "VISIBILITY_TYPE_PUBLIC_READ",
+    id: GnfVisibility.VISIBILITY_TYPE_PUBLIC_READ,
     title: "Public",
     icon: EarthIcon,
   },
   {
-    id: "VISIBILITY_TYPE_PRIVATE",
+    id: GnfVisibility.VISIBILITY_TYPE_PRIVATE,
     title: "Private",
     icon: EarthLockIcon,
   },

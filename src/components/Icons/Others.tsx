@@ -19,6 +19,7 @@ export function Diamond({
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 512 512"
       xmlSpace="preserve"
+      className="animate-pulse"
     >
       <path
         style={{ fill: "#FFD782" }}

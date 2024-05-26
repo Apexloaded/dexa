@@ -78,7 +78,10 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
             {Number(post.remintPrice) > 0 && (
               <div className="flex flex-col items-center">
                 <Button
-                  onClick={() => setRemintModal(true)}
+                  onClick={(e) => {
+                    setRemintModal(true);
+                    prevent(e);
+                  }}
                   type={"button"}
                   kind={"primary"}
                   shape={"CIRCLE"}
