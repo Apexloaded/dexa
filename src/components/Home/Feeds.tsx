@@ -61,7 +61,7 @@ function Feeds() {
   }, [response]);
 
   return (
-    <div>
+    <div className="pb-40 lg:pb-10">
       <div className="py-3 border-b border-light cursor-pointer hover:bg-light">
         <p className="text-primary text-center text-sm">Show 98 posts</p>
       </div>

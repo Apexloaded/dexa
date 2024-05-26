@@ -181,7 +181,7 @@ export default function Page() {
           ))}
         </Swiper>
       </div>
-      <div className="flex flex-col md:flex-row items-center gap-5 justify-center">
+      <div className="flex pb-20 flex-col md:flex-row items-center gap-5 justify-center">
         <Button
           onClick={() => router.push("/welcome")}
           type="button"

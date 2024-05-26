@@ -53,7 +53,7 @@ function PostDetails({ id }: Props) {
   }, [data]);
 
   return (
-    <div className="">
+    <div className="pb-40 lg:pb-10">
       <div className="flex items-center justify-between px-5">
         <div className="flex items-center space-x-2">
           <CreatorPFP
@@ -66,7 +66,7 @@ function PostDetails({ id }: Props) {
               href={`/${post?.creator.username}`}
               className="flex items-center space-x-1"
             >
-              <p className="font-semibold text-sm capitalize text-dark dark:text-white">
+              <p className="font-semibold text-sm capitalize text-dark">
                 {post?.creator.name}
               </p>
               <BadgeCheck size={18} className="fill-primary stroke-white" />

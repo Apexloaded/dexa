@@ -11,6 +11,8 @@ import { useDexa } from "@/context/dexa.context";
 import { useReadContract } from "wagmi";
 import { sortPostByDate } from "../Home/Feeds";
 import Reminted from "./Reminted";
+import EmtpyBox from "../ui/EmtpyBox";
+import { useAuth } from "@/context/auth.context";
 
 type Props = {
   username: string;
@@ -21,6 +23,7 @@ function ProfileTabs({ username }: Props) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [replies, setReplies] = useState<Post[]>([]);
   const { FeedsABI, dexaFeeds } = useDexa();
+  const { user } = useAuth();
   const { data: response } = useReadContract({
     abi: FeedsABI,
     address: dexaFeeds,
@@ -44,9 +47,9 @@ function ProfileTabs({ username }: Props) {
 
   return (
     <div className="max-w-5xl w-full mx-auto mt-5">
-      <div className="overflow-scroll scrollbar-hide">
+      <div className="overflow-scroll scrollbar-hide pb-40 lg:pb-10">
         <TabsRoot>
-          <TabsList className="border-b border-light">
+          <TabsList className="border-b border-light overflow-x-auto scrollbar-hide">
             <TabsHeader
               title="Collectibles"
               value="tab1"
@@ -71,25 +74,14 @@ function ProfileTabs({ username }: Props) {
               activeTabId={activeTab}
               onTabChange={onTabChange}
             />
-            <TabsHeader
-              title="Tips"
-              value="tab5"
-              activeTabId={activeTab}
-              onTabChange={onTabChange}
-            />
-            {/*
-            <TabsHeader
-              title="Favourite"
-              value="tab4"
-              activeTabId={activeTab}
-              onTabChange={onTabChange}
-            />
-            <TabsHeader
-              title="Activity"
-              value="tab5"
-              activeTabId={activeTab}
-              onTabChange={onTabChange}
-            /> */}
+            {user?.username == username && (
+              <TabsHeader
+                title="Tips"
+                value="tab5"
+                activeTabId={activeTab}
+                onTabChange={onTabChange}
+              />
+            )}
           </TabsList>
           <TabsContent value="tab1" activeTabId={activeTab}>
             <UserFeeds posts={posts} />
@@ -100,15 +92,29 @@ function ProfileTabs({ username }: Props) {
           <TabsContent value="tab3" activeTabId={activeTab}>
             <UserFeeds posts={replies} />
           </TabsContent>
-          {/* <TabsContent value="tab3" activeTabId={activeTab}>
-            <div>Tab 3</div>
-          </TabsContent>
           <TabsContent value="tab4" activeTabId={activeTab}>
-            <div>Tab 4</div>
+            <div>
+              <div className="text-center py-20">
+                <EmtpyBox
+                  title="No communities"
+                  message={`${username} do not have any active community`}
+                />
+              </div>
+            </div>
           </TabsContent>
-          <TabsContent value="tab5" activeTabId={activeTab}>
-            <div>Tab 5</div>
-          </TabsContent> */}
+
+          {user?.username == username && (
+            <TabsContent value="tab5" activeTabId={activeTab}>
+              <div>
+                <div className="text-center py-20">
+                  <EmtpyBox
+                    title="No tips"
+                    message={`You have no tips yet on your posts`}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+          )}
         </TabsRoot>
       </div>
     </div>
