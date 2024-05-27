@@ -1,26 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
-import Lottie from "lottie-react";
-import dbAnim from "@/assets/lottie/db.json";
 import { Dancing_Script } from "next/font/google";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 import { favicon } from "@/components/Icons/Connector";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Autoplay, Zoom } from "swiper/modules";
-import ape1 from "@/assets/nft/1.png";
-import ape2 from "@/assets/nft/2.png";
-import ape3 from "@/assets/nft/3.png";
-import ape4 from "@/assets/nft/4.png";
-import ape5 from "@/assets/nft/5.png";
-import ape6 from "@/assets/nft/6.png";
-import ape7 from "@/assets/nft/7.png";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import Button from "@/components/Form/Button";
 import { useRouter } from "next/navigation";
-import { DexaLogo } from "@/components/Icons/Others";
 import { ArrowDownUpIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -83,21 +71,17 @@ export default function Page() {
         </div>
         <div className="flex-1 w-full">
           <div className="px-10 lg:px-20 flex-1 h-full flex flex-col justify-between">
-            <div className="pt-10 flex justify-center">
-              <div className="md:hidden block">
-                <DexaLogo />
-              </div>
-              
-              <Image
-                src={favicon.main}
-                width={260}
-                height={260}
-                alt={`dexa`}
-                className="h-12 w-12 hidden md:block"
-              />
-            </div>
             <div className="flex-1 items-center flex">
               <div className="w-full max-w-md mx-auto">
+                <div className="pb-10 flex justify-center">
+                  <Image
+                    src={favicon.main}
+                    width={260}
+                    height={260}
+                    alt={`dexa`}
+                    className="h-14 w-14"
+                  />
+                </div>
                 <div className="mb-7 block md:hidden">
                   <p className="text-3xl font-black mb-1">
                     Welcome to <span className="text-primary">Dexa</span>
