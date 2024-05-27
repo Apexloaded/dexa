@@ -1,5 +1,3 @@
-"use server";
-
 import { uploadApi } from "./api.action";
 import { IActionResponse } from "@/interfaces/response.interface";
 

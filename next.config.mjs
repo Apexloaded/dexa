@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: false,
   // experimental: {
   //   esmExternals: "loose",
@@ -12,8 +13,9 @@ const nextConfig = {
         hostname: "gnfd-testnet-sp1.bnbchain.org",
         port: "",
         pathname: "/view/dexa/**",
-      }
+      },
     ],
+    unoptimized: true,
   },
 };
 

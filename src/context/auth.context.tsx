@@ -1,3 +1,5 @@
+"use client";
+
 import useUser from "@/hooks/user.hook";
 import { AuthData, UserInterface } from "@/interfaces/user.interface";
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
@@ -10,6 +12,7 @@ export type AuthContextType = {
   profileProgress?: number;
   setProfileProgress: Dispatch<SetStateAction<number | undefined>>;
   isAuth: boolean;
+  isAuthenticated: () => boolean;
 };
 
 interface Props {

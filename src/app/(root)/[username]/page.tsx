@@ -5,6 +5,20 @@ import ProfileHeader from "@/components/Profile/ProfileHeader";
 import Section from "@/components/Layouts/Section";
 import Aside from "@/components/Layouts/Aside";
 import ProfileTabs from "@/components/Profile/ProfileTabs";
+import { ethers, Contract } from "ethers";
+import { BSC_RPC_URL, DEXA_CREATOR } from "@/config/env";
+import { findAllCreatorsABI } from "@/contracts/DexaCreator.sol/findAllCreators";
+import { UserInterface } from "@/interfaces/user.interface";
+
+export async function generateStaticParams() {
+  //if (!DEXA_CREATOR || BSC_RPC_URL) return;
+  const provider = new ethers.JsonRpcProvider(BSC_RPC_URL);
+  const contract = new Contract(`${DEXA_CREATOR}`, findAllCreatorsABI, provider);
+  const creators = await contract.findAllCreators();
+  return creators.map((creator: UserInterface) => ({
+    username: creator.username,
+  }));
+}
 
 type Props = {
   params: { username: string };

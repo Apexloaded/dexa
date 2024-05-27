@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Reddit_Mono } from "next/font/google";
+import { Reddit_Mono } from "next/font/google";
 import "./globals.scss";
 import HTML from "@/components/HTML";
-import { headers } from "next/headers";
+import { parseCookies } from "nookies";
 import { cookieToInitialState } from "wagmi";
 import { config } from "@/config/wagmi.config";
 
-// export const dynamicParams = true;
+export const dynamicParams = true;
 
 const poppins = Reddit_Mono({
   subsets: ["latin-ext"],
@@ -24,7 +24,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState(config, headers().get("cookie"));
+  const parsedCookies = parseCookies();
+  const initialState = cookieToInitialState(
+    config,
+    JSON.stringify(parsedCookies)
+  );
   return (
     <HTML font={poppins} initialState={initialState}>
       {children}

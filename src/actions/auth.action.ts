@@ -1,10 +1,7 @@
-"use server";
-
 import { SiweMessage } from "siwe";
-import { cookies } from "next/headers";
+import { setCookie, destroyCookie } from "nookies";
 import { StorageTypes } from "@/libs/enum";
 import { AuthData } from "@/interfaces/user.interface";
-import { redirect } from "next/navigation";
 import { postApi, getApi, uploadApi } from "./api.action";
 import { IActionResponse } from "@/interfaces/response.interface";
 
@@ -43,13 +40,12 @@ export async function verifyNonce({
     const response = await postApi("auth/nonce/verify", payload);
     const data = response.data as AuthData;
     if (data.ok) {
-      const exp = Number(data.expiresIn) - 24 * 60 * 60;
-      cookies().set(StorageTypes.ACCESS_TOKEN, data.token, {
+      setCookie(null, StorageTypes.ACCESS_TOKEN, data.token, {
         httpOnly: false,
         path: "/",
         sameSite: "strict",
         secure: false,
-        expires: Date.now() + exp * 1000,
+        maxAge: 6 * 24 * 60 * 60,
       });
       return { status: true, message: "success" };
     }
@@ -92,6 +88,5 @@ export async function updateProfile(
 }
 
 export async function clearSession() {
-  cookies().delete(StorageTypes.ACCESS_TOKEN);
-  redirect("/login");
+  destroyCookie(null, StorageTypes.ACCESS_TOKEN);
 }
