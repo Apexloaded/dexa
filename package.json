@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "fleek sites deploy",
+    "serve": "npx serve@latest out"
   },
   "dependencies": {
     "@bnb-chain/greenfield-js-sdk": "^2.0.0",

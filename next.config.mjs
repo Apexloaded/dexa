@@ -2,10 +2,6 @@
 const nextConfig = {
   output: "export",
   reactStrictMode: false,
-  // experimental: {
-  //   esmExternals: "loose",
-  //   serverComponentsExternalPackages: ["mongoose"],
-  // },
   images: {
     remotePatterns: [
       {
@@ -16,7 +12,10 @@ const nextConfig = {
       },
     ],
     unoptimized: true,
+    loader: "akamai",
+    path: "",
   },
+  trailingSlash: true,
 };
 
 export default nextConfig;
