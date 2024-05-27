@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Reddit_Mono } from "next/font/google";
+import local from "next/font/local";
 import "./globals.scss";
 import HTML from "@/components/HTML";
 import { parseCookies } from "nookies";
@@ -7,6 +8,10 @@ import { cookieToInitialState } from "wagmi";
 import { config } from "@/config/wagmi.config";
 
 export const dynamicParams = true;
+// const redditMono = local({
+//   src: [],
+//   variable: '--font-reddit'
+// })
 
 const poppins = Reddit_Mono({
   subsets: ["latin-ext"],
