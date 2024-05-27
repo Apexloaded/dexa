@@ -50,7 +50,7 @@ function ListConnectors({ setSignModal, onCloseModal }: Props) {
 
   return (
     <>
-      {connectors.toReversed().map((connector) => (
+      {connectors && connectors.toReversed().map((connector) => (
         <Button
           key={connector.uid}
           kind={`default`}

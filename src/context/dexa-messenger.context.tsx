@@ -110,7 +110,6 @@ export function DexaMessengerProvider({ children }: Props) {
   };
 
   const mapMessages = (chats: MessageInterface[]) => {
-    console.log(chats);
     return chats.map(({ createdAt, ...data }) => ({
       createdAt: `${new Date(Number(createdAt) * 1000)}`,
       ...data,
