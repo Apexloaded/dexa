@@ -175,7 +175,7 @@ export default function AccountStep({ nextStep, index }: Props) {
           >
             Mint Profile
           </Button>
-          <p className="text-center font-semibold">Already registered? <Link href="/login" className="text-primary">Login</Link></p>
+          <p className="text-center font-semibold">Already a Dexan? <Link href="/login" className="text-primary">Login</Link></p>
         </div>
       </div>
     </>
