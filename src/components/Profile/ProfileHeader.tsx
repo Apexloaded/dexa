@@ -33,18 +33,17 @@ import Image from "next/image";
 import ConnectButton from "./ConnectButton";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import { ChatInterface } from "@/interfaces/message.interface";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { routes } from "@/libs/routes";
 
 export type Status = {
   isRequest: boolean;
   isAccepted: boolean;
 };
 
-type Props = {
-  username: string;
-};
-
-function ProfileHeader({ username }: Props) {
+function ProfileHeader() {
+  const searchParams = useSearchParams();
+  const username = searchParams.get("u");
   const { address } = useAccount();
   const router = useRouter();
   const [user, setUser] = useState<UserInterface>();
@@ -61,14 +60,14 @@ function ProfileHeader({ username }: Props) {
     abi: CreatorABI,
     address: dexaCreator,
     functionName: "findCreatorByUsername",
-    args: [username],
+    args: [`${username}`],
   });
 
   const { data: isFriend } = useReadContract({
     abi: MessengerABI,
     address: dexaMessenger,
     functionName: "checkFriendStatus",
-    args: [username],
+    args: [`${username}`],
     account: address,
   });
 
@@ -119,7 +118,7 @@ function ProfileHeader({ username }: Props) {
         return temp;
       });
     }
-    router.push(`/messages/${user?.wallet}`);
+    router.push(routes.app.messages.message(`${user?.wallet}`));
   };
 
   return (

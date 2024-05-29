@@ -26,6 +26,9 @@ import { useAuth } from "@/context/auth.context";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 import * as Popover from "@radix-ui/react-popover";
 import { getFirstLetters } from "@/libs/helpers";
+import { routes } from "@/libs/routes";
+import { useAppSelector } from "@/hooks/redux.hook";
+import { selectSidebar } from "@/slices/sidebar/sidebar.slice";
 
 export default function Sidebar() {
   const path = usePathname();
@@ -33,15 +36,15 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
 
   const navigation = [
-    { name: "Home", href: "/home", icon: HomeIcon },
+    { name: "Home", href: routes.app.home, icon: HomeIcon },
     {
       name: "Explore",
-      href: "/explore",
+      href: routes.app.explore,
       icon: BoxIcon,
     },
     {
       name: "Messages",
-      href: "/messages",
+      href: routes.app.messages.index,
       icon: MailIcon,
     },
     // {
@@ -51,12 +54,12 @@ export default function Sidebar() {
     // },
     {
       name: "Connections",
-      href: "/connections",
+      href: routes.app.connections,
       icon: Users2Icon,
     },
     {
       name: "Transactions",
-      href: "/transactions",
+      href: routes.app.transaction.index,
       icon: BanknoteIcon,
     },
     // {
@@ -71,15 +74,21 @@ export default function Sidebar() {
     // },
     {
       name: "Settings",
-      href: "/settings",
+      href: routes.app.settings,
       icon: SettingsIcon,
     },
     {
       name: "Community",
-      href: "#",
+      href: routes.app.community,
       icon: UsersIcon,
     },
   ];
+
+  const checkIsActive = (pathname: string, isActive?: Array<string>) => {
+    const splitPath = pathname.split("/");
+    const basePath = splitPath[1];
+    return isActive?.includes(basePath);
+  };
 
   return (
     <>
@@ -134,12 +143,6 @@ export default function Sidebar() {
               <div className="outline-none flex justify-end xl:justify-start w-full">
                 <div className="py-3 px-3 rounded-full  hover:bg-light cursor-pointer flex items-center justify-end xl:justify-between w-auto xl:w-full">
                   <div className="flex justify-end items-center gap-2">
-                    {/* <CreatorPFP
-                      username={user?.username}
-                      name={user?.name}
-                      pfp={user?.pfp}
-                      isClickable={false}
-                    /> */}
                     <div className="w-10">
                       <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>
                       {user?.pfp ? (

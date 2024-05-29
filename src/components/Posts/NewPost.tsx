@@ -94,7 +94,7 @@ function NewPost() {
               postId,
               content,
               ethers.parseEther(price),
-              token?.address,
+              `${token?.address}`,
               tokenURI,
               [nft],
             ],

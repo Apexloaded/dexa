@@ -1,6 +1,7 @@
 import React from "react";
 import parse, { HTMLReactParserOptions } from "html-react-parser";
 import Link from "next/link";
+import { routes } from "@/libs/routes";
 
 interface HtmlNode {
   type: string;
@@ -32,7 +33,7 @@ const customReplace = (domNode: HtmlNode): JSX.Element | null => {
               onClick={onClick}
               prefetch={true}
               key={`${username}-${index}`}
-              href={`/${username}`}
+              href={routes.app.profile(username)}
             >
               @{username}
             </Link>
@@ -44,7 +45,7 @@ const customReplace = (domNode: HtmlNode): JSX.Element | null => {
               onClick={onClick}
               prefetch={true}
               key={`${hashtag}-${index}`}
-              href={`/hashtag/${hashtag}`}
+              href={routes.app.hashtag.hashtag(hashtag)}
             >
               #{hashtag}
             </Link>
@@ -56,7 +57,7 @@ const customReplace = (domNode: HtmlNode): JSX.Element | null => {
               onClick={onClick}
               prefetch={true}
               key={`${tag}-${index}`}
-              href={`/search?q=${tag}`}
+              href={routes.app.search(tag)}
             >
               ${tag}
             </Link>

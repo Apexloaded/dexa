@@ -16,6 +16,7 @@ import { useAppDispatch } from "@/hooks/redux.hook";
 import { setAuth } from "@/slices/account/auth.slice";
 import useToast from "@/hooks/toast.hook";
 import { verifyNonce, getNonce } from "@/actions/auth.action";
+import { routes } from "@/libs/routes";
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,7 +55,7 @@ function SignInModal({ setModal }: Props) {
         setModal(false);
         dispatch(setAuth(true));
         success({ msg: "Successfully signed in!" });
-        router.push("/home");
+        router.push(routes.app.home);
       }
       if (!verifyRes?.status) {
         error({ msg: "Something went wrong" });

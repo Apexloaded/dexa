@@ -20,9 +20,9 @@ function ShowMore({
   isShowMore = false,
   onClick,
 }: Props) {
-  const [showMore, setShowMore] = useState<boolean>(isShowMore);
+  const [showMore] = useState<boolean>(isShowMore);
 
-  const truncateString = (str: string, length:number) => {
+  const truncateString = (str: string, length: number) => {
     if (str.length <= length) return str;
 
     // Find the last complete sentence within the limit
@@ -51,69 +51,6 @@ function ShowMore({
   const contentToDisplay = showMore
     ? parseHtmlToJsx(truncateString(data, endLength))
     : parseHtmlToJsx(data);
-
-  // const onLinkClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-  //   e.stopPropagation();
-  // };
-
-  // const post = parse(data, {
-  //   replace(domNode, index) {
-  //     if (domNode.type === "text") {
-  //       const textContent = domNode.data;
-  //       if (textContent) {
-  //         const mentionRegex = /@(\w+)/g;
-  //         const hashtagRegex = /#(\w+)/g;
-  //         const dollarRegex = /\$([a-zA-Z]+)/g;
-
-  //         const parts = textContent.split(/(@\w+|#\w+|\$[a-zA-Z]+)/g);
-
-  //         const elements = parts.map((part, index) => {
-  //           if (part.match(mentionRegex)) {
-  //             const username = part.slice(1);
-  //             return (
-  //               <Link
-  //                 onClick={onLinkClick}
-  //                 prefetch={true}
-  //                 key={`${username}-${index}`}
-  //                 href={`/${username}`}
-  //               >
-  //                 @{username}
-  //               </Link>
-  //             );
-  //           } else if (part.match(hashtagRegex)) {
-  //             const hashtag = part.slice(1);
-  //             return (
-  //               <Link
-  //                 onClick={onLinkClick}
-  //                 prefetch={true}
-  //                 key={`${hashtag}-${index}`}
-  //                 href={`/hashtag/${hashtag}`}
-  //               >
-  //                 #{hashtag}
-  //               </Link>
-  //             );
-  //           } else if (part.match(dollarRegex)) {
-  //             const tag = part.slice(1);
-  //             return (
-  //               <Link
-  //                 onClick={onLinkClick}
-  //                 prefetch={true}
-  //                 key={`${tag}-${index}`}
-  //                 href={`/search?q=${tag}`}
-  //               >
-  //                 ${tag}
-  //               </Link>
-  //             );
-  //           } else {
-  //             return part;
-  //           }
-  //         });
-
-  //         return <>{elements}</>;
-  //       }
-  //     }
-  //   },
-  // });
 
   return (
     <>

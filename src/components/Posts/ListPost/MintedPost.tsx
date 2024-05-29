@@ -36,6 +36,7 @@ import TipModal from "../TipModal";
 import CreatorPFP from "./CreatorPFP";
 import CreatorName from "./CreatorName";
 import PostButtons from "../PostButtons/PostButtons";
+import { routes } from "@/libs/routes";
 
 type Props = {
   post: Post;
@@ -49,13 +50,14 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    router.prefetch(`/${post.creator.username}/mint/${post.id}`);
+    router.prefetch(routes.app.mints(post.id));
   }, []);
 
   const postDetails = () => {
-    router.push(`/${post.creator.username}/mint/${post.id}`, { scroll: false });
+    router.push(routes.app.mints(post.id), {
+      scroll: false,
+    });
     dispatch(selectPost(post));
-    //router.push(`/${post.creator.username}/mint/${post.id}`);
   };
 
   const prevent = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -119,7 +121,7 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
                 </Button>
               </div>
             </div>
-            {/* <Link href={`/${post.creator.username}/mint/${post.id}`}> */}
+
             {post && post.content && (
               <div className="mt-2">
                 <ShowMore
@@ -143,17 +145,11 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
                   />
                 </div>
               ))}
-            {/* </Link> */}
 
             {!post.isMintable && (
               <div>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm">
-                      Mint ID{" "}
-                      <span className="text-primary">{post.tokenId}</span>
-                    </p>
-                  </div>
+                  <div></div>
                   <div className="flex items-center space-x-1">
                     <TrendingDownIcon size={18} className="text-danger" />
                     <p className="text-danger text-sm text-right">Bearish</p>

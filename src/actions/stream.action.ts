@@ -1,17 +1,65 @@
-// "use server";
+import { IngressInput } from "@/libs/enum";
+import { postApi, getApi } from "./api.action";
 
-// import { STREAM_KEY, STREAM_SECRET } from "@/config/env";
-// import { StreamClient } from "@stream-io/node-sdk";
+export async function getStreamCredentials() {
+  try {
+    const response = await getApi("stream/ingress/credentials");
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success", data };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
 
-// export const getStreamToken = async (userId: string) => {
-//   const key = STREAM_KEY;
-//   const secret = STREAM_SECRET;
+export async function requestCredentials(
+  username: string,
+  ingressType: IngressInput
+) {
+  try {
+    const payload = {
+      username,
+      ingressType,
+    };
+    const response = await postApi("stream/ingress/request", payload);
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success", data };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
 
-//   if (key && secret && userId) {
-//     const streamClient = new StreamClient(key, secret);
-//     const expireAt = Math.floor(Date.now() / 1000) * 60 * 60;
-//     const issuedAt = Math.floor(Date.now() / 1000) - 60;
-//     const token = streamClient.createToken(userId, expireAt, issuedAt);
-//     return token;
-//   }
-// };
+export async function getViewerStreamCredentials(
+  hostIdentity: string,
+  username: string
+) {
+  try {
+    const payload = { hostIdentity, username };
+    const response = await postApi("stream/viewer/credentials", payload);
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success", data };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
+
+export async function getUserStreamStatus(address: string) {
+  try {
+    const response = await getApi(`stream/status/${address}`);
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success", data };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}

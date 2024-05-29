@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-  // experimental: {
-  //   esmExternals: "loose",
-  //   serverComponentsExternalPackages: ["mongoose"],
-  // },
+  output: "export",
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -12,9 +9,13 @@ const nextConfig = {
         hostname: "gnfd-testnet-sp1.bnbchain.org",
         port: "",
         pathname: "/view/dexa/**",
-      }
+      },
     ],
+    unoptimized: true,
+    loader: "akamai",
+    path: "",
   },
+  trailingSlash: true,
 };
 
 export default nextConfig;

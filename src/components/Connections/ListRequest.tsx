@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useDexa } from "@/context/dexa.context";
 import { RequestInterface } from "@/interfaces/message.interface";
 import { UserInterface } from "@/interfaces/user.interface";
@@ -10,6 +10,7 @@ import Button from "../Form/Button";
 import { formatWalletAddress } from "@/libs/helpers";
 import Link from "next/link";
 import useToast from "@/hooks/toast.hook";
+import { routes } from "@/libs/routes";
 
 type Props = {
   request: RequestInterface;
@@ -104,7 +105,10 @@ function ListRequest({ request, index }: Props) {
         />
         <div className="text-sm">
           <div className="gap-x-2 flex items-center">
-            <Link href="" className="font-semibold">
+            <Link
+              href={routes.app.profile(`${creator?.username}`)}
+              className="font-semibold"
+            >
               {creator?.name}
             </Link>
             {creator?.wallet && (

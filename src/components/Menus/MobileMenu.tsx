@@ -2,13 +2,11 @@
 import React, { useEffect } from "react";
 import Button from "../Form/Button";
 import { BellIcon, BoxIcon, HomeIcon, MailIcon } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import ape1 from "@/assets/nft/1.png";
 import { useRouter } from "next/navigation";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import { useAuth } from "@/context/auth.context";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
+import { routes } from "@/libs/routes";
 
 function MobileMenu() {
   const router = useRouter();
@@ -16,8 +14,8 @@ function MobileMenu() {
   const { user } = useAuth();
 
   useEffect(() => {
-    router.prefetch("/messages");
-    router.prefetch("/home");
+    router.prefetch(routes.app.messages.index);
+    router.prefetch(routes.app.home);
     router.prefetch("/messages");
     router.prefetch("/messages");
     router.prefetch("/messages");
@@ -35,7 +33,7 @@ function MobileMenu() {
     >
       <div className="px-5 flex items-center h-full justify-between">
         <Button
-          onClick={() => navigateTo("/home")}
+          onClick={() => navigateTo(routes.app.home)}
           type={"button"}
           kind={"default"}
           shape={"CIRCLE"}
@@ -46,7 +44,7 @@ function MobileMenu() {
         </Button>
         <Button
           onClick={() => {
-            navigateTo("/messages");
+            navigateTo(routes.app.messages.index);
             setIsMsgBoxOn(false);
           }}
           type={"button"}

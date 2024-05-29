@@ -1,9 +1,17 @@
 "use client";
 
+import { useState } from "react";
+
 function useClipBoard() {
+  const [isCopied, setIsCopied] = useState(false);
+
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1000);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -17,7 +25,7 @@ function useClipBoard() {
     }
   };
 
-  return { copy, paste };
+  return { copy, paste, isCopied };
 }
 
 export default useClipBoard;

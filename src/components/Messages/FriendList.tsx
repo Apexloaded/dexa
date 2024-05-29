@@ -8,12 +8,12 @@ import { useAccount, useReadContract } from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import { useRouter } from "next/navigation";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
+import { routes } from "@/libs/routes";
 
 type Props = { contact: FriendListInterface; messages: MessageInterface[] };
 
 const FriendList = ({ contact, messages }: Props) => {
   const router = useRouter();
-  router.prefetch(`/messages/${contact.id}`);
 
   const { address } = useAccount();
   const [lastMsg, setLastMsg] = useState<MessageInterface>();
@@ -26,6 +26,10 @@ const FriendList = ({ contact, messages }: Props) => {
     args: [contact.id],
     account: address,
   });
+
+  useEffect(() => {
+    router.prefetch(routes.app.messages.message(contact.id));
+  }, []);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -53,7 +57,7 @@ const FriendList = ({ contact, messages }: Props) => {
   const initChat = () => {
     setIsMsgBoxOn(true);
     setCurrentMsg({ profile: contact, chats: messages });
-    router.push(`/messages/${contact.id}`);
+    router.push(routes.app.messages.message(contact.id));
   };
 
   return (

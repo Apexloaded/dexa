@@ -191,7 +191,6 @@ export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
             closeModal();
           },
           onError(err) {
-            console.log(err);
             error({ msg: `${err.message}` });
           },
         }

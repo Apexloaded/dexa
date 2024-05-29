@@ -11,7 +11,6 @@ import { store } from "@/store";
 import { AuthProvider } from "@/context/auth.context";
 import SwitchChain from "./Auth/SwitchChain";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
-import { StreamProvider } from "@/context/stream.context";
 import "swiper/css";
 import { DexaMessengerProvider } from "@/context/dexa-messenger.context";
 
@@ -35,17 +34,15 @@ export default function HTML({
               <AuthProvider>
                 <DexaProvider>
                   <DexaMessengerProvider>
-                    <StreamProvider>
-                      <ProgressBar
-                        height="4px"
-                        color="#4338ca"
-                        options={{ showSpinner: false }}
-                        shallowRouting
-                      />
-                      <SwitchChain />
-                      <main>{children}</main>
-                      <Toaster />
-                    </StreamProvider>
+                    <ProgressBar
+                      height="4px"
+                      color="#4338ca"
+                      options={{ showSpinner: false }}
+                      shallowRouting
+                    />
+                    <SwitchChain />
+                    <main>{children}</main>
+                    <Toaster />
                   </DexaMessengerProvider>
                 </DexaProvider>
               </AuthProvider>

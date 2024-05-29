@@ -12,7 +12,6 @@ function MediaPreview({ file, onClear, isRounded = true }: MediaPreviewProps) {
   const [mediaType, setMediaType] = useState<"image" | "video">();
 
   useEffect(() => {
-    console.log(file);
     if (file) checkMediaType(file);
   }, [file]);
 
@@ -46,10 +45,6 @@ function MediaPreview({ file, onClear, isRounded = true }: MediaPreviewProps) {
         return <div>No media selected</div>;
     }
   };
-
-  //   if (!file) {
-  //     return null;
-  //   }
 
   return (
     file && (

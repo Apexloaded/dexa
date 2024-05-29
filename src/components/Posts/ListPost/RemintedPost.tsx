@@ -2,8 +2,6 @@ import { Post } from "@/interfaces/feed.interface";
 import React, { useEffect, useState } from "react";
 import CreatorPFP from "./CreatorPFP";
 import CreatorName from "./CreatorName";
-import { timestampToDate } from "@/libs/helpers";
-import Link from "next/link";
 import Image from "next/image";
 import ShowMore from "../ShowMore";
 import { useDexa } from "@/context/dexa.context";
@@ -12,6 +10,7 @@ import { mapPost } from "@/components/Home/Feeds";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { selectPost } from "@/slices/posts/post-selected.slice";
+import { routes } from "@/libs/routes";
 type Props = {
   postId?: string;
   postItem?: Post;
@@ -40,14 +39,13 @@ function RemintedPost({ postId, postItem }: Props) {
   }, [response]);
 
   useEffect(() => {
-    router.prefetch(`/${post?.creator.username}/mint/${post?.id}`);
+    router.prefetch(routes.app.mints(`${post?.id}`));
   }, [post]);
 
   const postDetails = () => {
     if (post) {
-      router.push(`/${post.creator.username}/mint/${post.id}`);
+      router.push(routes.app.mints(post.id));
       dispatch(selectPost(post));
-      //router.push(`/${post.creator.username}/mint/${post.id}`);
     }
   };
 
@@ -73,33 +71,31 @@ function RemintedPost({ postId, postItem }: Props) {
         />
       </div>
       <div>
-        {/* <Link href={`/${post?.creator.username}/mint/${post?.id}`}> */}
-          <div className="px-3">
-            {post && post.content && (
-              <div className="mt-2">
-                <ShowMore
-                  onClick={postDetails}
-                  data={post.content}
-                  isShowMore={true}
-                />
-              </div>
-            )}
-          </div>
-          {post?.media &&
-            post.media.map((media, index) => (
-              <div key={index} className="pt-2 rounded-xl overflow-hidden">
-                <Image
-                  key={index}
-                  src={media.url}
-                  height={400}
-                  width={600}
-                  alt={post.id}
-                  priority
-                  className="size-full"
-                />
-              </div>
-            ))}
-        {/* </Link> */}
+        <div className="px-3">
+          {post && post.content && (
+            <div className="mt-2">
+              <ShowMore
+                onClick={postDetails}
+                data={post.content}
+                isShowMore={true}
+              />
+            </div>
+          )}
+        </div>
+        {post?.media &&
+          post.media.map((media, index) => (
+            <div key={index} className="pt-2 rounded-xl overflow-hidden">
+              <Image
+                key={index}
+                src={media.url}
+                height={400}
+                width={600}
+                alt={post.id}
+                priority
+                className="size-full"
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

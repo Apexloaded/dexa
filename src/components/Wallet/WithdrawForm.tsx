@@ -119,7 +119,6 @@ function WithdrawForm() {
         }
       );
     } catch (err) {
-      console.log(err);
       if (err instanceof Error) {
         error({ msg: err.message });
       }

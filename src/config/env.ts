@@ -14,7 +14,7 @@ export const GRPC_URL = process.env.NEXT_PUBLIC_GRPC_URL!;
 export const GREEN_CHAIN_ID = parseInt(process.env.NEXT_PUBLIC_GREEN_CHAIN_ID!);
 export const OPBNB_CHAIN_ID = parseInt(process.env.NEXT_PUBLIC_OPBNB_CHAIN!);
 
-export const STREAM_KEY = process.env.NEXT_PUBLIC_STREAM_KEY;
-export const STREAM_SECRET = process.env.NEXT_PUBLIC_STREAM_SECRET;
+export const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL;
+export const STREAM_WS = process.env.NEXT_PUBLIC_STREAM_WS;
 
 export const BUCKET = "dexa";

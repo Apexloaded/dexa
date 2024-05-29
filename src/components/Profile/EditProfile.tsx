@@ -88,7 +88,6 @@ function EditProfile({ user, isOpen, setIsOpen }: Props) {
         );
       }
     } catch (err: any) {
-      console.log(err);
       if (err instanceof Error) {
         error({ msg: err.message });
       }

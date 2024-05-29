@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Label from "@/components/Form/Label";
 import Input from "@/components/Form/Input";
 import Button from "@/components/Form/Button";
@@ -9,16 +9,16 @@ import { useDexa } from "@/context/dexa.context";
 import { config } from "@/config/wagmi.config";
 import { HOSTNAME } from "@/config/env";
 import { FieldValues, useForm, Controller } from "react-hook-form";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ContractError } from "@/libs/enum";
 import { useAuth } from "@/context/auth.context";
 import { registerUser } from "@/actions/auth.action";
 import { debounce } from "lodash";
-import { CheckCheckIcon, CircleAlertIcon, XIcon } from "lucide-react";
+import { CheckCheckIcon, CircleAlertIcon } from "lucide-react";
 import WalletConnectModal from "../WalletConnectModal";
 import useToast from "@/hooks/toast.hook";
 import Link from "next/link";
+import { routes } from "@/libs/routes";
 
 type Props = {
   nextStep: (value: number) => void;
@@ -93,7 +93,7 @@ export default function AccountStep({ nextStep, index }: Props) {
           onSuccess: async (data) => {
             success({ msg: "Profile created" });
             setProfileProgress(100);
-            router.replace("/login");
+            router.replace(routes.login);
           },
           onError(err) {
             const msg = getError(err);
@@ -175,7 +175,12 @@ export default function AccountStep({ nextStep, index }: Props) {
           >
             Mint Profile
           </Button>
-          <p className="text-center font-semibold">Already registered? <Link href="/login" className="text-primary">Login</Link></p>
+          <p className="text-center font-semibold">
+            Already a Dexan?{" "}
+            <Link href={routes.login} className="text-primary">
+              Login
+            </Link>
+          </p>
         </div>
       </div>
     </>

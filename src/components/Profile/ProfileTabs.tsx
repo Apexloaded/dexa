@@ -13,12 +13,11 @@ import { sortPostByDate } from "../Home/Feeds";
 import Reminted from "./Reminted";
 import EmtpyBox from "../ui/EmtpyBox";
 import { useAuth } from "@/context/auth.context";
+import { useSearchParams } from "next/navigation";
 
-type Props = {
-  username: string;
-};
-
-function ProfileTabs({ username }: Props) {
+function ProfileTabs() {
+  const searchParams = useSearchParams();
+  const username = searchParams.get("u");
   const [activeTab, setActiveTab] = useState("tab1");
   const [posts, setPosts] = useState<Post[]>([]);
   const [replies, setReplies] = useState<Post[]>([]);
@@ -28,7 +27,7 @@ function ProfileTabs({ username }: Props) {
     abi: FeedsABI,
     address: dexaFeeds,
     functionName: "postByCreator",
-    args: [username],
+    args: [`${username}`],
   });
 
   useEffect(() => {
@@ -87,7 +86,7 @@ function ProfileTabs({ username }: Props) {
             <UserFeeds posts={posts} />
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
-            <Reminted posts={posts} username={username} />
+            <Reminted posts={posts} username={`${username}`} />
           </TabsContent>
           <TabsContent value="tab3" activeTabId={activeTab}>
             <UserFeeds posts={replies} />

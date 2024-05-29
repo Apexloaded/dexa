@@ -10,6 +10,7 @@ export enum QueryKeys {
   AUTH = "AUTH",
   WALLET = "WALLET",
   PROFILE = "PROFILE",
+  STREAM_AUTH = "STREAM_AUTH"
 }
 
 export enum BucketVisibilityType {
@@ -37,4 +38,10 @@ export enum Path {
   FEEDS = "feeds",
   METADATA = "metadata",
   TIP = "tips",
+}
+
+export enum IngressInput {
+  RTMP_INPUT = 0,
+  WHIP_INPUT = 1,
+  URL_INPUT = 2,
 }

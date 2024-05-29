@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import Image from "next/image";
-import { Dancing_Script } from "next/font/google";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 import { favicon } from "@/components/Icons/Connector";
 import "swiper/css";
@@ -11,12 +10,7 @@ import Button from "@/components/Form/Button";
 import { useRouter } from "next/navigation";
 import { ArrowDownUpIcon } from "lucide-react";
 import Link from "next/link";
-
-const ds = Dancing_Script({
-  subsets: ["latin-ext"],
-  style: "normal",
-  weight: ["400", "500", "600", "700"],
-});
+import { routes } from "@/libs/routes";
 
 export default function Page() {
   const router = useRouter();
@@ -32,8 +26,8 @@ export default function Page() {
   });
 
   useEffect(() => {
-    router.prefetch("/welcome");
-    router.prefetch("/login");
+    router.prefetch(routes.register);
+    router.prefetch(routes.login);
   }, []);
 
   return (
@@ -93,7 +87,7 @@ export default function Page() {
 
                 <div className="flex flex-col items-center gap-5">
                   <Button
-                    onClick={() => router.push("/welcome")}
+                    onClick={() => router.push(routes.register)}
                     type="button"
                     kind="clear"
                     className="py-[0.9rem] rounded-full bg-primary hover:bg-primary/90 text-white border-primary w-full border"
@@ -104,7 +98,7 @@ export default function Page() {
                     <ArrowDownUpIcon size={18} className="text-primary" />
                   </div>
                   <Button
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push(routes.login)}
                     type="button"
                     kind="clear"
                     className="py-[0.9rem] rounded-full bg-white hover:bg-primary/5 text-primary border-primary w-full border"

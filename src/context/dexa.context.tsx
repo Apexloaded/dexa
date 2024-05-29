@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import DexaFeeds from "@/contracts/DexaFeeds.sol/DexaFeeds.json";
 import FeedsToken from "@/contracts/FeedsToken.sol/FeedsToken.json";
@@ -13,6 +13,10 @@ import {
   DEXA_MESSENGER,
 } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
+import { usePathname } from "next/navigation";
+import { useAppDispatch } from "@/hooks/redux.hook";
+import { setSidebar } from "@/slices/sidebar/sidebar.slice";
+import { fullScreenPath } from "@/libs/routes";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 const FEEDS = toOxString(DEXA_FEEDS);
@@ -40,6 +44,8 @@ export const DexaContext = createContext<DexaContextType | undefined>(
 );
 
 export function DexaProvider({ children }: Props) {
+  const path = usePathname();
+  const dispatch = useAppDispatch();
   const [CreatorABI] = useState(DexaCreator);
   const [FeedsABI] = useState(DexaFeeds);
   const [FeedsTokenABI] = useState(FeedsToken);
@@ -50,6 +56,14 @@ export function DexaProvider({ children }: Props) {
   const [dexaFeeds] = useState<`0x${string}`>(FEEDS);
   const [feedsToken] = useState<`0x${string}`>(FEEDSTOKEN);
   const [dexaMessenger] = useState<`0x${string}`>(MESSENGER);
+
+  useEffect(() => {
+    if (fullScreenPath.includes(path)) {
+      dispatch(setSidebar(false));
+    } else {
+      dispatch(setSidebar(true));
+    }
+  }, [path]);
 
   return (
     <DexaContext.Provider
@@ -62,7 +76,7 @@ export function DexaProvider({ children }: Props) {
         feedsToken,
         ERC20ABI,
         dexaMessenger,
-        MessengerABI
+        MessengerABI,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { favicon } from "./Connector";
 import Link from "next/link";
+import { routes } from "@/libs/routes";
 
 export function Diamond({
   height = "25",
@@ -63,7 +64,11 @@ export function Diamond({
 
 export function DexaLogo() {
   return (
-    <Link href={"/"} prefetch={true} className={`flex items-center gap-x-1`}>
+    <Link
+      href={routes.home}
+      prefetch={true}
+      className={`flex items-center gap-x-1`}
+    >
       <Image
         src={favicon.main}
         width={260}

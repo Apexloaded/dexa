@@ -29,12 +29,12 @@ import { mapPost } from "../Home/Feeds";
 import { Diamond } from "../Icons/Others";
 import MintPostModal from "./MintPostModal";
 import RemintedPost from "./ListPost/RemintedPost";
+import { routes } from "@/libs/routes";
+import { useSearchParams } from "next/navigation";
 
-type Props = {
-  id: string;
-};
-
-function PostDetails({ id }: Props) {
+function PostDetails() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const { address } = useAccount();
   const [tipModal, setTipModal] = useState<boolean>(false);
   const [mintModal, setMintModal] = useState<boolean>(false);
@@ -44,7 +44,7 @@ function PostDetails({ id }: Props) {
     abi: FeedsABI,
     address: dexaFeeds,
     functionName: "postBygnfdId",
-    args: [id],
+    args: [`${id}`],
   });
   const [post, setPost] = useState<Post | undefined>(_post);
 
@@ -67,7 +67,7 @@ function PostDetails({ id }: Props) {
           />
           <div className="flex flex-col">
             <Link
-              href={`/${post?.creator.username}`}
+              href={routes.app.profile(`${post?.creator.username}`)}
               className="flex items-center space-x-1"
             >
               <p className="font-semibold text-sm capitalize text-dark">
@@ -76,7 +76,7 @@ function PostDetails({ id }: Props) {
               <BadgeCheck size={18} className="fill-primary stroke-white" />
             </Link>
             <Link
-              href={`/${post?.creator.username}`}
+              href={routes.app.profile(`${post?.creator.username}`)}
               className="text-xs text-medium"
             >
               @{post?.creator.username}

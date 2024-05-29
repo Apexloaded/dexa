@@ -5,10 +5,11 @@ import { FriendListInterface } from "@/interfaces/user.interface";
 import Link from "next/link";
 import { formatWalletAddress } from "@/libs/helpers";
 import Button from "../Form/Button";
-import { EllipsisIcon, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import { ChatInterface } from "@/interfaces/message.interface";
 import { useRouter } from "next/navigation";
+import { routes } from "@/libs/routes";
 type Props = {
   connection: FriendListInterface;
 };
@@ -17,7 +18,7 @@ function ListConnection({ connection }: Props) {
   const { setMessages, messages } = useDexaMessenger();
 
   useEffect(() => {
-    router.prefetch("/messages");
+    router.prefetch(routes.app.messages.index);
   }, []);
 
   const initChat = () => {
@@ -33,7 +34,7 @@ function ListConnection({ connection }: Props) {
         return temp;
       });
     }
-    router.push(`/messages/${connection.id}`);
+    router.push(routes.app.messages.message(connection.id));
   };
 
   const remove = async () => {};
@@ -48,7 +49,10 @@ function ListConnection({ connection }: Props) {
         />
         <div className="text-sm">
           <div className="gap-x-2 flex items-center">
-            <Link href="" className="font-semibold">
+            <Link
+              href={routes.app.profile(connection.username)}
+              className="font-semibold"
+            >
               {connection?.name}
             </Link>
             <span className="text-medium">@{connection?.username}</span>

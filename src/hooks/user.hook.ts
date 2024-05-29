@@ -10,6 +10,7 @@ import {
   useDisconnect,
   useReadContract,
   useSwitchChain,
+  useAccountEffect,
 } from "wagmi";
 import useStorage from "./storage.hook";
 import { useAppSelector } from "./redux.hook";
@@ -17,8 +18,11 @@ import { selectAuth, setAuth } from "@/slices/account/auth.slice";
 import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import { DEXA_CREATOR } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
-import { publicRoutes } from "@/libs/routes";
+import { routes } from "@/libs/routes";
 import { clearSession } from "@/actions/auth.action";
+import { parseCookies } from "nookies";
+import { jwtDecode } from "jwt-decode";
+import { StorageTypes } from "@/libs/enum";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
@@ -29,7 +33,7 @@ function useUser() {
   const isAuth = useAppSelector(selectAuth);
   const [user, setUser] = useState<UserInterface>();
   const [profileProgress, setProfileProgress] = useState<number>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   const { address, isConnected, isDisconnected, chainId, isReconnecting } =
     useAccount();
   const { chains } = useSwitchChain();
@@ -43,6 +47,17 @@ function useUser() {
     args: [address],
     query: { enabled: address ? true : false },
   });
+
+  useAccountEffect({
+    onConnect(data) {},
+    onDisconnect() {
+      logout();
+    },
+  });
+
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -74,12 +89,6 @@ function useUser() {
   }, [isConnected, isAuth, data]);
 
   useEffect(() => {
-    if (!isConnected && isDisconnected && !publicRoutes.includes(path)) {
-      logout();
-    }
-  }, [isConnected, isDisconnected]);
-
-  useEffect(() => {
     const checkChain = () => {
       const isChain = chains.find((c) => c.id == chainId);
       if (!isChain && isConnected) {
@@ -91,10 +100,36 @@ function useUser() {
     checkChain();
   }, [chainId, chains, isConnected]);
 
+  const isAuthenticated = () => {
+    setIsAuthenticating(true);
+    const parsedCookies = parseCookies();
+    const cookie = parsedCookies[StorageTypes.ACCESS_TOKEN];
+
+    if (!cookie) {
+      setIsAuthenticating(false);
+      return false;
+    }
+
+    try {
+      const parsedCookie: any = jwtDecode(cookie);
+      const expires = new Date(parsedCookie.exp * 1000);
+      if (expires < new Date()) {
+        setIsAuthenticating(false);
+        return false;
+      }
+      setIsAuthenticating(false);
+      return true;
+    } catch (error) {
+      setIsAuthenticating(false);
+      return false;
+    }
+  };
+
   const logout = () => {
     disconnect();
     dispatch(setAuth(false));
     clearSession();
+    router.push(routes.login);
   };
 
   return {
@@ -103,6 +138,8 @@ function useUser() {
     profileProgress,
     setProfileProgress,
     isAuth,
+    isAuthenticated,
+    isAuthenticating,
   };
 }
 

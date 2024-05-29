@@ -30,7 +30,6 @@ function LikeButton({ post }: Props) {
         },
         {
           onSuccess: (data) => {
-            console.log(data);
             post.likedBy.push(`${address}`);
           },
         }

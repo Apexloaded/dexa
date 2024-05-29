@@ -23,8 +23,11 @@ import { walletToLowercase, weiToUnit } from "@/libs/helpers";
 import Link from "next/link";
 import QuickViewBal from "./QuickViewBal";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
+import { useRouter } from "next/navigation";
+import { routes } from "@/libs/routes";
 
 function QuickView() {
+  const router = useRouter();
   const swiperElRef = useRef(null);
   const [hideBal, setHideBal] = useState<boolean>(false);
   const [balances, setBalances] = useState<UserBalance[]>([]);
@@ -37,6 +40,10 @@ function QuickView() {
     functionName: "getTokenBalances",
     args: [`${address}`],
   });
+
+  useEffect(() => {
+    router.prefetch(routes.app.wallet.withdraw);
+  }, []);
 
   useEffect(() => {
     const init = () => {
@@ -63,7 +70,7 @@ function QuickView() {
           <div className="name">
             <Link
               prefetch={true}
-              href={`/${user?.username}`}
+              href={routes.app.profile(`${user?.username}`)}
               className="font-bold flex items-center gap-1 capitalize"
             >
               <BlueCheckMark />
@@ -146,15 +153,14 @@ function QuickView() {
             >
               Add Fund
             </Button>
-            <Link prefetch={true} href="/withdraw">
-              <Button
-                shape={"ROUNDED"}
-                kind="primary"
-                className="text-sm border bg-transparent border-white"
-              >
-                Withdraw
-              </Button>
-            </Link>
+            <Button
+              onClick={() => router.push(routes.app.wallet.withdraw)}
+              shape={"ROUNDED"}
+              kind="primary"
+              className="text-sm border bg-transparent border-white"
+            >
+              Withdraw
+            </Button>
           </div>
         </div>
         <div className="text-center mt-4 flex shrink-0 cursor-pointer transition-all duration-500">
