@@ -6,9 +6,9 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-svh overflow-hidden relative overscroll-contain">
+    <div className="flex overflow-hidden h-full">
       <LiveMenu />
-      <div className="flex-1 w-4/5">{children}</div>
+      <div className="flex-1 w-4/5 overflow-hidden flex flex-col">{children}</div>
     </div>
   );
 }

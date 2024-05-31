@@ -180,6 +180,7 @@ function WithdrawForm() {
                 value="tab1"
                 activeTabId={activeTab}
                 onTabChange={onTabChange}
+                isCenter={false}
               />
               <TabsHeader
                 isActiveBg={true}
@@ -188,6 +189,7 @@ function WithdrawForm() {
                 value="tab2"
                 activeTabId={activeTab}
                 onTabChange={onTabChange}
+                isCenter={false}
               />
             </TabsList>
             <TabsContent value="tab1" activeTabId={activeTab}>

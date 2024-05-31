@@ -5,29 +5,44 @@ import { LiveKitRoom } from "@livekit/components-react";
 import { STREAM_WS } from "@/config/env";
 import Video from "./Video";
 import { walletToLowercase } from "@/libs/helpers";
+import StreamerView from "./stream-components/StreamerView";
+import ClientView from "./stream-components/ClientView";
 
 type Props = {
-  token: string;
+  token?: string;
   hostIdentity: string;
   hostName: string;
+  isStreaming: boolean;
+  className?: string;
 };
 
-function StreamPlayer({ token, hostIdentity, hostName }: Props) {
-  useEffect(() => {
-    console.log(token);
-    console.log(STREAM_WS);
-  }, [token, STREAM_WS]);
+function StreamPlayer({
+  token,
+  hostIdentity,
+  hostName,
+  isStreaming,
+  className,
+}: Props) {
   return (
     <>
       <LiveKitRoom
         token={token}
         serverUrl={STREAM_WS}
-        className="h-full w-full"
+        className={`h-full w-full overflow-hidden ${className}`}
       >
-        <Video
-          hostIdentity={walletToLowercase(hostIdentity)}
-          hostName={hostName}
-        />
+        {isStreaming ? (
+          <StreamerView
+            hostIdentity={walletToLowercase(hostIdentity)}
+            hostName={hostName}
+            isStreaming={isStreaming}
+          />
+        ) : (
+          <ClientView
+            hostIdentity={walletToLowercase(hostIdentity)}
+            hostName={hostName}
+            isStreaming={isStreaming}
+          />
+        )}
       </LiveKitRoom>
     </>
   );

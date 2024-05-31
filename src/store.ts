@@ -3,6 +3,7 @@ import switchChainReducer from "./slices/account/switch-chain.slice";
 import postSelectedReducer from "./slices/posts/post-selected.slice";
 import authReducer from "./slices/account/auth.slice";
 import sidebarReducer from "./slices/sidebar/sidebar.slice";
+import chatSidebarReducer from "./slices/live/chat-sidebar.slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     "switch-chain": switchChainReducer,
     auth: authReducer,
     sidebar: sidebarReducer,
+    chatsidebar: chatSidebarReducer,
   },
 });
 

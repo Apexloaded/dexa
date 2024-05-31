@@ -1,4 +1,6 @@
+import CryptoJS, { AES } from "crypto-js";
 import { generateToken, lowerTokenAlphaNumeric } from "./generateId";
+import { APP_SECRET } from "@/config/env";
 
 export function toOxString(value?: string) {
   return value as `0x${string}`;
@@ -85,4 +87,30 @@ export const getFirstLetters = (fullName: string) => {
 export const timestampToDate = (time: string | number) => {
   const date = new Date(Number(time) * 1000);
   return date;
+};
+
+export const encryptMessage = (message: string) => {
+  return CryptoJS.AES.encrypt(message, `${APP_SECRET}`).toString();
+};
+
+export const decryptMessage = (encryptedMessage: string) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedMessage, `${APP_SECRET}`);
+  return bytes.toString(CryptoJS.enc.Utf8);
+};
+
+export const stringToColor = (str: string) => {
+  // Hash function to convert string to a number (modify if needed)
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Convert hash to a hex color string (adjust for desired color range)
+  let color = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += value.toString(16).padStart(2, "0");
+  }
+
+  return color;
 };

@@ -12,6 +12,7 @@ interface Props
   activeTabId: string;
   isActiveBg?: boolean;
   isActiveText?: boolean;
+  isCenter?: boolean;
 }
 
 function TabsHeader({
@@ -22,15 +23,17 @@ function TabsHeader({
   activeTabId,
   isActiveBg,
   isActiveText,
+  isCenter = true,
   ...prop
 }: Props) {
   const bg = activeTabId === value && isActiveBg ? "bg-primary/10" : "";
   const textColor = activeTabId === value && isActiveText ? "text-primary" : "";
+  const alignClass = isCenter ? "flex-1" : "flex-0"
   return (
     <div
       {...prop}
       onClick={() => onTabChange(value)}
-      className={`py-4 font-medium relative select-none ${bg} text-medium text-sm px-5 flex flex-1 items-center justify-center hover:bg-light cursor-pointer ${className}`}
+      className={`py-4 font-medium relative select-none ${bg} text-medium text-sm px-5 flex ${alignClass} items-center justify-center hover:bg-light cursor-pointer ${className}`}
     >
       <p className={`${textColor}`}>{title}</p>
       {activeTabId === value && (

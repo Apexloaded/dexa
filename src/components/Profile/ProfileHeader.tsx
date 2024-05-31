@@ -17,9 +17,12 @@ import Link from "next/link";
 import BackButton from "../ui/BackButton";
 import { useReadContract, useAccount } from "wagmi";
 import {
+  decryptMessage,
+  encryptMessage,
   formatWalletAddress,
   getFirstLetters,
   toOxString,
+  walletToLowercase,
 } from "@/libs/helpers";
 import {
   FriendListInterface,
@@ -35,6 +38,7 @@ import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import { ChatInterface } from "@/interfaces/message.interface";
 import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/libs/routes";
+import { getUserStreamStatus } from "@/actions/stream.action";
 
 export type Status = {
   isRequest: boolean;
@@ -47,6 +51,7 @@ function ProfileHeader() {
   const { address } = useAccount();
   const router = useRouter();
   const [user, setUser] = useState<UserInterface>();
+  const [isLive, setIsLive] = useState<boolean>(false);
   const [connections, setConnections] = useState<FriendListInterface[]>([]);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [status, setStatus] = useState<Status>();
@@ -80,6 +85,13 @@ function ProfileHeader() {
   });
 
   useEffect(() => {
+    if (!user) return;
+    const wallet = walletToLowercase(`${user?.wallet}`);
+    router.prefetch(routes.app.messages.message(`${user?.wallet}`));
+    router.prefetch(routes.app.watch(`${wallet}`));
+  }, [user]);
+
+  useEffect(() => {
     if (friends) {
       setConnections(friends as FriendListInterface[]);
     }
@@ -98,6 +110,19 @@ function ProfileHeader() {
       const date = new Date(Number(createdAt) * 1000).toISOString();
       setUser({ ...payload, createdAt: date });
     }
+  }, [response]);
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      const user = response as UserInterface;
+      const decryptString = decryptMessage(
+        decodeURIComponent(`${user.wallet}`)
+      );
+      if (!decryptString) return;
+      const statusRes = await getUserStreamStatus(`${decryptString}`);
+      setIsLive(statusRes.data.status);
+    };
+    if (response) checkStatus();
   }, [response]);
 
   const initChat = () => {
@@ -119,6 +144,12 @@ function ProfileHeader() {
       });
     }
     router.push(routes.app.messages.message(`${user?.wallet}`));
+  };
+
+  const liveStream = () => {
+    const wallet = walletToLowercase(`${user?.wallet}`);
+    const encrypted = encryptMessage(wallet);
+    router.push(routes.app.watch(`${encodeURIComponent(encrypted)}`));
   };
 
   return (
@@ -157,7 +188,22 @@ function ProfileHeader() {
                   <div className="h-full w-full absolute bg-white/10 inset-0"></div>
                 </>
               )}
-              <div className="h-32 w-32 overflow-hidden rounded-full hover:bg-medium/25 hover:cursor-pointer flex items-center justify-center border-4 border-white absolute -bottom-16 left-4 bg-medium/20">
+              <div
+                className={`h-32 w-32 overflow-hidden rounded-full hover:bg-medium/25 hover:cursor-pointer flex items-center justify-center border-4 ${
+                  isLive ? "border-primary" : "border-white"
+                } absolute -bottom-16 left-4 bg-medium/20`}
+              >
+                {isLive && (
+                  <div
+                    role="button"
+                    onClick={liveStream}
+                    className="absolute inset-0 z-50 flex items-center justify-center bg-dark/10"
+                  >
+                    <p className="text-xs bg-primary px-2 py-1 rounded-sm animate-pulse text-white">
+                      LIVE
+                    </p>
+                  </div>
+                )}
                 {user?.pfp ? (
                   <Image
                     src={user.pfp}

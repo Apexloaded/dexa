@@ -1,7 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { getFirstLetters, walletToLowercase } from "@/libs/helpers";
+import {
+  encryptMessage,
+  getFirstLetters,
+  walletToLowercase,
+} from "@/libs/helpers";
 import { useRouter } from "next/navigation";
 import { routes } from "@/libs/routes";
 import { UserInterface } from "@/interfaces/user.interface";
@@ -42,6 +46,7 @@ function CreatorPFP({
     const checkStatus = async () => {
       const user = data as UserInterface;
       const response = await getUserStreamStatus(`${user.wallet}`);
+      if (!response.status) return setIsLive(false);
       setIsLive(response.data.status);
       setUser(user);
     };
@@ -60,9 +65,10 @@ function CreatorPFP({
   const liveStream = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     const wallet = walletToLowercase(`${user?.wallet}`);
-    router.push(routes.app.watch(`${wallet}`));
+    const encrypted = encryptMessage(wallet);
+    router.push(routes.app.watch(`${encodeURIComponent(encrypted)}`));
   };
-  // https://sparrow-safe-crappie.ngrok-free.app/stream/webhook/livekit
+
   return (
     <div role="button" onClick={profile} className="w-10 relative">
       <div className="hover:bg-dark/20 cursor-pointer h-10 w-10 rounded-full absolute"></div>

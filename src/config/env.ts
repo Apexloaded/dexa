@@ -8,6 +8,7 @@ export const FEEDS_TOKEN = process.env.NEXT_PUBLIC_FEEDS_TOKEN;
 export const DEXA_MESSENGER = process.env.NEXT_PUBLIC_DEXA_MESSENGER;
 export const API_URL = process.env.NEXT_PUBLIC_DEXA_API;
 export const HOSTNAME = process.env.NEXT_PUBLIC_DEXA_HOST;
+export const APP_SECRET = process.env.NEXT_PUBLIC_APP_SECRET;
 
 export const GREEN_SP = process.env.NEXT_PUBLIC_GREEN_SP;
 export const GRPC_URL = process.env.NEXT_PUBLIC_GRPC_URL!;

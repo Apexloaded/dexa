@@ -26,7 +26,7 @@ function LiveMenu() {
   ];
 
   return (
-    <div className="border-r border-light h-screen flex flex-col justify-between">
+    <div className="border-r border-light h-full flex flex-col justify-between">
       <div>
         <div className="relative">
           <div
