@@ -90,6 +90,8 @@ function CreatorPFP({
           height={400}
           width={400}
           alt={"PFP"}
+          placeholder="blur"
+          blurDataURL="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
           className="h-10 w-10 rounded-full"
         />
       ) : (

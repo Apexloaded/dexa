@@ -93,6 +93,7 @@ function RemintedPost({ postId, postItem }: Props) {
                 alt={post.id}
                 priority
                 className="size-full"
+                blurDataURL="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
               />
             </div>
           ))}

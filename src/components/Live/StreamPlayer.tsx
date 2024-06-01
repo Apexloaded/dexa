@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { LiveKitRoom } from "@livekit/components-react";
 import { STREAM_WS } from "@/config/env";
-import Video from "./Video";
 import { walletToLowercase } from "@/libs/helpers";
 import StreamerView from "./stream-components/StreamerView";
 import ClientView from "./stream-components/ClientView";

@@ -3,7 +3,6 @@ import Video from "../Video";
 import Label from "@/components/Form/Label";
 import Button from "@/components/Form/Button";
 import { CircleIcon } from "lucide-react";
-import Chats from "../chats-components/Chats";
 import LiveHeader from "../LiveHeader";
 import StreamerSettingsTabs from "./StreamerSettingsTabs";
 import {
@@ -12,6 +11,7 @@ import {
 } from "@livekit/components-react";
 import { ConnectionState } from "livekit-client";
 import ChatContainer from "../chats-components/ChatContainer";
+import ToggleMenu from "@/components/ui/ToggleMenu";
 
 type Props = {
   hostIdentity: string;
@@ -27,7 +27,15 @@ function StreamerView({ hostIdentity, hostName, isStreaming }: Props) {
   return (
     <div className="flex flex-col lg:flex-row overflow-hidden w-full h-full">
       <div className="bg-light overflow-hidden flex-none lg:flex-1 flex flex-col border-r border-light">
-        <LiveHeader title="Live streaming" className="bg-white" />
+        <div className="flex items-center bg-white py-1">
+          <ToggleMenu />
+          <LiveHeader
+            title="Live streaming"
+            className="bg-white flex-1 border-b-[0]"
+            isBack={false}
+          />
+        </div>
+
         <div className="lg:p-5 flex-1 flex flex-col overflow-hidden">
           <div className="grid grid-cols-1 xl:grid-cols-2">
             <div className="bg-white">

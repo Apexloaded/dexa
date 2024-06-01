@@ -140,8 +140,10 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
                     src={media.url}
                     height={400}
                     width={600}
+                    placeholder="blur"
                     alt={post.id}
                     priority
+                    blurDataURL="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
                   />
                 </div>
               ))}

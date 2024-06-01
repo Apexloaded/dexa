@@ -5,11 +5,10 @@ import Button from "@/components/Form/Button";
 import Lottie from "lottie-react";
 import dbAnim from "@/assets/lottie/live.json";
 import evAnim from "@/assets/lottie/event.json";
-import { useRouter } from "next/navigation";
 import { routes } from "@/libs/routes";
+import Link from "next/link";
 
 function GoLive() {
-  const router = useRouter();
   return (
     <div className="pt-20">
       <div className="max-w-3xl mx-auto">
@@ -49,23 +48,35 @@ function GoLive() {
               </p>
             </div>
             <div className="flex gap-5 mt-6 justify-center shrink-0">
-              <Button
-                type={"button"}
-                kind={"primary"}
-                shape={"ROUNDED"}
-                className="flex-1"
+              <Link
+                className="flex-1 block"
+                prefetch={true}
+                href={routes.app.live.desktop}
               >
-                Mobile
-              </Button>
-              <Button
-                type={"button"}
-                kind={"primary"}
-                shape={"ROUNDED"}
-                className="flex-1"
-                onClick={() => router.push(routes.app.live.desktop)}
+                <Button
+                  type={"button"}
+                  kind={"primary"}
+                  shape={"ROUNDED"}
+                  className="w-full"
+                >
+                  Mobile
+                </Button>
+              </Link>
+
+              <Link
+                className="flex-1 block"
+                prefetch={true}
+                href={routes.app.live.desktop}
               >
-                Desktop
-              </Button>
+                <Button
+                  type={"button"}
+                  kind={"primary"}
+                  shape={"ROUNDED"}
+                  className="w-full"
+                >
+                  Desktop
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

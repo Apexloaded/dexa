@@ -12,14 +12,13 @@ import {
 import { BNB } from "../Icons/NetworkIcons";
 import BlueCheckMark from "./BlueCheck";
 import { useAuth } from "@/context/auth.context";
-import { UserBalance, UserInterface } from "@/interfaces/user.interface";
+import { UserBalance } from "@/interfaces/user.interface";
 import { useAccount, useReadContract } from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { ethers } from "ethers";
 import { Tokens } from "@/config/tokens";
-import { walletToLowercase, weiToUnit } from "@/libs/helpers";
+import { walletToLowercase } from "@/libs/helpers";
 import Link from "next/link";
 import QuickViewBal from "./QuickViewBal";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
@@ -28,7 +27,6 @@ import { routes } from "@/libs/routes";
 
 function QuickView() {
   const router = useRouter();
-  const swiperElRef = useRef(null);
   const [hideBal, setHideBal] = useState<boolean>(false);
   const [balances, setBalances] = useState<UserBalance[]>([]);
   const { address } = useAccount();
@@ -56,7 +54,6 @@ function QuickView() {
         );
         return { ...balance, ...(token || {}) };
       });
-      console.log(userBal);
       setBalances(userBal);
     };
     init();
@@ -65,18 +62,17 @@ function QuickView() {
   return (
     <div className="">
       <div className="flex justify-between sticky top-0 bg-white">
-        <p className="text-xl font-semibold">Profile</p>
-        <div className="flex gap-4 items-center justify-end text-right">
+        <p className="hidden xl:inline text-base xl:text-lg font-semibold">Profile</p>
+        <div className="flex flex-1 gap-3 items-center justify-between xl:justify-end text-right">
           <div className="name">
             <Link
               prefetch={true}
               href={routes.app.profile(`${user?.username}`)}
-              className="font-bold flex items-center gap-1 capitalize"
+              className="font-bold text-base flex items-center gap-1 capitalize"
             >
-              <BlueCheckMark />
-              <span>{user?.name}</span>{" "}
+              <span>{user?.name}</span> <BlueCheckMark />
             </Link>
-            <p className="text-neutral-400 text-sm">Professional</p>
+            <p className="text-medium text-left text-sm">Professional</p>
           </div>
           <CreatorPFP
             username={user?.username}
@@ -145,7 +141,7 @@ function QuickView() {
               </>
             )}
           </div>
-          <div className="flex xl:flex-row flex-col gap-2 justify-center">
+          <div className="flex xl:flex-row flex-col gap-2 xl:gap-5 justify-center">
             <Button
               kind="default"
               shape={"ROUNDED"}

@@ -34,6 +34,7 @@ import axios from "axios";
 import { API_URL } from "@/config/env";
 import { StorageTypes } from "@/libs/enum";
 import { createPost } from "@/actions/post.action";
+import { routes } from "@/libs/routes";
 
 function NewPost() {
   const router = useRouter();
@@ -65,7 +66,7 @@ function NewPost() {
   const isEmptyContent = content === "<p></p>";
 
   useEffect(() => {
-    router.prefetch("/live");
+    router.prefetch(routes.app.live.index);
   }, []);
 
   const onSubmit = async (data: FieldValues) => {
@@ -268,14 +269,14 @@ function NewPost() {
             >
               <CalendarPlusIcon size={18} />
             </Button>
-            <div
-              onClick={() => router.push("/live")}
+            <Link
+              href={routes.app.live.index}
               role="button"
-              className="flex gap-1 rounded-md select-none text-white cursor-pointer hover:bg-danger/90 bg-danger items-center px-[0.5rem] py-[0.2rem]"
+              className="hidden lg:flex gap-1 rounded-md select-none text-white cursor-pointer hover:bg-danger/90 bg-danger items-center px-[0.5rem] py-[0.2rem]"
             >
               <VideoIcon size={18} />
               <p className="text-sm">Live</p>
-            </div>
+            </Link>
           </div>
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1">

@@ -28,7 +28,7 @@ function StreamerSettingsTabs() {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data?.data && data.status == true) {
       const { serverUrl, streamKey, ingressId } =
         data.data as IStreamCredentials;
       setCredentials({ serverUrl, streamKey, ingressId });

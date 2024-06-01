@@ -36,10 +36,8 @@ function useStreamHook() {
 
   const getViewerToken = async (hostIdentity: string, username: string) => {
     try {
-      const response = await getViewerStreamCredentials(
-        hostIdentity,
-        username
-      );
+      const response = await getViewerStreamCredentials(hostIdentity, username);
+      if (!response.status) return;
       const token = response.data.token;
       const decoded = jwtDecode(token) as JwtPayload & { name?: string };
       const { name, sub } = decoded;
