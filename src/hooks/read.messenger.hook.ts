@@ -1,3 +1,4 @@
+"use client";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import { IReadContract } from "@/interfaces/contract.interface";
 import { useReadContract } from "wagmi";

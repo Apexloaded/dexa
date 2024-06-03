@@ -14,6 +14,7 @@ import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import "swiper/css";
 import { DexaMessengerProvider } from "@/context/dexa-messenger.context";
 import { StreamProvider } from "@/context/stream.context";
+import { CookiesProvider } from "react-cookie";
 
 const queryClient = new QueryClient();
 
@@ -30,25 +31,27 @@ export default function HTML({
     <html lang="en" className="overflow-hidden">
       <body id="body" className={`${font.className} overflow-auto`}>
         <Provider store={store}>
-          <WagmiProvider config={config} initialState={initialState}>
+          <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
-              <AuthProvider>
-                <DexaProvider>
-                  <DexaMessengerProvider>
-                    <StreamProvider>
-                      <ProgressBar
-                        height="4px"
-                        color="#4338ca"
-                        options={{ showSpinner: false }}
-                        shallowRouting
-                      />
-                      <SwitchChain />
-                      <main>{children}</main>
-                      <Toaster />
-                    </StreamProvider>
-                  </DexaMessengerProvider>
-                </DexaProvider>
-              </AuthProvider>
+              <CookiesProvider defaultSetOptions={{ path: "/" }}>
+                <AuthProvider>
+                  <DexaProvider>
+                    <DexaMessengerProvider>
+                      <StreamProvider>
+                        <ProgressBar
+                          height="4px"
+                          color="#4338ca"
+                          options={{ showSpinner: false }}
+                          shallowRouting
+                        />
+                        <SwitchChain />
+                        <main>{children}</main>
+                        <Toaster />
+                      </StreamProvider>
+                    </DexaMessengerProvider>
+                  </DexaProvider>
+                </AuthProvider>
+              </CookiesProvider>
             </QueryClientProvider>
           </WagmiProvider>
         </Provider>

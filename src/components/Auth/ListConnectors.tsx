@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Button from "../Form/Button";
 import Image from "next/image";
 import { useAccount, useConnect } from "wagmi";
@@ -15,12 +15,17 @@ type Props = {
 };
 
 function ListConnectors({ setSignModal, onCloseModal }: Props) {
+  const [isClient, setIsClient] = useState(false);
   const { loading, error: tError, success } = useToast();
   const { connect, connectors, error, isPending, isSuccess, isError } =
     useConnect({
       config,
     });
   const { isConnected, address } = useAccount();
+
+  useEffect(() => {
+    setIsClient(true)
+  },[isClient])
 
   useEffect(() => {
     const check = () => {
@@ -50,15 +55,15 @@ function ListConnectors({ setSignModal, onCloseModal }: Props) {
 
   return (
     <>
-      {connectors && connectors.toReversed().map((connector) => (
+      {isClient && connectors && connectors.toReversed().map((connector) => (
         <Button
           key={connector.uid}
           kind={`default`}
           onClick={() => connectToWallet(connector)}
           className="py-[1rem] capitalize border-b border-primary/50 hover:bg-primary/5 rounded-none last:border-none"
         >
-          <p className="flex justify-between items-center">
-            <span className="flex items-center">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
               {connectorIcons[connector.id] ? (
                 <Image
                   src={connectorIcons[connector.id].icon}
@@ -76,13 +81,13 @@ function ListConnectors({ setSignModal, onCloseModal }: Props) {
                 />
               )}
               <span className="ml-3 font-medium">{connector.name}</span>
-            </span>
+            </div>
             {connector.id === "io.metamask" && (
               <span className="text-xs bg-primary text-white px-3 rounded-sm">
                 Popular
               </span>
             )}
-          </p>
+          </div>
         </Button>
       ))}
     </>

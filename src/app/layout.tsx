@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Reddit_Mono } from "next/font/google";
-import local from "next/font/local";
 import "./globals.scss";
 import HTML from "@/components/HTML";
-import { parseCookies } from "nookies";
-import { cookieToInitialState } from "wagmi";
-import { config } from "@/config/wagmi.config";
 
 export const dynamicParams = true;
 // const redditMono = local({
@@ -29,14 +25,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const parsedCookies = parseCookies();
-  const initialState = cookieToInitialState(
-    config,
-    JSON.stringify(parsedCookies)
-  );
-  return (
-    <HTML font={poppins} initialState={initialState}>
-      {children}
-    </HTML>
-  );
+  return <HTML font={poppins}>{children}</HTML>;
 }

@@ -47,7 +47,7 @@ export async function verifyNonce({
         secure: false,
         maxAge: 6 * 24 * 60 * 60,
       });
-      return { status: true, message: "success" };
+      return { status: true, message: "success", data };
     }
     return { status: false, message: "false" };
   } catch (error: any) {
@@ -87,6 +87,6 @@ export async function updateProfile(
   }
 }
 
-export async function clearSession() {
-  destroyCookie(null, StorageTypes.ACCESS_TOKEN);
-}
+// export async function clearSession() {
+//   destroyCookie(null, StorageTypes.ACCESS_TOKEN);
+// }

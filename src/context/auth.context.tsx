@@ -2,7 +2,9 @@
 
 import useUser from "@/hooks/user.hook";
 import { AuthData, UserInterface } from "@/interfaces/user.interface";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
+import { ReadContractErrorType } from "viem";
 
 export type AuthContextType = {
   ens?: string;
@@ -13,7 +15,9 @@ export type AuthContextType = {
   setProfileProgress: Dispatch<SetStateAction<number | undefined>>;
   isAuth: boolean;
   isAuthenticated: () => boolean;
-  isAuthenticating: boolean;
+  findCreator: (
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<unknown, ReadContractErrorType>>;
 };
 
 interface Props {

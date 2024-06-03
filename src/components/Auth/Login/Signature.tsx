@@ -17,6 +17,7 @@ import { setAuth } from "@/slices/account/auth.slice";
 import useToast from "@/hooks/toast.hook";
 import { verifyNonce, getNonce } from "@/actions/auth.action";
 import { routes } from "@/libs/routes";
+import { useAuth } from "@/context/auth.context";
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ function SignInModal({ setModal }: Props) {
   const router = useRouter();
   const { chainId, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { findCreator } = useAuth();
   const { loading, success, error } = useToast();
   const dispatch = useAppDispatch();
 
@@ -52,6 +54,7 @@ function SignInModal({ setModal }: Props) {
         message: JSON.stringify(message),
       });
       if (verifyRes?.status) {
+        await findCreator();
         setModal(false);
         dispatch(setAuth(true));
         success({ msg: "Successfully signed in!" });

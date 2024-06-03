@@ -106,7 +106,7 @@ function PostDetails() {
       {post && (
         <div className="mt-2 px-5">
           <ShowMore data={post.content} />
-          <div className="rounded-xl mt-2 overflow-hidden">
+          <div className="rounded-xl mt-2 border border-light overflow-auto">
             {post?.media.map((media, index) => (
               <Image
                 key={index}

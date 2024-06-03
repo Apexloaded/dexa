@@ -23,7 +23,8 @@ export default function Profile() {
           </Suspense>
         </Section>
         <Aside>
-          <div className="w-full p-3 shadow rounded-lg bg-white dark:bg-gray-700">
+          <div></div>
+          {/* <div className="w-full p-3 shadow rounded-lg bg-white dark:bg-gray-700">
             <div className="border-b pb-3 border-gray-300">
               <p className="font-bold text-xl mb-2 dark:text-gray-200">About</p>
               <p className="text-md font-normal text-left dark:text-gray-300">
@@ -73,7 +74,7 @@ export default function Profile() {
                 <Image src={ape1} alt="" />
               </div>
             </div>
-          </div>
+          </div> */}
         </Aside>
       </div>
     </AuthMainLayout>

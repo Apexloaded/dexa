@@ -134,7 +134,10 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
 
             {post.media &&
               post.media.map((media, index) => (
-                <div key={index} className="my-2 rounded-xl overflow-hidden">
+                <div
+                  key={index}
+                  className="my-2 rounded-xl border border-light max-h-[35rem] overflow-hidden"
+                >
                   <Image
                     key={index}
                     src={media.url}

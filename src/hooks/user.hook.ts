@@ -19,10 +19,10 @@ import DexaCreator from "@/contracts/DexaCreator.sol/DexaCreator.json";
 import { DEXA_CREATOR } from "@/config/env";
 import { toOxString } from "@/libs/helpers";
 import { routes } from "@/libs/routes";
-import { clearSession } from "@/actions/auth.action";
 import { parseCookies } from "nookies";
 import { jwtDecode } from "jwt-decode";
 import { StorageTypes } from "@/libs/enum";
+import { useCookies } from "react-cookie";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
@@ -33,14 +33,14 @@ function useUser() {
   const isAuth = useAppSelector(selectAuth);
   const [user, setUser] = useState<UserInterface>();
   const [profileProgress, setProfileProgress] = useState<number>();
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   const { address, isConnected, isDisconnected, chainId, isReconnecting } =
     useAccount();
   const { chains } = useSwitchChain();
   const { disconnect } = useDisconnect();
+  const [_, set, remove] = useCookies([StorageTypes.ACCESS_TOKEN]);
   const { getItem, setItem } = useStorage();
 
-  const { data } = useReadContract({
+  const { data, refetch: findCreator } = useReadContract({
     abi: DexaCreator,
     address: CREATOR,
     functionName: "findCreator",
@@ -101,12 +101,10 @@ function useUser() {
   }, [chainId, chains, isConnected]);
 
   const isAuthenticated = () => {
-    setIsAuthenticating(true);
     const parsedCookies = parseCookies();
     const cookie = parsedCookies[StorageTypes.ACCESS_TOKEN];
 
     if (!cookie) {
-      setIsAuthenticating(false);
       return false;
     }
 
@@ -114,13 +112,10 @@ function useUser() {
       const parsedCookie: any = jwtDecode(cookie);
       const expires = new Date(parsedCookie.exp * 1000);
       if (expires < new Date()) {
-        setIsAuthenticating(false);
         return false;
       }
-      setIsAuthenticating(false);
       return true;
     } catch (error) {
-      setIsAuthenticating(false);
       return false;
     }
   };
@@ -128,7 +123,7 @@ function useUser() {
   const logout = () => {
     disconnect();
     dispatch(setAuth(false));
-    clearSession();
+    remove(StorageTypes.ACCESS_TOKEN);
     router.push(routes.login);
   };
 
@@ -139,7 +134,7 @@ function useUser() {
     setProfileProgress,
     isAuth,
     isAuthenticated,
-    isAuthenticating,
+    findCreator
   };
 }
 

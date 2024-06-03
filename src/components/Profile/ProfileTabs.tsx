@@ -83,13 +83,19 @@ function ProfileTabs() {
             )}
           </TabsList>
           <TabsContent value="tab1" activeTabId={activeTab}>
-            <UserFeeds posts={posts} />
+            <UserFeeds
+              posts={posts}
+              msg={`${username} haven't minted any collectible yet`}
+            />
           </TabsContent>
           <TabsContent value="tab2" activeTabId={activeTab}>
             <Reminted posts={posts} username={`${username}`} />
           </TabsContent>
           <TabsContent value="tab3" activeTabId={activeTab}>
-            <UserFeeds posts={replies} />
+            <UserFeeds
+              posts={replies}
+              msg={`${username} have not replied any post yet`}
+            />
           </TabsContent>
           <TabsContent value="tab4" activeTabId={activeTab}>
             <div>

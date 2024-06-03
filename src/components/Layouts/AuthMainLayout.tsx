@@ -21,8 +21,13 @@ function AuthMainLayout({
   const router = useRouter();
   const [signModal, setSignModal] = useState<boolean>(false);
   const { isConnected, address } = useAccount();
-  const { isAuthenticated, isAuthenticating } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const isSidebar = useAppSelector(selectSidebar);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     async function fetchNonce() {
@@ -34,12 +39,13 @@ function AuthMainLayout({
   }, [isConnected, address]);
 
   useEffect(() => {
-    if (!isConnected && !isAuthenticating && !address && !isAuthenticated()) {
+    if (!isConnected && !address && !isAuthenticated()) {
+      logout();
       router.push(routes.login);
     }
-  }, [isConnected, isAuthenticating, address]);
+  }, [isConnected, address]);
 
-  if (isAuthenticating) {
+  if (loading) {
     return <Loader />;
   }
 

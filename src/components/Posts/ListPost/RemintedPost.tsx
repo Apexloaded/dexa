@@ -84,7 +84,10 @@ function RemintedPost({ postId, postItem }: Props) {
         </div>
         {post?.media &&
           post.media.map((media, index) => (
-            <div key={index} className="pt-2 rounded-xl overflow-hidden">
+            <div
+              key={index}
+              className="pt-2 rounded-xl border border-light max-h-[35rem] overflow-hidden"
+            >
               <Image
                 key={index}
                 src={media.url}

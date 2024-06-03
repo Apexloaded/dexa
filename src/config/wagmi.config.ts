@@ -4,10 +4,10 @@ import { metaMask, coinbaseWallet, walletConnect, injected } from "wagmi/connect
 
 export const config = createConfig({
   chains: [bsc, bscTestnet],
-  ssr: true,
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
+  ssr: false,
+  // storage: createStorage({
+  //   storage: cookieStorage,
+  // }),
   connectors: [
     // metaMask({
     //   dappMetadata: { url: "https://dexa.ink", name: "Dexa App", iconUrl: "" },
