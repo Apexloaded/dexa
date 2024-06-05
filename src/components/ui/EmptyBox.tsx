@@ -10,7 +10,7 @@ type Props = {
 const header = "Tab is empty";
 const msg = "There nothing in this folder, kindly check back later";
 
-function EmtpyBox({ title = header, message = msg }: Props) {
+function EmptyBox({ title = header, message = msg }: Props) {
   return (
     <div className="text-center">
       <Lottie animationData={emptyAnim} className="mb-3 h-60" loop={false} />
@@ -20,4 +20,4 @@ function EmtpyBox({ title = header, message = msg }: Props) {
   );
 }
 
-export default EmtpyBox;
+export default EmptyBox;

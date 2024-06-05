@@ -11,7 +11,7 @@ import TabsList from "@/components/Tabs/TabsList";
 import TabsHeader from "@/components/Tabs/TabsHeader";
 import TabsContent from "@/components/Tabs/TabsContent";
 import ListRequest from "@/components/Connections/ListRequest";
-import EmtpyBox from "@/components/ui/EmtpyBox";
+import EmtpyBox from "@/components/ui/EmptyBox";
 import ListConnection from "@/components/Connections/ListConnection";
 import { useDexaMessenger } from "@/context/dexa-messenger.context";
 import AuthMainLayout from "@/components/Layouts/AuthMainLayout";

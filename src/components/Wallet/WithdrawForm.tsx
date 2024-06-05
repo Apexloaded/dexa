@@ -18,7 +18,7 @@ import { UserBalance } from "@/interfaces/user.interface";
 import { walletToLowercase, weiToUnit } from "@/libs/helpers";
 import { withdrawalResolver } from "@/schemas/withdraw.schema";
 import ShowError from "../Form/ShowError";
-import useClipBoard from "@/hooks/clipboard";
+import useClipBoard from "@/hooks/clipboard.hook";
 import useToast from "@/hooks/toast.hook";
 import { ZeroAddress, parseEther } from "ethers";
 import { useRouter } from "next/navigation";
@@ -45,7 +45,7 @@ function WithdrawForm() {
   const { writeContractAsync, isPending } = useWriteContract();
   const [options] = useState(
     Tokens.map((t) => {
-      return { value: t.address, name: t.name, icon: t.icon };
+      return { value: t.address, name: t.symbol, icon: t.icon };
     })
   );
 

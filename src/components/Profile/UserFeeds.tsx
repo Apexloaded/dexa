@@ -3,11 +3,11 @@
 import React from "react";
 import ListPost from "../Posts/ListPost/ListPost";
 import { Post } from "@/interfaces/feed.interface";
-import EmtpyBox from "../ui/EmtpyBox";
+import EmptyBox from "../ui/EmptyBox";
 
 type Props = {
   posts: Post[];
-  msg: string
+  msg: string;
 };
 
 function UserFeeds({ posts, msg }: Props) {
@@ -30,10 +30,7 @@ function UserFeeds({ posts, msg }: Props) {
         <>
           <div>
             <div className="text-center py-20">
-              <EmtpyBox
-                title="Empty remints"
-                message={`${msg}`}
-              />
+              <EmptyBox title="Empty remints" message={`${msg}`} />
             </div>
           </div>
         </>

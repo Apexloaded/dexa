@@ -24,11 +24,17 @@ import QuickViewBal from "./QuickViewBal";
 import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 import { useRouter } from "next/navigation";
 import { routes } from "@/libs/routes";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import { selectHideBalance, setHideBalance } from "@/slices/account/hide-balance.slice";
+import useStorage from "@/hooks/storage.hook";
+import { StorageTypes } from "@/libs/enum";
 
 function QuickView() {
   const router = useRouter();
-  const [hideBal, setHideBal] = useState<boolean>(false);
+  const isHidden = useAppSelector(selectHideBalance);
+  const dispatch = useAppDispatch();
   const [balances, setBalances] = useState<UserBalance[]>([]);
+  const { setItem } = useStorage();
   const { address } = useAccount();
   const { user } = useAuth();
   const { dexaCreator, CreatorABI } = useDexa();
@@ -59,10 +65,18 @@ function QuickView() {
     init();
   }, [data, address]);
 
+  const toggleHide = () => {
+    const value = !isHidden;
+    setItem(StorageTypes.DEXA_HIDE_BAL, value);
+    dispatch(setHideBalance(value))
+  }
+
   return (
     <div className="">
       <div className="flex justify-between sticky top-0 bg-white">
-        <p className="hidden xl:inline text-base xl:text-lg font-semibold">Profile</p>
+        <p className="hidden xl:inline text-base xl:text-lg font-semibold">
+          Profile
+        </p>
         <div className="flex flex-1 gap-3 items-center justify-between xl:justify-end text-right">
           <div className="name">
             <Link
@@ -86,14 +100,11 @@ function QuickView() {
           <div className="mb-5 text-light">
             <p className="font-light flex justify-between items-center">
               <span className="">Account balance</span>
-              <span
-                className="cursor-pointer p-2 text-xl"
-                onClick={() => setHideBal(!hideBal)}
-              >
-                {hideBal ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+              <span className="cursor-pointer p-2 text-xl" onClick={toggleHide}>
+                {isHidden ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
               </span>
             </p>
-            {hideBal ? (
+            {isHidden ? (
               <div className="mb-2">
                 <p>
                   <span className="text-5xl font-semibold">*****</span>
@@ -115,7 +126,7 @@ function QuickView() {
                     {balances.map((bal, index) => (
                       <SwiperSlide key={index}>
                         <QuickViewBal
-                          balance={bal.balance}
+                          balance={bal}
                           icon={bal.icon ? <bal.icon /> : <></>}
                         />
                       </SwiperSlide>
@@ -124,13 +135,13 @@ function QuickView() {
                 ) : (
                   <>
                     {balances.length < 1 ? (
-                      <QuickViewBal balance="0.00" icon={<BNB />} />
+                      <QuickViewBal icon={<BNB />} />
                     ) : (
                       <>
                         {balances.map((bal, index) => (
                           <QuickViewBal
                             key={index}
-                            balance={bal.balance}
+                            balance={bal}
                             icon={bal.icon ? <bal.icon /> : <></>}
                           />
                         ))}

@@ -3,6 +3,7 @@
 import {
   BanknoteIcon,
   BellDotIcon,
+  BookmarkIcon,
   BoxIcon,
   CandlestickChart,
   EllipsisIcon,
@@ -14,6 +15,7 @@ import {
   SettingsIcon,
   Users2Icon,
   UsersIcon,
+  Wallet2Icon,
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -53,14 +55,14 @@ export default function Sidebar() {
     //   icon: BellDotIcon,
     // },
     {
+      name: "Bookmarks",
+      href: routes.app.bookmarks,
+      icon: BookmarkIcon,
+    },
+    {
       name: "Connections",
       href: routes.app.connections,
       icon: Users2Icon,
-    },
-    {
-      name: "Transactions",
-      href: routes.app.transaction.index,
-      icon: BanknoteIcon,
     },
     // {
     //   name: "My Collections",
@@ -72,23 +74,30 @@ export default function Sidebar() {
     //   href: "/stats",
     //   icon: CandlestickChart,
     // },
+
+    {
+      name: "Community",
+      href: routes.app.community,
+      icon: UsersIcon,
+    },
     {
       name: "Settings",
       href: routes.app.settings,
       icon: SettingsIcon,
     },
     {
-      name: "Community",
-      href: routes.app.community,
-      icon: UsersIcon,
+      name: "Wallet",
+      href: routes.app.wallet.index,
+      icon: Wallet2Icon,
     },
   ];
 
-  const checkIsActive = (pathname: string, isActive?: Array<string>) => {
-    const splitPath = pathname.split("/");
-    const basePath = splitPath[1];
-    return isActive?.includes(basePath);
-  };
+  // const checkIsActive = (pathname: string, isActive?: Array<string>) => {
+  //   const splitPath = pathname.split("/");
+  //   const basePath = splitPath[1];
+  //   return isActive?.includes(basePath);
+  // };
+  const isActive = (url: string) => path.includes(url);
 
   return (
     <>
@@ -111,11 +120,18 @@ export default function Sidebar() {
                 key={idx}
                 className="flex justify-end xl:justify-start group px-3 md:pl-5 md:pr-5 xl:pl-0 xl:pr-0"
               >
-                <div className="flex space-x-2 group-hover:bg-primary/10 transition-all duration-200 rounded-[1.8rem] p-[0.8rem] xl:py-[0.8rem] xl:pl-3 xl:pr-8">
-                  <nav.icon className="group-hover:text-primary" size={26} />
+                <div
+                  className={`flex space-x-2 group-hover:bg-primary/10 transition-all duration-200 rounded-[1.8rem] p-[0.8rem] xl:py-[0.8rem] xl:pl-3 xl:pr-8`}
+                >
+                  <nav.icon
+                    className={`group-hover:text-primary ${
+                      isActive(nav.href) ? "text-primary" : ""
+                    }`}
+                    size={26}
+                  />
                   <p
                     className={`hidden xl:inline group-hover:text-primary text-lg ${
-                      path == nav.href ? "font-bold" : "font-normal"
+                      isActive(nav.href) ? "text-primary font-bold" : ""
                     }`}
                   >
                     {nav.name}

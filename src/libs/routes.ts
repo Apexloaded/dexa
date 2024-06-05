@@ -11,6 +11,7 @@ export const routes = {
       index: "/messages",
       message: (address: string) => `/messages/view?u=${address}`,
     },
+    bookmarks: "/bookmarks",
     live: {
       index: "/live",
       desktop: "/live/streams/video",

@@ -11,7 +11,7 @@ import { useDexa } from "@/context/dexa.context";
 import { useReadContract } from "wagmi";
 import { sortPostByDate } from "../Home/Feeds";
 import Reminted from "./Reminted";
-import EmtpyBox from "../ui/EmtpyBox";
+import EmptyBox from "../ui/EmptyBox";
 import { useAuth } from "@/context/auth.context";
 import { useSearchParams } from "next/navigation";
 
@@ -100,7 +100,7 @@ function ProfileTabs() {
           <TabsContent value="tab4" activeTabId={activeTab}>
             <div>
               <div className="text-center py-20">
-                <EmtpyBox
+                <EmptyBox
                   title="No communities"
                   message={`${username} do not have any active community`}
                 />
@@ -112,7 +112,7 @@ function ProfileTabs() {
             <TabsContent value="tab5" activeTabId={activeTab}>
               <div>
                 <div className="text-center py-20">
-                  <EmtpyBox
+                  <EmptyBox
                     title="No tips"
                     message={`You have no tips yet on your posts`}
                   />

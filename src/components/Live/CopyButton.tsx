@@ -1,4 +1,4 @@
-import useClipBoard from "@/hooks/clipboard";
+import useClipBoard from "@/hooks/clipboard.hook";
 import { CopyIcon, CopyPlusIcon } from "lucide-react";
 import React from "react";
 import Button from "../Form/Button";

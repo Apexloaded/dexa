@@ -62,7 +62,7 @@ function RemintFee({ onInput, value, selectedCoin, onSelectCoin }: Props) {
                 key={i}
                 onClick={() => onSelectCoin(token)}
                 className={`flex border border-medium/20 hover:bg-primary/20 items-center gap-2 p-2 cursor-pointer ${
-                  token.name == selectedCoin?.name
+                  token.symbol == selectedCoin?.symbol
                     ? "bg-primary/20"
                     : "bg-white"
                 }`}

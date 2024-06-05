@@ -48,7 +48,7 @@ function LikeButton({ post }: Props) {
           likePost();
         }}
         className={`text-dark ${
-          isLiked ? "text-primary bg-primary/20" : "bg-white"
+          isLiked ? "text-primary" : "bg-white"
         }  group-hover:text-primary group-hover:bg-primary/20`}
         hoverColor={false}
         title="Like"

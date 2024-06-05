@@ -15,8 +15,9 @@ import "swiper/css";
 import { DexaMessengerProvider } from "@/context/dexa-messenger.context";
 import { StreamProvider } from "@/context/stream.context";
 import { CookiesProvider } from "react-cookie";
+import { ConverterProvider } from "@/context/currency.context";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export default function HTML({
   children,
@@ -38,15 +39,17 @@ export default function HTML({
                   <DexaProvider>
                     <DexaMessengerProvider>
                       <StreamProvider>
-                        <ProgressBar
-                          height="4px"
-                          color="#4338ca"
-                          options={{ showSpinner: false }}
-                          shallowRouting
-                        />
-                        <SwitchChain />
-                        <main>{children}</main>
-                        <Toaster />
+                        <ConverterProvider>
+                          <ProgressBar
+                            height="4px"
+                            color="#4338ca"
+                            options={{ showSpinner: false }}
+                            shallowRouting
+                          />
+                          <SwitchChain />
+                          <main>{children}</main>
+                          <Toaster />
+                        </ConverterProvider>
                       </StreamProvider>
                     </DexaMessengerProvider>
                   </DexaProvider>

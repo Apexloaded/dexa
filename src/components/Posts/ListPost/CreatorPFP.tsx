@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
@@ -93,6 +92,7 @@ function CreatorPFP({
           placeholder="blur"
           blurDataURL="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
           className="h-10 w-10 rounded-full"
+          priority={true}
         />
       ) : (
         <div className="h-10 w-10 bg-white/90 border border-primary rounded-full flex justify-center items-center">

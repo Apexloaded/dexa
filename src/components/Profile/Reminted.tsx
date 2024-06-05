@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import ListPost from "../Posts/ListPost/ListPost";
 import { Post } from "@/interfaces/feed.interface";
-import EmtpyBox from "../ui/EmtpyBox";
+import EmptyBox from "../ui/EmptyBox";
 
 type Props = {
   posts: Post[];
@@ -31,7 +31,7 @@ function Reminted({ posts, username }: Props) {
       ) : (
         <div>
           <div className="text-center py-20">
-            <EmtpyBox
+            <EmptyBox
               title="Empty remints"
               message={`${username} haven't reminted any mintable`}
             />

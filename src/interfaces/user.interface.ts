@@ -26,7 +26,9 @@ export interface AuthData {
 }
 
 export interface UserBalance {
+  id?: string;
   name?: string | undefined;
+  symbol?: string | undefined;
   icon?:
     | (({
         width,
@@ -37,6 +39,7 @@ export interface UserBalance {
       }) => React.JSX.Element)
     | undefined;
   address?: string | undefined;
+  usdValue?: number;
   tokenAddress: string;
   balance: string;
 }

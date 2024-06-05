@@ -4,13 +4,16 @@ export enum StorageTypes {
   AUTH_USER = "dexa.auth_user",
   REFERRER = "dexa.referrer",
   NEXT_SESSION_TOKEN = "next-auth.session-token",
+  DEXA_HIDE_BAL = "dexa.hide.balance"
 }
 
 export enum QueryKeys {
   AUTH = "AUTH",
   WALLET = "WALLET",
   PROFILE = "PROFILE",
-  STREAM_AUTH = "STREAM_AUTH"
+  STREAM_AUTH = "STREAM_AUTH",
+  BOOKMARK = "BOOKMARK",
+  BOOKMARKS = "BOOKMARKS"
 }
 
 export enum BucketVisibilityType {

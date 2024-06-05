@@ -23,6 +23,10 @@ import { parseCookies } from "nookies";
 import { jwtDecode } from "jwt-decode";
 import { StorageTypes } from "@/libs/enum";
 import { useCookies } from "react-cookie";
+import {
+  selectHideBalance,
+  setHideBalance,
+} from "@/slices/account/hide-balance.slice";
 
 const CREATOR = toOxString(DEXA_CREATOR);
 
@@ -31,6 +35,7 @@ function useUser() {
   const path = usePathname();
   const dispatch = useDispatch();
   const isAuth = useAppSelector(selectAuth);
+  const isHidden = useAppSelector(selectHideBalance);
   const [user, setUser] = useState<UserInterface>();
   const [profileProgress, setProfileProgress] = useState<number>();
   const { address, isConnected, isDisconnected, chainId, isReconnecting } =
@@ -58,6 +63,11 @@ function useUser() {
   useEffect(() => {
     isAuthenticated();
   }, []);
+
+  useEffect(() => {
+    const isHidden = getItem(StorageTypes.DEXA_HIDE_BAL);
+    dispatch(setHideBalance(!!isHidden));
+  }, [isHidden]);
 
   useEffect(() => {
     if (data) {
@@ -134,7 +144,7 @@ function useUser() {
     setProfileProgress,
     isAuth,
     isAuthenticated,
-    findCreator
+    findCreator,
   };
 }
 

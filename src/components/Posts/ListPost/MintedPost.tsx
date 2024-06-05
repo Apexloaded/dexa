@@ -1,38 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
-import ape1 from "@/assets/nft/1.png";
-import Link from "next/link";
-import {
-  BadgeCheck,
-  BarChart2Icon,
-  BookmarkIcon,
-  EllipsisIcon,
-  HandCoinsIcon,
-  MessageSquareTextIcon,
-  Repeat2Icon,
-  Share2Icon,
-  ThumbsUpIcon,
-  TrendingDownIcon,
-} from "lucide-react";
+import { EllipsisIcon, TrendingDownIcon } from "lucide-react";
 import Button from "../../Form/Button";
 import ShowMore from "../ShowMore";
-import usePost from "@/hooks/post.hook";
 import { Post } from "@/interfaces/feed.interface";
-import Moment from "react-moment";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { selectPost } from "@/slices/posts/post-selected.slice";
-import {
-  formatWalletAddress,
-  getFirstLetters,
-  timestampToDate,
-  weiToUnit,
-} from "@/libs/helpers";
+import { formatWalletAddress } from "@/libs/helpers";
 import { Diamond } from "../../Icons/Others";
-import BlueCheckMark from "../../Profile/BlueCheck";
-import TipModal from "../TipModal";
 import CreatorPFP from "./CreatorPFP";
 import CreatorName from "./CreatorName";
 import PostButtons from "../PostButtons/PostButtons";
@@ -145,7 +123,7 @@ function MintedPost({ post, setTipModal, setRemintModal }: Props) {
                     width={600}
                     placeholder="blur"
                     alt={post.id}
-                    priority
+                    priority={true}
                     blurDataURL="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
                   />
                 </div>

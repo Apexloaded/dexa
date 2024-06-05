@@ -40,7 +40,9 @@ type Props = {
 };
 
 export interface Coin {
-  name: string;
+  id: string;
+  symbol: string;
   icon: ({ width, height }: Props) => React.JSX.Element;
   address: string;
+  name: string;
 }

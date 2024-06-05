@@ -34,6 +34,20 @@ export const postApi = async (url: string, data: any) => {
     .then((res) => res.data);
 };
 
+export const deleteApi = async (url: string) => {
+  const parsedCookies = parseCookies();
+  const cookie = parsedCookies[StorageTypes.ACCESS_TOKEN];
+  const apiUrl = `${API}/${url}`;
+  return axios
+    .delete(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${cookie}`,
+        "Access-Control-Allow-Credentials": true,
+      },
+    })
+    .then((res) => res.data);
+};
+
 export const uploadApi = async (
   url: string,
   data: any

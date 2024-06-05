@@ -164,3 +164,20 @@ export const isValidPostID = (str: string) => {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return idRegex.test(str);
 };
+
+export function formatCur(value: string | number) {
+  const cur = Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "NGN",
+    maximumSignificantDigits: 10,
+    currencySign: "accounting",
+  });
+  const cleanInp = value.toString()?.replace(/(,)/g, "");
+  const fAmt = cur.format(Number(cleanInp));
+  const amount = fAmt.toString().replace(/(NGN|\s)/g, "");
+  return amount;
+}
+
+export function isNumber(value: number) {
+  return !isNaN(value);
+}
