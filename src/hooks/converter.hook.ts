@@ -2,10 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Tokens } from "@/config/tokens";
 
-interface TokenAmounts {
-  [key: string]: number;
-}
-
 export interface ConversionRates {
   [key: string]: number;
 }
@@ -13,7 +9,6 @@ export interface ConversionRates {
 const useConverter = () => {
   const [usdRate, setUsdRate] = useState<ConversionRates>({});
   const [bnbRate, setBnbRate] = useState<ConversionRates>({});
-  const [totalConverted, setTotalConverted] = useState<number | null>(null);
 
   useEffect(() => {
     const init = async () => {
