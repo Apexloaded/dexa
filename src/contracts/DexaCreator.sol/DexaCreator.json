@@ -698,6 +698,11 @@
             "internalType": "address[]",
             "name": "friends",
             "type": "address[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "isVerified",
+            "type": "bool"
           }
         ],
         "internalType": "struct Creator[]",
@@ -774,6 +779,11 @@
             "internalType": "address[]",
             "name": "friends",
             "type": "address[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "isVerified",
+            "type": "bool"
           }
         ],
         "internalType": "struct Creator",
@@ -850,6 +860,11 @@
             "internalType": "address[]",
             "name": "friends",
             "type": "address[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "isVerified",
+            "type": "bool"
           }
         ],
         "internalType": "struct Creator",
@@ -1060,6 +1075,29 @@
       }
     ],
     "name": "init_roles",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "internalTransfer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

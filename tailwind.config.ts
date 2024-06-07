@@ -22,7 +22,8 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "quick-view": "url('/banner/bg.png')"  
+        "quick-view": "url('/banner/bg.png')",
+        "gradient-to-r": "linear-gradient(to right, #4facfe, #00f2fe)",
       },
     },
     colors: {

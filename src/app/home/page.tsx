@@ -6,6 +6,7 @@ import QuickView from "@/components/Profile/QuickView";
 import Header from "@/components/ui/Header";
 import AuthMainLayout from "@/components/Layouts/AuthMainLayout";
 import SearchComponent from "@/components/Home/Search";
+import LiveOnDexa from "@/components/Home/LiveOnDexa";
 
 export default function Home() {
   return (
@@ -23,9 +24,8 @@ export default function Home() {
         <Aside className="pr-3">
           <div className="flex flex-col gap-y-5 mt-2">
             <SearchComponent />
-            <div className="w-full p-3 rounded-xl border border-light bg-white">
-              <QuickView />
-            </div>
+            <QuickView />
+            <LiveOnDexa />
           </div>
         </Aside>
       </div>

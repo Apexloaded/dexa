@@ -26,6 +26,8 @@ import {
 import useStorage from "@/hooks/storage.hook";
 import { StorageTypes } from "@/libs/enum";
 import ListTransactions from "@/components/Wallet/ListTransactions";
+import TransferModal from "@/components/Wallet/TransferModal";
+import WithdrawModal from "@/components/Wallet/WithdrawModal";
 
 function Wallet() {
   const isHidden = useAppSelector(selectHideBalance);
@@ -33,6 +35,8 @@ function Wallet() {
   const [balances, setBalances] = useState<UserBalance[]>([]);
   const [totalValue, setTotalValue] = useState<UserBalance>();
   const [activeTab, setActiveTab] = useState("tab1");
+  const [isTransferModal, setIsTransferModal] = useState<boolean>(false);
+  const [isWithdrawModal, setIsWithdrawModal] = useState<boolean>(false);
   const { setItem } = useStorage();
   const { usdRate, bnbRate } = useConverter();
   const { dexaCreator, CreatorABI } = useDexa();
@@ -78,6 +82,7 @@ function Wallet() {
           tokenAddress: "",
           usdValue: usdEquiv,
         };
+        console.log(payload);
         setTotalValue(payload);
       }
       setBalances(userBal);
@@ -93,8 +98,8 @@ function Wallet() {
 
   return (
     <Section isFull={true}>
-      <div className="px-3 top-0 z-50 sticky">
-        <Header title="Main Wallet" isBack={false} />
+      <div className="top-0 z-50 sticky">
+        <Header title="Main Wallet" />
       </div>
 
       <div className="px-5 pt-5">
@@ -106,7 +111,9 @@ function Wallet() {
                 <p className="font-semibold text-lg -mb-1">*******</p>
               ) : (
                 <p className="font-semibold text-lg -mb-1">
-                  {formatCur(totalValue?.balance)}
+                  {Number(totalValue.balance) > 0
+                    ? formatCur(totalValue?.balance)
+                    : "0.00"}
                 </p>
               )}
 
@@ -114,7 +121,24 @@ function Wallet() {
             </div>
           )}
 
-          {totalValue?.usdValue && (
+          {Number(totalValue?.balance) > 0 ? (
+            totalValue?.usdValue && (
+              <div className="flex items-end">
+                {isHidden ? (
+                  <p className="text-xs text-medium pl-2 font-semibold">
+                    ******
+                  </p>
+                ) : (
+                  <p className="text-xs text-medium pl-2 font-semibold">
+                    = {formatCur(totalValue?.usdValue)} USD
+                  </p>
+                )}
+              </div>
+            )
+          ) : (
+            <></>
+          )}
+          {/* {totalValue.usdValue && (
             <div className="flex items-end">
               {isHidden ? (
                 <p className="text-xs text-medium pl-2 font-semibold">******</p>
@@ -124,7 +148,7 @@ function Wallet() {
                 </p>
               )}
             </div>
-          )}
+          )} */}
         </div>
         <div className="flex items-center gap-x-5 pt-5">
           <Button type="button" kind="primary" shape="NORMAL">
@@ -135,6 +159,7 @@ function Wallet() {
             kind="clear"
             shape="NORMAL"
             className="bg-light hover:bg-medium/20"
+            onClick={() => setIsTransferModal(true)}
           >
             Transfer
           </Button>
@@ -143,6 +168,7 @@ function Wallet() {
             kind="clear"
             shape="NORMAL"
             className="bg-light hover:bg-medium/20"
+            onClick={() => setIsWithdrawModal(true)}
           >
             Withdraw
           </Button>
@@ -154,9 +180,9 @@ function Wallet() {
             <p className="text-sm">Hide balance</p>
           </div>
         </div>
-        <div className="pt-5">
+        <div className="pt-5 pb-20">
           <TabsRoot>
-            <TabsList className="border-b border-light">
+            <TabsList className="">
               <TabsHeader
                 isActiveText={true}
                 title="My Assets"
@@ -178,7 +204,11 @@ function Wallet() {
             </TabsList>
             <TabsContent value="tab1" activeTabId={activeTab}>
               <div className="flex-1 mt-1">
-                <AssetsTable balances={balances} />
+                <AssetsTable
+                  balances={balances}
+                  setTransferModal={setIsTransferModal}
+                  setWithdrawalModal={setIsWithdrawModal}
+                />
               </div>
             </TabsContent>
             <TabsContent value="tab2" activeTabId={activeTab}>
@@ -189,6 +219,8 @@ function Wallet() {
           </TabsRoot>
         </div>
       </div>
+      <TransferModal setIsOpen={setIsTransferModal} isOpen={isTransferModal} />
+      <WithdrawModal setIsOpen={setIsWithdrawModal} isOpen={isWithdrawModal} />
     </Section>
   );
 }

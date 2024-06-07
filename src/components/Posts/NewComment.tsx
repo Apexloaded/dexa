@@ -3,27 +3,26 @@
 import React, { useRef, useState } from "react";
 import CreatorPFP from "./ListPost/CreatorPFP";
 import { useAuth } from "@/context/auth.context";
-import CLEditor from "../Editor/Editor";
 import { useAccount, useWriteContract } from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import useToast from "@/hooks/toast.hook";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Post } from "@/interfaces/feed.interface";
 import Button from "../Form/Button";
-import {
-  ImageIcon,
-  SmilePlusIcon,
-} from "lucide-react";
+import { ImageIcon, SmilePlusIcon } from "lucide-react";
 import { GifIcon } from "@heroicons/react/24/outline";
 import FileSelector from "../ui/FileSelector";
 import PostCounter from "./PostCounter";
 import { generateId } from "@/libs/generateId";
+import DexaEditor, { DexaEditorHandle } from "../Editor/DexaEditor";
 
 type Props = {
   post: Post;
+  refectComments: () => Promise<void>;
 };
 
-function NewComment({ post }: Props) {
+function NewComment({ post, refectComments }: Props) {
+  const editorRef = useRef<DexaEditorHandle>(null);
   const { user } = useAuth();
   const [maxWord] = useState(70);
   const { address } = useAccount();
@@ -78,7 +77,8 @@ function NewComment({ post }: Props) {
             success({
               msg: "Reply successful",
             });
-            //resetForm();
+            resetForm();
+            refectComments();
           },
           onError(err) {
             error({ msg: `${err.message}` });
@@ -88,6 +88,10 @@ function NewComment({ post }: Props) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const resetForm = () => {
+    editorRef.current?.clearEditor();
   };
 
   return (
@@ -103,10 +107,11 @@ function NewComment({ post }: Props) {
             control={control}
             render={({ field: { onChange, value } }) => (
               <>
-                <CLEditor
+                <DexaEditor
                   onWordCount={onWordCount}
                   onUpdate={onChange}
                   defaultValue={value}
+                  ref={editorRef}
                 />
               </>
             )}

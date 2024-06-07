@@ -4,17 +4,16 @@ import { isAddress } from "ethers";
 
 export const withdrawal = yup.object({
   token: yup.string().required("Choose a token"),
-  to: yup
-    .string()
-    .required("Enter a withdrawal address")
-    .test("valid", "Wallet address is not valid", (value: string) => {
-      return isAddress(value);
-    }),
+  // to: yup
+  //   .string()
+  //   .required("Enter a withdrawal address")
+  //   .test("valid", "Wallet address is not valid", (value: string) => {
+  //     return isAddress(value);
+  //   }),
   amount: yup
     .number()
     .positive("Enter a valid amount")
     .required("Enter withdrawal amount"),
-  remark: yup.string(),
 });
 
 export const withdrawalResolver = {

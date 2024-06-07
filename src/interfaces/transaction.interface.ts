@@ -7,7 +7,7 @@ export const txType = {
   "3": "Transfer",
 };
 
-enum TxType {
+export enum TxType {
   Remint = "0",
   Tip = "1",
   Deposit = "2",

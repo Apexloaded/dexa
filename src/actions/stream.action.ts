@@ -1,5 +1,6 @@
 import { IngressInput } from "@/libs/enum";
 import { postApi, getApi } from "./api.action";
+import { FriendListInterface } from "@/interfaces/user.interface";
 
 export async function getStreamCredentials() {
   try {
@@ -30,6 +31,7 @@ export async function requestCredentials(
     }
     return { status: false, message: "false" };
   } catch (error: any) {
+    console.log(error);
     return { status: false, message: `${error.message}` };
   }
 }
@@ -54,6 +56,20 @@ export async function getViewerStreamCredentials(
 export async function getUserStreamStatus(address: string) {
   try {
     const response = await getApi(`stream/status/${address}`);
+    const data = response.data;
+    if (response.status == true) {
+      return { status: true, message: "success", data };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
+
+export async function batchUserStreamStatus(friends: FriendListInterface[]) {
+  try {
+    const addresses = friends.map((f) => f.id);
+    const response = await postApi(`stream/status/batch`, { addresses });
     const data = response.data;
     if (response.status == true) {
       return { status: true, message: "success", data };

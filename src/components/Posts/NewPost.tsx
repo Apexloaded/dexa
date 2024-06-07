@@ -10,10 +10,8 @@ import {
   VideoIcon,
 } from "lucide-react";
 import { GifIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import ToggleMintType from "./ToggleMintType";
 import Link from "next/link";
-import CLEditor from "../Editor/Editor";
 import PostCounter from "./PostCounter";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { postResolver } from "@/schemas/post.schema";
@@ -26,15 +24,12 @@ import RemintFee from "./RemintFee";
 import { Coin } from "@/interfaces/feed.interface";
 import { ethers } from "ethers";
 import { useAuth } from "@/context/auth.context";
-import { getFirstLetters } from "@/libs/helpers";
 import useToast from "@/hooks/toast.hook";
 import CreatorPFP from "./ListPost/CreatorPFP";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { API_URL } from "@/config/env";
-import { StorageTypes } from "@/libs/enum";
 import { createPost } from "@/actions/post.action";
 import { routes } from "@/libs/routes";
+import DexaEditor, { DexaEditorHandle } from "../Editor/DexaEditor";
 
 function NewPost() {
   const router = useRouter();
@@ -43,6 +38,7 @@ function NewPost() {
   const [token, selectToken] = useState<Coin>();
   const { loading, success, error } = useToast();
   const mediaRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<DexaEditorHandle>(null);
   const { user } = useAuth();
   const [percentage, setPercentage] = useState(0);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -146,6 +142,7 @@ function NewPost() {
     reset();
     removeMedia();
     setRemintFee("0");
+    editorRef.current?.clearEditor();
   };
 
   return (
@@ -170,10 +167,11 @@ function NewPost() {
           control={control}
           render={({ field: { onChange, value } }) => (
             <>
-              <CLEditor
+              <DexaEditor
                 onWordCount={onWordCount}
                 onUpdate={onChange}
                 defaultValue={value}
+                ref={editorRef}
               />
               <MediaPreview file={mediaFile} onClear={removeMedia} />
               {errors.images && <ShowError error={errors.images.message} />}

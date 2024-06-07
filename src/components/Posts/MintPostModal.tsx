@@ -9,13 +9,11 @@ import {
   ImageIcon,
   ShieldQuestionIcon,
   SmilePlusIcon,
-  VideoIcon,
   XIcon,
 } from "lucide-react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { useAuth } from "@/context/auth.context";
 import CreatorPFP from "./ListPost/CreatorPFP";
-import CLEditor from "../Editor/Editor";
 import ToggleMintType from "./ToggleMintType";
 import RemintedPost from "./ListPost/RemintedPost";
 import FileSelector from "../ui/FileSelector";
@@ -34,6 +32,7 @@ import useToast from "@/hooks/toast.hook";
 import { ZeroAddress, ethers } from "ethers";
 import { ContractError } from "@/libs/enum";
 import { generateId } from "@/libs/generateId";
+import DexaEditor, { DexaEditorHandle } from "../Editor/DexaEditor";
 
 const getError = (error: Error): string => {
   const errorMessages: { [key: string]: string } = {
@@ -56,6 +55,7 @@ type Props = {
 };
 
 export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
+  const editorRef = useRef<DexaEditorHandle>(null);
   const { user } = useAuth();
   const [maxWord] = useState(70);
   const { address } = useAccount();
@@ -187,7 +187,7 @@ export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
             success({
               msg: "Remint successful",
             });
-            //resetForm();
+            resetForm();
             closeModal();
           },
           onError(err) {
@@ -199,6 +199,10 @@ export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
       const msg = getError(err);
       error({ msg: `${msg}` });
     }
+  };
+
+  const resetForm = () => {
+    editorRef.current?.clearEditor();
   };
 
   return (
@@ -266,10 +270,11 @@ export default function MintPostModal({ post, isOpen, setIsOpen }: Props) {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <>
-                            <CLEditor
+                            <DexaEditor
                               onWordCount={onWordCount}
                               onUpdate={onChange}
                               defaultValue={value}
+                              ref={editorRef}
                             />
                           </>
                         )}

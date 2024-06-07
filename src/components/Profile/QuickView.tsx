@@ -25,15 +25,20 @@ import CreatorPFP from "../Posts/ListPost/CreatorPFP";
 import { useRouter } from "next/navigation";
 import { routes } from "@/libs/routes";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
-import { selectHideBalance, setHideBalance } from "@/slices/account/hide-balance.slice";
+import {
+  selectHideBalance,
+  setHideBalance,
+} from "@/slices/account/hide-balance.slice";
 import useStorage from "@/hooks/storage.hook";
 import { StorageTypes } from "@/libs/enum";
+import WithdrawModal from "../Wallet/WithdrawModal";
 
 function QuickView() {
   const router = useRouter();
   const isHidden = useAppSelector(selectHideBalance);
   const dispatch = useAppDispatch();
   const [balances, setBalances] = useState<UserBalance[]>([]);
+  const [isWithdrawModal, setIsWithdrawModal] = useState<boolean>(false);
   const { setItem } = useStorage();
   const { address } = useAccount();
   const { user } = useAuth();
@@ -46,8 +51,8 @@ function QuickView() {
   });
 
   useEffect(() => {
-    router.prefetch(routes.app.wallet.withdraw);
-  }, []);
+    router.prefetch(routes.app.wallet.index);
+  }, [router]);
 
   useEffect(() => {
     const init = () => {
@@ -68,11 +73,11 @@ function QuickView() {
   const toggleHide = () => {
     const value = !isHidden;
     setItem(StorageTypes.DEXA_HIDE_BAL, value);
-    dispatch(setHideBalance(value))
-  }
+    dispatch(setHideBalance(value));
+  };
 
   return (
-    <div className="">
+    <div className="w-full p-3 rounded-2xl border border-light bg-white">
       <div className="flex justify-between sticky top-0 bg-white">
         <p className="hidden xl:inline text-base xl:text-lg font-semibold">
           Profile
@@ -96,7 +101,7 @@ function QuickView() {
         </div>
       </div>
       <div>
-        <div className="bg-quick-view bg-contain p-5 mt-2 rounded-2xl">
+        <div className="bg-quick-view bg-contain p-5 mt-2 rounded-xl">
           <div className="mb-5 text-light">
             <p className="font-light flex justify-between items-center">
               <span className="">Account balance</span>
@@ -154,14 +159,15 @@ function QuickView() {
           </div>
           <div className="flex xl:flex-row flex-col gap-2 xl:gap-5 justify-center">
             <Button
+              onClick={() => router.push(routes.app.wallet.index)}
               kind="default"
               shape={"ROUNDED"}
               className="text-sm border border-white"
             >
-              Add Fund
+              My Wallet
             </Button>
             <Button
-              onClick={() => router.push(routes.app.wallet.withdraw)}
+              onClick={() => setIsWithdrawModal(true)}
               shape={"ROUNDED"}
               kind="primary"
               className="text-sm border bg-transparent border-white"
@@ -170,7 +176,7 @@ function QuickView() {
             </Button>
           </div>
         </div>
-        <div className="text-center mt-4 flex shrink-0 cursor-pointer transition-all duration-500">
+        {/* <div className="text-center mt-4 flex shrink-0 cursor-pointer transition-all duration-500">
           <div className="flex flex-1 text-primary group flex-col items-center">
             <div className="h-12 w-12 mb-1 rounded-full group-hover:bg-primary/15 transition-all duration-150 bg-primary/20 flex items-center justify-center">
               <WalletMinimalIcon size={22} />
@@ -189,8 +195,9 @@ function QuickView() {
             </div>
             <p className="text-xs">Transfer</p>
           </div>
-        </div>
+        </div> */}
       </div>
+      <WithdrawModal isOpen={isWithdrawModal} setIsOpen={setIsWithdrawModal} />
       {/* <AddFundModal isOpen={fundShelveModal} setIsOpen={setFundShelveModal} /> */}
     </div>
   );

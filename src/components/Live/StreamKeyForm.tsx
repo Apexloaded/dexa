@@ -38,8 +38,12 @@ function StreamKeyForm({ credentials }: Props) {
         `${user.username}`,
         IngressInput.RTMP_INPUT
       );
-      const data = request.data as IStreamCredentials;
-      success({ msg: "Successful" });
+      if (request.status == true) {
+        const data = request.data as IStreamCredentials;
+        success({ msg: "Successful" });
+      } else {
+        error({ msg: request.message });
+      }
     } catch (err: any) {
       error({ msg: err.message });
     }

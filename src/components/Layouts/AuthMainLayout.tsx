@@ -68,7 +68,7 @@ function AuthMainLayout({
       {!isConnected && !signModal && !address ? (
         <WalletConnectModal setModal={setSignModal} />
       ) : (
-        <SignInModal setModal={setSignModal} />
+        isConnected && <SignInModal setModal={setSignModal} />
       )}
     </div>
   );

@@ -26,10 +26,14 @@ function RequestKey({ setCredentials }: Props) {
         `${user.username}`,
         IngressInput.RTMP_INPUT
       );
-      const data = request.data as IStreamCredentials;
-      setCredentials(data);
+      if (request.status) {
+        const data = request.data as IStreamCredentials;
+        setCredentials(data);
+        success({ msg: "Successful" });
+      } else {
+        error({ msg: request.message });
+      }
       setIsLoading(false);
-      success({ msg: "Successful" });
     } catch (err: any) {
       error({ msg: err.message });
     }

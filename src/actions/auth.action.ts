@@ -78,7 +78,7 @@ export async function updateProfile(
       return {
         status: true,
         message: "success",
-        data: { nonce: data.nonce },
+        data,
       };
     }
     return { status: false, message: "false" };

@@ -15,7 +15,7 @@ import Button from "../Form/Button";
 import ShowMore from "../Posts/ShowMore";
 import Link from "next/link";
 import BackButton from "../ui/BackButton";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract, useAccount, useReadContracts } from "wagmi";
 import {
   decryptMessage,
   encryptMessage,
@@ -87,9 +87,10 @@ function ProfileHeader() {
   useEffect(() => {
     if (!user) return;
     const wallet = walletToLowercase(`${user?.wallet}`);
+    const encrypted = encryptMessage(wallet);
     router.prefetch(routes.app.messages.message(`${user?.wallet}`));
-    router.prefetch(routes.app.watch(`${wallet}`));
-  }, [user]);
+    router.prefetch(routes.app.watch(`${encodeURIComponent(encrypted)}`));
+  }, [user, router]);
 
   useEffect(() => {
     if (friends) {
@@ -115,12 +116,8 @@ function ProfileHeader() {
   useEffect(() => {
     const checkStatus = async () => {
       const user = response as UserInterface;
-      const decryptString = decryptMessage(
-        decodeURIComponent(`${user.wallet}`)
-      );
-      if (!decryptString) return;
-      const statusRes = await getUserStreamStatus(`${decryptString}`);
-      setIsLive(statusRes.data.status);
+      const statusRes = await getUserStreamStatus(`${user.wallet}`);
+      setIsLive(statusRes.status ? statusRes.data.status : false);
     };
     if (response) checkStatus();
   }, [response]);

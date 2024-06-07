@@ -20,7 +20,7 @@ function BookmarkFeeds() {
     if (data?.data && data.status) {
       setBookmarks(data.data);
     }
-  }, [data?.data]);
+  }, [data?.data, data?.status]);
 
   return (
     <div>

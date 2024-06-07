@@ -5,6 +5,13 @@
 @import "../styles/tiptap.scss";
 @import "../styles/stepper.scss";
 
+.gradient-text {
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .html-data {
   h1,
   h2,

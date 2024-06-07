@@ -19,7 +19,7 @@ function ListConnection({ connection }: Props) {
 
   useEffect(() => {
     router.prefetch(routes.app.messages.index);
-  }, []);
+  }, [router]);
 
   const initChat = () => {
     const isMessage = messages.find((m) => m.profile.id == connection.id);

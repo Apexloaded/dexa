@@ -28,7 +28,7 @@ export default function Page() {
   useEffect(() => {
     router.prefetch(routes.register);
     router.prefetch(routes.login);
-  }, []);
+  }, [router]);
 
   return (
     <div className="h-svh overflow-y-scroll">

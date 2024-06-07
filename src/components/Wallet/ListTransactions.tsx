@@ -1,23 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  formatCur,
-  formatWalletAddress,
-  timestampToDate,
-  toOxString,
-  weiToUnit,
-} from "@/libs/helpers";
-import { UserBalance } from "@/interfaces/user.interface";
+import { timestampToDate, toOxString } from "@/libs/helpers";
 import EmptyBox from "../ui/EmptyBox";
-import { useAppSelector } from "@/hooks/redux.hook";
-import { selectHideBalance } from "@/slices/account/hide-balance.slice";
 import { useDexa } from "@/context/dexa.context";
 import { useAuth } from "@/context/auth.context";
 import { useReadContract } from "wagmi";
-import { ITransaction, txType } from "@/interfaces/transaction.interface";
-import Moment from "react-moment";
+import { ITransaction } from "@/interfaces/transaction.interface";
 import { Tokens } from "@/config/tokens";
+import TxBodyItems from "../Transactions/TxBodyItems";
 
 function ListTransactions() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -57,66 +48,29 @@ function ListTransactions() {
   }, [data]);
 
   return (
-    <div className="flex-1 overflow-auto">
-      <table className="table-fixed xl:w-full">
-        <thead className="bg-light px-4">
-          <tr className="h-14 text-left">
+    <div className="flex-1 max-w-full overflow-auto border border-light rounded-lg">
+      <table className="table-auto w-full">
+        <thead className="border-b border-light px-4">
+          <tr className="h-14 text-left font-bold">
             <th className="px-4 text-medium text-sm w-14 text-center"></th>
             <th className="px-4 text-medium text-sm w-32">Type</th>
             <th className="px-4 text-medium text-sm">From</th>
             <th className="px-4 text-medium text-sm">To</th>
             <th className="px-4 text-medium text-sm w-24">Amount</th>
             <th className="px-4 text-medium text-sm w-20">Fee</th>
-            <th className="px-4 text-medium text-sm w-32">Date</th>
+            <th className="px-4 text-medium text-sm w-32">Age</th>
           </tr>
         </thead>
         <tbody>
           {transactions.length > 0 ? (
             <>
               {transactions.map((tx, index) => (
-                <tr
-                  className="h-14 border-b border-light last-of-type:border-none"
-                  key={index}
-                >
-                  <td className="px-4">
-                    <p className="text-sm text-center">{<tx.coin.icon />}</p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">{txType[tx.txType]}</p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">
-                      {formatWalletAddress(tx.txFrom, "...", 10, 10)}
-                    </p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">
-                      {formatWalletAddress(tx.txTo, "...", 10, 10)}
-                    </p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">
-                      {Number(tx.txAmount) > 0
-                        ? weiToUnit(tx.txAmount)
-                        : "0.00"}
-                    </p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">
-                      {Number(tx.txFee) > 0 ? weiToUnit(tx.txFee) : "0"}
-                    </p>
-                  </td>
-                  <td className="px-4">
-                    <p className="text-sm">
-                      <Moment fromNow>{tx.txDate}</Moment>
-                    </p>
-                  </td>
-                </tr>
+                <TxBodyItems key={index} tx={tx} />
               ))}
             </>
           ) : (
             <tr>
-              <td colSpan={4}>
+              <td colSpan={7} className="pb-24">
                 <EmptyBox
                   title="No Transaction"
                   message="You currently do not have any transaction"

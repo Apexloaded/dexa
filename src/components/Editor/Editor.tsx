@@ -8,11 +8,18 @@ type Props = {
   onUpdate: (value: string) => void;
   onWordCount: (value: number) => void;
   defaultValue?: string;
+  onClear: () => void;
 };
 
-const CLEditor: React.FC<Props> = ({ onUpdate, defaultValue, onWordCount }) => {
+const CLEditor: React.FC<Props> = ({
+  onUpdate,
+  defaultValue,
+  onWordCount,
+  onClear,
+}) => {
   const [hydrated, setHydrated] = useState(false);
   const [wordCount, setWordCount] = useState<number>(0);
+
   const editor = useEditor({
     content: defaultValue,
     extensions: [...defaultExtensions],
@@ -25,6 +32,10 @@ const CLEditor: React.FC<Props> = ({ onUpdate, defaultValue, onWordCount }) => {
       onWordCount(words);
     },
   });
+
+  useEffect(() => {
+    console.log("clear");
+  }, [onClear]);
 
   useEffect(() => {
     if (!editor || hydrated) return;
@@ -44,6 +55,12 @@ const CLEditor: React.FC<Props> = ({ onUpdate, defaultValue, onWordCount }) => {
     return length;
   };
 
+  const clearEditor = () => {
+    if (editor) {
+      editor.commands.clearContent();
+    }
+  };
+
   return (
     <div
       onClick={() => {
@@ -58,6 +75,7 @@ const CLEditor: React.FC<Props> = ({ onUpdate, defaultValue, onWordCount }) => {
             onFocus={() => {
               console.log("focused");
             }}
+            placeholder="Hello"
             editor={editor}
           />
         </div>

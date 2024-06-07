@@ -110,6 +110,7 @@ export default function Sidebar() {
               height={260}
               alt={`dexa`}
               className="h-12 w-12"
+              priority={true}
             />
           </div>
           <div>
