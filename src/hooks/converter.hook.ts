@@ -34,58 +34,6 @@ const useConverter = () => {
     init();
   }, []);
 
-  //   useEffect(() => {
-  //     const fetchConversionRates = async () => {
-  //       try {
-  //         const tokenIds = Object.keys(tokens)
-  //           .map((token) => token.toLowerCase())
-  //           .join(",");
-  //         const response = await axios.get(
-  //           "https://api.coingecko.com/api/v3/simple/price",
-  //           {
-  //             params: {
-  //               ids: tokenIds,
-  //               vs_currencies: targetCurrency,
-  //             },
-  //           }
-  //         );
-
-  //         const rates = response.data;
-  //         const formattedRates: ConversionRates = {};
-
-  //         for (const token in tokens) {
-  //           formattedRates[token] =
-  //             rates[token.toLowerCase()]?.[targetCurrency] || 0;
-  //         }
-
-  //         setConversionRates(formattedRates);
-  //       } catch (error) {
-  //         console.error("Error fetching conversion rates:", error);
-  //       }
-  //     };
-
-  //     fetchConversionRates();
-  //   }, [tokens, targetCurrency]);
-
-  //   useEffect(() => {
-  //     if (Object.keys(conversionRates).length > 0) {
-  //       const convertedTotal = Object.keys(tokens).reduce((acc, token) => {
-  //         return acc + tokens[token] * (conversionRates[token] || 0);
-  //       }, 0);
-  //       setTotalConverted(convertedTotal);
-  //     }
-  //   }, [conversionRates, tokens]);
-
-  //   const convert = async (tokens: TokenAmounts) => {
-  //     if (Object.keys(conversionRates).length > 0) {
-  //       const convertedTotal = Object.keys(tokens).reduce((acc, token) => {
-  //         return acc + tokens[token] * (conversionRates[token] || 0);
-  //       }, 0);
-  //       setTotalConverted(convertedTotal);
-  //       return conversionRates;
-  //     }
-  //   };
-
   const getRates = async (tokens: string[], targetCurrency: string) => {
     try {
       const tokenIds = tokens.map((token) => token.toLowerCase()).join(",");

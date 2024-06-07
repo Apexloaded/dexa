@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CreatorPFP from "./ListPost/CreatorPFP";
 import { useAuth } from "@/context/auth.context";
-import { useAccount, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { useDexa } from "@/context/dexa.context";
 import useToast from "@/hooks/toast.hook";
 import { Controller, FieldValues, useForm } from "react-hook-form";
@@ -26,6 +30,11 @@ function NewComment({ post, refectComments }: Props) {
   const { user } = useAuth();
   const [maxWord] = useState(70);
   const { address } = useAccount();
+  const [hash, setHash] = useState<`0x${string}`>();
+  const { data } = useWaitForTransactionReceipt({
+    confirmations: 2,
+    hash,
+  });
   const [percentage, setPercentage] = useState(0);
   const [exceededCount, setExceededCount] = useState(0);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -42,6 +51,12 @@ function NewComment({ post, refectComments }: Props) {
   } = useForm();
   const content = watch("content", "");
   const isEmptyContent = content === "<p></p>";
+
+  useEffect(() => {
+    if (data) {
+      refectComments();
+    }
+  }, [data]);
 
   const onWordCount = (count: number) => {
     const percentage = (count / maxWord) * 100;
@@ -74,11 +89,11 @@ function NewComment({ post, refectComments }: Props) {
         },
         {
           onSuccess: async (data) => {
+            setHash(data);
             success({
               msg: "Reply successful",
             });
             resetForm();
-            refectComments();
           },
           onError(err) {
             error({ msg: `${err.message}` });

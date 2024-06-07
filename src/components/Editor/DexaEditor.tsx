@@ -88,5 +88,5 @@ const DexaEditor = React.forwardRef(
     );
   }
 );
-
+DexaEditor.displayName = "DexaEditor";
 export default DexaEditor;

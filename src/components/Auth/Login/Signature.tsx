@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Button from "@/components/Form/Button";
 import { formatWalletAddress } from "@/libs/helpers";
 import {
@@ -15,9 +15,10 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { setAuth } from "@/slices/account/auth.slice";
 import useToast from "@/hooks/toast.hook";
-import { verifyNonce, getNonce } from "@/actions/auth.action";
+import { verifyNonce, getNonce, verifyRecaptcha } from "@/actions/auth.action";
 import { routes } from "@/libs/routes";
 import { useAuth } from "@/context/auth.context";
+import ReCaptcha from "../ReCaptcha";
 
 type Props = {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,17 +26,27 @@ type Props = {
 
 function SignInModal({ setModal }: Props) {
   const router = useRouter();
+  const [token, setToken] = useState<string>();
   const { chainId, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
   const { findCreator } = useAuth();
   const { loading, success, error } = useToast();
   const dispatch = useAppDispatch();
 
+  const handelRecaptcha = (token: string) => {
+    setToken(token);
+  };
+
   const signMessage = async () => {
     try {
-      if (!address || !chainId) return;
+      if (!address || !chainId || !token) return;
       const res = await getNonce(address);
       loading({ msg: "Verifying..." });
+      const isVerified = await verifyRecaptcha(token);
+      if (!isVerified.status) {
+        error({ msg: "Invalid reCAPTCHA" });
+        return;
+      }
       const message = new SiweMessage({
         domain: window.location.host,
         address,
@@ -142,6 +153,7 @@ function SignInModal({ setModal }: Props) {
           </div>
         </div>
       </div>
+      <ReCaptcha onVerify={handelRecaptcha} />
     </div>
   );
 }

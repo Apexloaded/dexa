@@ -87,6 +87,30 @@ export async function updateProfile(
   }
 }
 
+export async function verifyRecaptcha(token: string): Promise<IActionResponse> {
+  try {
+    const payload = {
+      token,
+    };
+    const response = await postApi("auth/captcha/verify", payload);
+    const data = response.data;
+    if (
+      response.status == true &&
+      response.statusCode == 201 &&
+      data.score > 0.5
+    ) {
+      return {
+        status: true,
+        message: "success",
+        data,
+      };
+    }
+    return { status: false, message: "false" };
+  } catch (error: any) {
+    return { status: false, message: `${error.message}` };
+  }
+}
+
 // export async function clearSession() {
 //   destroyCookie(null, StorageTypes.ACCESS_TOKEN);
 // }

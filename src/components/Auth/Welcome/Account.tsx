@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import Label from "@/components/Form/Label";
 import Input from "@/components/Form/Input";
 import Button from "@/components/Form/Button";
@@ -12,13 +12,14 @@ import { FieldValues, useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ContractError } from "@/libs/enum";
 import { useAuth } from "@/context/auth.context";
-import { registerUser } from "@/actions/auth.action";
+import { registerUser, verifyRecaptcha } from "@/actions/auth.action";
 import { debounce } from "lodash";
 import { CheckCheckIcon, CircleAlertIcon } from "lucide-react";
 import WalletConnectModal from "../WalletConnectModal";
 import useToast from "@/hooks/toast.hook";
 import Link from "next/link";
 import { routes } from "@/libs/routes";
+import ReCaptcha from "../ReCaptcha";
 
 type Props = {
   nextStep: (value: number) => void;
@@ -39,6 +40,7 @@ const getError = (error: Error): string => {
 };
 
 export default function AccountStep({ nextStep, index }: Props) {
+  const [token, setToken] = useState<string>();
   const router = useRouter();
   const {
     handleSubmit,
@@ -74,13 +76,22 @@ export default function AccountStep({ nextStep, index }: Props) {
     []
   );
 
+  const handelRecaptcha = (token: string) => {
+    setToken(token);
+  };
+
   const proceed = async (data: FieldValues) => {
     try {
-      if (!isConnected) {
+      if (!isConnected || !token) {
         setConnectModal(true);
         return;
       }
       loading({ msg: "Processing..." });
+      const isVerified = await verifyRecaptcha(token);
+      if (!isVerified.status) {
+        error({ msg: "Invalid reCAPTCHA" });
+        return;
+      }
       const { name, username } = data;
       await writeContractAsync(
         {
@@ -114,6 +125,19 @@ export default function AccountStep({ nextStep, index }: Props) {
         <Controller
           control={control}
           render={({ field: { onChange } }) => (
+            <Input
+              name="bio"
+              className="bg-light shadow-sm rounded-lg border border-medium"
+              placeholder="Biography"
+              onChange={onChange}
+              hidden
+            />
+          )}
+          name="bio"
+        />
+        <Controller
+          control={control}
+          render={({ field: { onChange } }) => (
             <div>
               <Label title="Display Name" isRequired={true} isMargin={true} />
               <Input
@@ -127,7 +151,6 @@ export default function AccountStep({ nextStep, index }: Props) {
           )}
           name={"name"}
         />
-
         <Controller
           control={control}
           render={({ field: { onChange, value } }) => (
@@ -181,6 +204,7 @@ export default function AccountStep({ nextStep, index }: Props) {
               Login
             </Link>
           </p>
+          <ReCaptcha onVerify={handelRecaptcha} />
         </div>
       </div>
     </>
